@@ -220,13 +220,13 @@ export default {
       return icon
     },
     imgsrc: news => {
-      var imgSource = '@/assets/flashInfo-1.jpeg'
+      var imgSource = '/static/img/flashInfo-1.jpeg'
       if (news.image != null && news.image !== '') {
         imgSource = news.image
       } else {
         switch (news.type) {
           case 'flashInfo':
-            imgSource = '@/assets/flashInfo-2.jpeg'
+            imgSource = '/static/img/flashInfo-2.jpeg'
             break
           case 'actualites':
             imgSource = news.image
