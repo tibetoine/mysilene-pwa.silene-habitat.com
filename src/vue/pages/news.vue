@@ -44,8 +44,8 @@
                                             </v-flex>
                                         </v-layout>
                                         <v-layout justify-end>
-                                            <v-flex xs3>
-                                            <v-avatar :class="getColor(aNews)" style="margin-top:10px;">
+                                            <v-flex xs3 >
+                                            <v-avatar :class="getColor(aNews)" style="margin-top:10px;margin-right:10px;">
                                                     <p style="margin:0;padding:0 0 0 1px;text-align:center;line-height:1.1em;">
                                                         <span class="white--text" style="padding:0;margin:0;font-size:1.5em;padding-left:2px;">{{getDay(aNews)}}</span> 
                                                             <br/>                                        

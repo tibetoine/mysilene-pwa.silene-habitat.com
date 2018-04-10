@@ -53,15 +53,7 @@
       </v-btn>
       <v-btn icon>
         <v-icon>notifications</v-icon>
-      </v-btn>
-      <v-btn icon large>
-        <v-avatar size="32px" tile>
-          <img
-            src="https://vuetifyjs.com/static/doc-images/logo.svg"
-            alt="Vuetify"
-          >
-        </v-avatar>
-      </v-btn>
+      </v-btn>      
     </v-toolbar>
 
 
