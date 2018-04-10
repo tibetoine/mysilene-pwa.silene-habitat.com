@@ -12,7 +12,7 @@
             <v-layout row>
                 <v-flex xs12 sm6 offset-sm3>
                 <v-card>
-                    <v-card-media src="/img/contact.jpg" height="300px">
+                    <v-card-media src="/static/img/contact.jpg" height="300px">
                     <v-layout column class="media">
                         <v-card-title>
                         <v-btn dark icon>

@@ -1,6 +1,6 @@
 <template>
-  <main-layout>
-    <p>Page méteo</p>
+  <main-layout style="margin-top:50px;">
+    <p>Page méteo - En construction</p>
   </main-layout>
 </template>
 
