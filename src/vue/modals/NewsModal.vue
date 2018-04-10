@@ -224,12 +224,12 @@ export default {
       return imgSource
     },
     findAvatar: function (author) {
-      if (author == null || author === '') return '@/assets/ad-photos/default.jpg'
+      if (author == null || author === '') return '/static/img/ad-photos/default.jpg'
       var contact = this.$store.getters.searchContact(author)
-      if (contact == null) return '@/assets/ad-photos/default.jpg'
+      if (contact == null) return '/static/img/ad-photos/default.jpg'
 
       var imgSource =
-        '@/assets/ad-photos/' +
+        '/static/img/ad-photos/' +
         (contact.thumbnailPhoto ? contact.sAMAccountName : 'default') +
         '.jpg'
       return imgSource

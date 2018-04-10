@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
-    "start:dev": "webpack-dev-server",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
   },

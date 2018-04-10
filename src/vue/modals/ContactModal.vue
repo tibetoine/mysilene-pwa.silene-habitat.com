@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     imgsrc: contact =>
-      '/img/ad-photos/' +
+      '/static/img/ad-photos/' +
       (contact.thumbnailPhoto ? contact.sAMAccountName : 'default') +
       '.jpg',
     fetchData () {

@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     imgsrc: contact =>
-      '@/assets/ad-photos/' +
+      '/static/img/ad-photos/' +
       (contact.thumbnailPhoto ? contact.sAMAccountName : 'default') +
       '.jpg',
     doFilterSst () {
