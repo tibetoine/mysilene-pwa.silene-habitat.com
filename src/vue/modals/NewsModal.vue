@@ -237,3 +237,10 @@ export default {
   }
 }
 </script>
+<style>
+  #content-news ul {
+      margin-left:30px;
+      padding-right:30px;
+      text-align:justify;
+  }
+</style>

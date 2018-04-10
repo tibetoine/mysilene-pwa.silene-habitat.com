@@ -141,7 +141,7 @@ export default {
           color = 'red darken-2'
           break
         case 'mouvementsRH':
-          color = 'indigo darken-2'
+          color = 'light-green darken-2'
           break
         case 'actualites':
           color = 'blue darken-2'
@@ -185,7 +185,7 @@ export default {
           color = '#d32f2f' // red darken-2
           break
         case 'mouvementsRH':
-          color = '#303f9f ' // indigo darken-2
+          color = '#689F38 ' // light-green darken-2
           break
         case 'actualites':
           color = '#1976d2 ' // blue darken-2
