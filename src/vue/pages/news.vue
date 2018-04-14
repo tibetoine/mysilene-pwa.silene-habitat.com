@@ -22,10 +22,11 @@
                                     <!-- Author --> 
                                     <!-- Photo Author --> 
                                 </v-card-title>
-                                <v-card-media
+                                <v-card-media 
                                 class="black--text"
                                 height="200px"
                                 :src="imgsrc(aNews)"
+                                :contain="aNews.type=='mouvementsRH'"
                                 >
                                     <v-container fill-height fluid style="padding:2px;">
                                         <v-layout align-end justify-start >
@@ -238,6 +239,7 @@ export default {
             break
         }
       }
+      console.log('imgSource : ' + imgSource)
       return imgSource
     },
     findAvatar: function (author) {
