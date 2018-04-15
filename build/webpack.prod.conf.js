@@ -36,7 +36,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env': env
     }),
     new UglifyJSPlugin({
-      
+      parallel: 4
     }),
     // extract css into its own file
     new ExtractTextPlugin({
@@ -100,9 +100,28 @@ const webpackConfig = merge(baseWebpackConfig, {
     new SWPrecacheWebpackPlugin({
       cacheId: 'mysilene',
       filename: 'service-worker.js',
-      staticFileGlobs: ['dist/**/*.{js,html,css}'],
+      /* Permet de mettre en cache client (service-worker, l'ensemble des ressources dans static */
+      staticFileGlobs: ['dist/**/*.{js,html,css,jpg,jpeg,png}'],
       minify: true,
-      stripPrefix: 'dist/'
+      stripPrefix: 'dist/',
+      runtimeCaching: [
+        {
+          urlPattern: /^http:\/\/localhost\/api\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^https:\/\/fonts.googleapis.com\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^https:\/\/mysilene.silene-habitat.com\/api\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^http:\/\/mysilene.silene-habitat.com\/api\//,
+          handler: 'cacheFirst'
+        }
+      ]
     })
   ]
 })
