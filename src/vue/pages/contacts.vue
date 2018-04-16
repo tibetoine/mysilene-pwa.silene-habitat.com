@@ -169,7 +169,7 @@ export default {
       this.filterSst ? (this.filterSst = false) : (this.filterSst = true)
     },
     goToContact: function (contact, contactId) {
-      console.log('Contact : ' + contact + ' contactId : ' + contactId)
+      //console.log('Contact : ' + contact + ' contactId : ' + contactId)
       this.$store.state.selectedContact = contact
       // this.$router.push({ path: 'contactModal', params: { contactId }})
       // this.$router.push({ name: 'contactModal', params: { contactId }})

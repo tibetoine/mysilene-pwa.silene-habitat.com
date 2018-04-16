@@ -107,7 +107,7 @@ export default {
       (contact.thumbnailPhoto ? contact.sAMAccountName : 'default') +
       '.jpg',
     fetchData () {
-      console.log('--> Fetching data')
+      //console.log('--> Fetching data')
       this.error = this.contact = null
       this.loading = true
       if (this.$store.state.selectedContact != null) {
