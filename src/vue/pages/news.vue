@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     goToNews: function (news, newsId) {
-      //console.log('News : ' + news + ' newsId : ' + newsId)
+      // console.log('News : ' + news + ' newsId : ' + newsId)
       this.$store.state.selectedNews = news
       // this.$router.push({ path: 'newsModal', params: { newsId }})
       // this.$router.push({ name: 'newsModal', params: { newsId }})
@@ -239,7 +239,7 @@ export default {
             break
         }
       }
-      //console.log('imgSource : ' + imgSource)
+      // console.log('imgSource : ' + imgSource)
       return imgSource
     },
     findAvatar: function (author) {
