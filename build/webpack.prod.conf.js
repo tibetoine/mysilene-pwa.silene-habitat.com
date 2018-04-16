@@ -110,15 +110,15 @@ const webpackConfig = merge(baseWebpackConfig, {
           handler: 'cacheFirst'
         },
         {
-          urlPattern: /^https:\/\/fonts.googleapis.com\//,
-          handler: 'cacheFirst'
-        },
-        {
           urlPattern: /^https:\/\/mysilene.silene-habitat.com\/api\//,
           handler: 'cacheFirst'
         },
         {
           urlPattern: /^http:\/\/mysilene.silene-habitat.com\/api\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^https:\/\/fonts.googleapis.com\//,
           handler: 'cacheFirst'
         }
       ]
