@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     fetchData () {
-      //console.log('--> Fetching data News')
+      // console.log('--> Fetching data News')
       this.error = this.news = null
       this.loading = true
       if (this.$store.state.selectedNews != null) {

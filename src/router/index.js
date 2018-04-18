@@ -4,6 +4,7 @@ import News from '../vue/pages/news'
 import Contacts from '../vue/pages/contacts'
 import ContactModal from '../vue/modals/contactModal'
 import NewsModal from '../vue/modals/newsModal'
+import Meteo from '../vue/pages/meteo'
 
 Vue.use(Router)
 
@@ -31,6 +32,11 @@ export default new Router({
       path: '/news/:id',
       component: NewsModal,
       name: 'newsModal'
+    },
+    {
+      path: '/meteo',
+      component: Meteo,
+      name: 'meteo-contacts'
     }
 
   ]

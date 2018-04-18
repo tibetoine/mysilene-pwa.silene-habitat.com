@@ -6,6 +6,10 @@ export default {
       state.news.fullList,
       news => state.news.selectedTypes.indexOf(news.type) > -1
     ),
+  partialContacts: (state, getters) => count => {
+    console.log(count)
+    return getters.filteredContacts.slice(0, count)
+  },
   filteredContacts: state => {
     return state.contacts.fullList.filter(contact => {
       var isFiltered = false

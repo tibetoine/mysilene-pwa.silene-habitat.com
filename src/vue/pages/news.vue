@@ -2,7 +2,7 @@
     <v-content>
         <v-container fluid fill-height>
             <v-layout row>
-                <v-flex xs12 md9>
+                <v-flex xs12 md6>
                     <v-list two-line>
                         <template v-for="aNews in news">
                             <v-card style="margin:20px 10px 20px 10px;" v-bind:key="aNews._id">
@@ -11,10 +11,10 @@
                                 size="36px"
                                 slot="activator"
                                 >
-                                    <img
-                                        :src="findAvatar(aNews.author)"
-                                        alt=""                                        
-                                    >
+                                  <img
+                                      :src="findAvatar(aNews.author)"
+                                      :alt="'avatar_'+aNews.author"                                        
+                                  >
                                     
                                 </v-avatar>
                                 <span :title="aNews.author" style="padding-left:10px;">{{aNews.author?chrinkAuthor(aNews.author):'Auteur Inconnu'}}</span>
@@ -22,41 +22,46 @@
                                     <!-- Author --> 
                                     <!-- Photo Author --> 
                                 </v-card-title>
-                                <v-card-media 
-                                class="black--text"
-                                height="200px"
-                                :src="imgsrc(aNews)"
-                                :contain="aNews.type=='mouvementsRH'"
-                                >
-                                    <v-container fill-height fluid style="padding:2px;">
-                                        <v-layout align-end justify-start >
-                                            <v-flex 
-                                            xs2 
-                                            d-flex 
-                                            align-end
-                                            pa-2
-                                            >
-                                                <v-chip label :color="getColor(aNews)" text-color="white">
-                                                    <v-avatar>
-                                                        <v-icon>{{getIcon(aNews)}}</v-icon>
-                                                    </v-avatar>
-                                                    {{getTypeLabel(aNews)}}
-                                                </v-chip>
-                                            </v-flex>
-                                        </v-layout>
-                                        <v-layout justify-end>
-                                            <v-flex xs3 >
-                                            <v-avatar :class="getColor(aNews)" style="margin-top:10px;margin-right:10px;">
-                                                    <p style="margin:0;padding:0 0 0 1px;text-align:center;line-height:1.1em;">
-                                                        <span class="white--text" style="padding:0;margin:0;font-size:1.5em;padding-left:2px;">{{getDay(aNews)}}</span> 
-                                                            <br/>                                        
-                                                        <span class="white--text" style="padding:0;margin:0;">{{getMonth(aNews)}}</span>
-                                                    </p>
-                                                </v-avatar>
-                                            </v-flex>
-                                        </v-layout>
-                                    </v-container>
-                                </v-card-media>
+                                <clazy-load :src="imgsrc(aNews)">
+                                  <v-card-media 
+                                  class="black--text"
+                                  height="200px"
+                                  :src="imgsrc(aNews)"
+                                  :contain="aNews.type=='mouvementsRH'"
+                                  >
+                                      <v-container fill-height fluid style="padding:2px;">
+                                          <v-layout align-end justify-start >
+                                              <v-flex 
+                                              xs2 
+                                              d-flex 
+                                              align-end
+                                              pa-2
+                                              >
+                                                  <v-chip label :color="getColor(aNews)" text-color="white">
+                                                      <v-avatar>
+                                                          <v-icon>{{getIcon(aNews)}}</v-icon>
+                                                      </v-avatar>
+                                                      {{getTypeLabel(aNews)}}
+                                                  </v-chip>
+                                              </v-flex>
+                                          </v-layout>
+                                          <v-layout justify-end >
+                                              <v-flex xs6 sm3 md2 justify-end style="margin-top:10px;margin-right:10px;">
+                                                <v-avatar :class="getColor(aNews)" >
+                                                      <p style="margin:0;padding:0 0 0 1px;text-align:center;line-height:1.1em;">
+                                                          <span class="white--text" style="padding:0;margin:0;font-size:1.5em;padding-left:2px;">{{getDay(aNews)}}</span> 
+                                                              <br/>                                        
+                                                          <span class="white--text" style="padding:0;margin:0;">{{getMonth(aNews)}}</span>
+                                                      </p>
+                                                  </v-avatar>
+                                              </v-flex>
+                                          </v-layout>
+                                      </v-container>
+                                  </v-card-media>
+                                  <div class="preloader" slot="placeholder">
+                                    <v-progress-linear :color="getColor(aNews)" :indeterminate="true"></v-progress-linear>
+                                  </div>
+                                </clazy-load>
                                 <v-card-title>
                                     <div>
                                         <span class="headline" :style="'color:'+getFontColor(aNews)+';'">{{aNews.title}}</span>
@@ -243,7 +248,9 @@ export default {
       return imgSource
     },
     findAvatar: function (author) {
-      if (author == null || author === '') return '/static/img/ad-photos/default.jpg'
+      if (author == null || author === '') {
+        return '/static/img/ad-photos/default.jpg'
+      }
       var contact = this.$store.getters.searchContact(author)
       if (contact == null) return '/static/img/ad-photos/default.jpg'
 

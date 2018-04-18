@@ -40,13 +40,7 @@
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <span class="hidden-sm-and-down">MySilene</span>
       </v-toolbar-title>
-      <v-text-field
-        flat
-        solo-inverted
-        prepend-icon="search"
-        label="Search"
-        class="hidden-sm-and-down"
-      ></v-text-field>
+      
       <v-spacer></v-spacer>
       <v-btn icon @click="showNewsFilterDialog" v-if="$route.path==='/news'">
         <v-icon>settings</v-icon>
@@ -58,10 +52,6 @@
 
 
   <router-view></router-view>
-  
-
-
-
 
 
     <v-btn

@@ -8,6 +8,8 @@ import rest from './rest/routes'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import 'babel-polyfill'
+import VueClazyLoad from 'vue-clazy-load'
+import infiniteScroll from 'vue-infinite-scroll'
 
 /* Couleurs Silène (A partir du logo) */
 // Jaune : #fabd00
@@ -26,6 +28,9 @@ Vue.use(Vuetify, { theme: {
   success: '#4CAF50',
   warning: '#FFC107'
 }})
+
+Vue.use(VueClazyLoad)
+Vue.use(infiniteScroll)
 
 Vue.config.productionTip = false
 
