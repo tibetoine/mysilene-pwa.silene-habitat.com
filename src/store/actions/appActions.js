@@ -13,5 +13,9 @@ export default {
 
   [On.LOAD_NEWS]: async function ({ commit }) {
     commit(Do.SET_NEWS, await rest.getNews())
+  },
+
+  [On.LOAD_WEATHER]: async function ({ commit }) {
+    commit(Do.SET_WEATHER, await rest.getLastWeather())
   }
 }

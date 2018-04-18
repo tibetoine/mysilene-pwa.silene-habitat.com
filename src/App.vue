@@ -151,6 +151,7 @@ export default {
   mounted: function () {
     this.loadContacts()
     this.loadNews()
+    this.loadWeather()
   },
   methods: {
     goBack () {
@@ -158,7 +159,8 @@ export default {
     },
     ...mapActions({
       loadContacts: On.LOAD_CONTACTS,
-      loadNews: On.LOAD_NEWS
+      loadNews: On.LOAD_NEWS,
+      loadWeather: On.LOAD_WEATHER
     }),
     ...mapMutations({
       showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG

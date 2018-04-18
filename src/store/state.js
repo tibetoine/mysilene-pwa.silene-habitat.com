@@ -23,5 +23,8 @@ export default {
     }],
     selectedTypes: ['actualites', 'flashInfo', 'facebook', 'mouvementsRH'],
     fullList: []
+  },
+  meteo: {
+    lastWeather: null
   }
 }
