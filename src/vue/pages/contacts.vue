@@ -115,10 +115,10 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
-  import {debounce} from 'lodash'
-  import Do from "../../const/do";
-  import On from "../../const/on";
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { debounce } from 'lodash'
+import Do from '../../const/do'
+import On from '../../const/on'
 
 export default {
   name: 'contacts',
@@ -129,6 +129,7 @@ export default {
       { icon: 'chat', title: 'Chat' },
       { icon: 'phonelink_ring', title: 'Mobile' }
     ],
+    updateT: null,
     busy: false,
     dialog: false,
     countLoaded: 0
@@ -167,26 +168,26 @@ export default {
     }
   },
   beforeUpdate: function () {
-    updateT = Date.now()
+    this.updateT = Date.now()
   },
   updated: function () {
-    console.log("updated in", Date.now() - updateT, "ms")
+    console.log('updated in', Date.now() - this.updateT, 'ms')
   },
   methods: {
     ...mapActions({
-      filterChanged: On.UPDATE_FILTERED_CONTACTS,
+      filterChanged: On.UPDATE_FILTERED_CONTACTS
     }),
     ...mapMutations({
       showMore: Do.SHOW_MORE_CONTACTS
     }),
     setSearch: debounce(function (value) {
-      this.$store.state.contacts.search = value;
-      this.filterChanged();
+      this.$store.state.contacts.search = value
+      this.filterChanged()
     }, 300),
     loadMore: function () {
-      console.log("load more contacts...");
+      console.log('load more contacts...')
       this.busy = true
-      this.showMore();
+      this.showMore()
       setTimeout(() => {
         this.busy = false
       }, 1000)

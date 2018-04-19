@@ -7,7 +7,7 @@ export default {
     fullList: [],
     filteredList: [],
     visibleList: [],
-    pageSize : 15
+    pageSize: 15
   },
   news: {
     filterDialogVisible: false,

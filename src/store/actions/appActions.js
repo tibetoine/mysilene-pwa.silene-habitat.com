@@ -19,7 +19,7 @@ export default {
     commit(Do.SET_WEATHER, await rest.getLastWeather())
   },
 
-  [On.UPDATE_FILTERED_CONTACTS]: function ({commit}){
+  [On.UPDATE_FILTERED_CONTACTS]: function ({commit}) {
     commit(Do.UPDATE_FILTERED_CONTACTS)
     commit(Do.SHOW_MORE_CONTACTS)
   }

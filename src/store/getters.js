@@ -1,4 +1,4 @@
-import {filter, isNil} from 'lodash'
+import {filter} from 'lodash'
 
 export default {
   lastWeather: state => {

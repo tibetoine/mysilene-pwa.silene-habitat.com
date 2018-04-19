@@ -5,7 +5,7 @@ export default {
   [Do.SET_CONTACTS]: (state, contacts) => {
     // Vue.set(contacts, "contacts", contacts);
     state.contacts.filteredList = state.contacts.fullList = contacts
-    addContacts(state);
+    addContacts(state)
   },
   [Do.SET_CONTACTS_SEARCH]: (state, search) => {
     state.contacts.search = search
@@ -16,7 +16,7 @@ export default {
   },
 
   [Do.UPDATE_FILTERED_CONTACTS]: state => {
-    const s = Date.now();
+    const s = Date.now()
 
     const r = state.contacts.fullList.filter(contact => {
       var isFiltered = false
@@ -52,28 +52,27 @@ export default {
         }
       }
       return isFiltered
-    });
-    state.contacts.filteredList = r;
-    state.contacts.visibleList = [];
+    })
+    state.contacts.filteredList = r
+    state.contacts.visibleList = []
 
-    console.log("filtered", r.length, "contacts in", Date.now() - s, "ms");
+    console.log('filtered', r.length, 'contacts in', Date.now() - s, 'ms')
   },
 
   [Do.SHOW_MORE_CONTACTS]: state => {
-    addContacts(state);
+    addContacts(state)
   }
 
 }
 
-
 const addContacts = (state) => {
-  const s = Date.now();
+  const s = Date.now()
 
-  const start = state.contacts.visibleList.length;
-  const max = Math.min(start + state.contacts.pageSize, state.contacts.filteredList.length);
+  const start = state.contacts.visibleList.length
+  const max = Math.min(start + state.contacts.pageSize, state.contacts.filteredList.length)
   for (let i = start; i < max; i++) {
-    state.contacts.visibleList.push(state.contacts.filteredList[i]);
+    state.contacts.visibleList.push(state.contacts.filteredList[i])
   }
 
-  console.log("contacts",start,"to",state.contacts.visibleList.length,"in", Date.now() - s, "ms");
-};
+  console.log('contacts', start, 'to', state.contacts.visibleList.length, 'in', Date.now() - s, 'ms')
+}
