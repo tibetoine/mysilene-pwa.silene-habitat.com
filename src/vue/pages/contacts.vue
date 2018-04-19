@@ -3,9 +3,9 @@
     <v-layout row>
       <v-flex xs12 md9 offset-md3>
         <v-card>
-          <v-container fluid>
+          <v-container style="padding:4px;">
             <v-layout row>
-              <v-flex xs12 sm8>
+              <v-flex xs8 sm-and-up8>
                 <v-text-field
                   name="input-1-3"
                   label="Rechercher .."
@@ -14,7 +14,7 @@
                   v-model="search"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs12 sm4>
+              <v-flex xs4 sm-and-up4>
                 <v-btn
                   @click="doFilterSst"
                   :color="filterSst?'green':'grey'"
@@ -28,8 +28,7 @@
           </v-container>
           <v-list two-line>
             <div v-infinite-scroll="loadMore" infinite-scroll-distance="10">
-              <template v-for="(contact, index) in contacts(countLoaded)">
-                <v-divider :key="index"></v-divider>
+              <template v-for="(contact) in contacts(countLoaded)">
                 <v-list-tile avatar  :key="contact._id" @click="goToContact(contact, contact._id)">
                   <v-badge color="green" left v-if="contact.silenesst == '1'" overlap>
                     <v-icon slot="badge" dark small>local_hospital</v-icon>
@@ -109,6 +108,7 @@
                 </v-list-tile>
               </template>
             </div>
+            <v-progress-linear :indeterminate="true" v-if="busy"></v-progress-linear>
           </v-list>
         </v-card>
       </v-flex>
@@ -129,6 +129,7 @@ export default {
       { icon: 'phonelink_ring', title: 'Mobile' }
     ],
     busy: false,
+    dialog: false,
     countLoaded: 0
   }),
   computed: {
@@ -165,7 +166,11 @@ export default {
   },
   methods: {
     loadMore: function () {
+      this.busy = true
       this.countLoaded = this.countLoaded + 10
+      setTimeout(() => {
+        this.busy = false
+      }, 1000)
     },
     imgsrc: contact =>
       '/static/img/ad-photos/' +

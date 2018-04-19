@@ -24,10 +24,10 @@
 
                   <ul class="col details">
                     <li>
-                      Précipitation: <strong>{{ toPercentage(weather.currently.precipProbability) }}%</strong>
+                      Pluie: <strong>{{ toPercentage(weather.currently.precipProbability) }}%</strong>
                     </li>
                     <li>
-                      Couvert.  nuageuse: <strong>{{ toPercentage(weather.currently.cloudCover) }}%</strong>
+                      Nuages: <strong>{{ toPercentage(weather.currently.cloudCover) }}%</strong>
                     </li>
                     <li>
                       Humidité: <strong>{{ toPercentage(weather.currently.humidity) }}%</strong>
@@ -36,10 +36,10 @@
                       Vent: <strong>{{ weather.currently.windSpeed }} km/h</strong>
                     </li>
                     <li>
-                      Levé de soleil: <strong>{{ timestamp(weather.daily.data[0].sunriseTime * 1000, weather.timezone)}}</strong>
+                      Levé soleil: <strong>{{ timestamp(weather.daily.data[0].sunriseTime * 1000, weather.timezone)}}</strong>
                     </li>
                     <li>
-                      Couché de soleil: <strong>{{ timestamp(weather.daily.data[0].sunsetTime * 1000, weather.timezone)}}</strong>
+                      Couché soleil: <strong>{{ timestamp(weather.daily.data[0].sunsetTime * 1000, weather.timezone)}}</strong>
                     </li>
                   </ul>
                 </div> <!-- end .row -->

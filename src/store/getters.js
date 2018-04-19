@@ -10,7 +10,7 @@ export default {
       news => state.news.selectedTypes.indexOf(news.type) > -1
     ),
   partialContacts: (state, getters) => count => {
-    console.log(count)
+    // console.log(count)
     return getters.filteredContacts.slice(0, count)
   },
   filteredContacts: state => {

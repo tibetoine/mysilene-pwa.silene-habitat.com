@@ -1,5 +1,5 @@
 <template>
-    <v-dialog width="800px" v-model="visible" fullscreen transition="dialog-bottom-transition" :overlay="false" scrollable>
+    <v-dialog width="800px" v-model="visible" transition="dialog-bottom-transition" :overlay="false" scrollable>
         <v-card tile>
             <v-toolbar card dark color="primary">
                 <v-toolbar-title>Filtrer les news</v-toolbar-title>
@@ -15,7 +15,6 @@
                 />
             </v-card-text>
         </v-card>
-
     </v-dialog>
 </template>
 
