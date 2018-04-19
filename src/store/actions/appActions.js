@@ -13,5 +13,10 @@ export default {
 
   [On.LOAD_NEWS]: async function ({ commit }) {
     commit(Do.SET_NEWS, await rest.getNews())
+  },
+
+  [On.UPDATE_FILTERED_CONTACTS]: function ({commit}){
+    commit(Do.UPDATE_FILTERED_CONTACTS)
+    commit(Do.SHOW_MORE_CONTACTS)
   }
 }

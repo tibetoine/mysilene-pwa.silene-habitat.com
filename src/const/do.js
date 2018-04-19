@@ -4,5 +4,7 @@ export default {
   SET_CONTACTS_SEARCH: 'setContactsSearch',
   SET_NEWS: 'setNews',
   SHOW_NEWS_FILTER_DIALOG: 'showNewsFilterDialog',
-  TOGGLE_NEWS_FILTER_DIALOG: 'toggleNewsFilterDialog'
+  TOGGLE_NEWS_FILTER_DIALOG: 'toggleNewsFilterDialog',
+  UPDATE_FILTERED_CONTACTS: 'updateFilteredContacts',
+  SHOW_MORE_CONTACTS: 'showMoreContacts'
 }

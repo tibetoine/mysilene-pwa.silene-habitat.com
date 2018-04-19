@@ -5,13 +5,14 @@
   "author": "arobert@silene-habitat.com",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js",
+    "dev": "nodemon build/dev-server.js --exec babel-node",
     "start": "node build/dev-server.js --host 0.0.0.0",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "nodemon": "^1.17.3",
     "request-promise-lite": "^0.12.0",
     "vue": "^2.5.2",
     "vue-clazy-load": "^0.4.2",

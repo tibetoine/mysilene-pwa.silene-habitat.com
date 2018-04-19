@@ -4,7 +4,10 @@ export default {
   contacts: {
     search: '',
     filterSst: false,
-    fullList: []
+    fullList: [],
+    filteredList: [],
+    visibleList: [],
+    pageSize : 15
   },
   news: {
     filterDialogVisible: false,
