@@ -7,4 +7,5 @@ export default {
   TOGGLE_NEWS_FILTER_DIALOG: 'toggleNewsFilterDialog',
   UPDATE_FILTERED_CONTACTS: 'updateFilteredContacts',
   SHOW_MORE_CONTACTS: 'showMoreContacts'
+  SET_WEATHER: 'setWeather'
 }

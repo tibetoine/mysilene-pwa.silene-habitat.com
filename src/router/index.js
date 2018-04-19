@@ -36,7 +36,7 @@ export default new Router({
     {
       path: '/meteo',
       component: Meteo,
-      name: 'meteo-contacts'
+      name: 'meteo'
     }
 
   ]

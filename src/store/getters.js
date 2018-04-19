@@ -1,6 +1,9 @@
 import {filter, isNil} from 'lodash'
 
 export default {
+  lastWeather: state => {
+    return state.meteo.lastWeather
+  },
   filteredNews: state =>
     filter(
       state.news.fullList,

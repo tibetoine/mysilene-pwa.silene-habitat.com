@@ -81,13 +81,30 @@
                 </v-flex>
             </v-layout>
         </v-container>
+      <v-btn
+        fab
+        bottom
+        right
+        color="pink"
+        dark
+        fixed
+        @click.stop="showNewsFilterDialog"
+      >
+        <v-icon>settings</v-icon>
+      </v-btn>
+      
+
+      <filter-news-dialog/>
     </v-content>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
+import Do from '../../const/do'
+import FilterNewsDialog from '../dialogs/FilterNewsDialog'
 
 export default {
+  components: { FilterNewsDialog },
   name: 'news',
   computed: {
     ...mapState({
@@ -104,6 +121,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG
+    }),
     goToNews: function (news, newsId) {
       // console.log('News : ' + news + ' newsId : ' + newsId)
       this.$store.state.selectedNews = news

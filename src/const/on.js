@@ -2,5 +2,6 @@
 export default {
   LOAD_CONTACTS: 'loadContacts',
   LOAD_NEWS: 'loadNews',
-  UPDATE_FILTERED_CONTACTS: 'updateFilteredContacts'
+  UPDATE_FILTERED_CONTACTS: 'updateFilteredContacts',
+  LOAD_WEATHER: 'loadWeather'
 }

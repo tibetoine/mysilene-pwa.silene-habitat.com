@@ -3,9 +3,9 @@
     <v-layout row>
       <v-flex xs12 md9 offset-md3>
         <v-card>
-          <v-container fluid>
+          <v-container style="padding:4px;">
             <v-layout row>
-              <v-flex xs12 sm8>
+              <v-flex xs8 sm-and-up8>
                 <v-text-field
                   name="input-1-3"
                   label="Rechercher .."
@@ -14,7 +14,7 @@
                   v-model="search"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs12 sm4>
+              <v-flex xs4 sm-and-up4>
                 <v-btn
                   @click="doFilterSst"
                   :color="filterSst?'green':'grey'"
@@ -107,6 +107,7 @@
                   </v-menu>
                 </v-list-tile>
               </template>
+            </div>
           </v-list>
         </v-card>
       </v-flex>
@@ -120,96 +121,101 @@
   import Do from "../../const/do";
   import On from "../../const/on";
 
-  let updateT;
-  export default {
-    name: 'contacts',
-    data: () => ({
-      items: [
-        {icon: 'email', title: 'Mail'},
-        {icon: 'phone', title: 'Phone'},
-        {icon: 'chat', title: 'Chat'},
-        {icon: 'phonelink_ring', title: 'Mobile'}
-      ],
-      busy: false
+export default {
+  name: 'contacts',
+  data: () => ({
+    items: [
+      { icon: 'email', title: 'Mail' },
+      { icon: 'phone', title: 'Phone' },
+      { icon: 'chat', title: 'Chat' },
+      { icon: 'phonelink_ring', title: 'Mobile' }
+    ],
+    busy: false,
+    dialog: false,
+    countLoaded: 0
+  }),
+  computed: {
+    ...mapState({
+      filterSst: state => state.contacts.filterSst,
+      selectedContact: state => state.selectedContact,
+      visibleContacts: state => state.contacts.visibleList
     }),
-    computed: {
-      ...mapState({
-        filterSst: state => state.contacts.filterSst,
-        selectedContact: state => state.selectedContact,
-        visibleContacts: state => state.contacts.visibleList
-      }),
-      search: {
-        get: function () {
-          return this.$store.state.contacts.search
-        },
-        set: function (value) {
-          this.setSearch(value);
-        }
+    ...mapGetters({ contacts: 'partialContacts' }),
+    search: {
+      get: function () {
+        return this.$store.state.contacts.search
       },
-      ...mapGetters({contacts: 'partialContacts'}),
-      filterSst: {
-        get: function () {
-          return this.$store.state.contacts.filterSst
-        },
-        set: function (value) {
-          this.$store.state.contacts.filterSst = value;
-          this.filterChanged();
-        }
-      },
-      selectedContact: {
-        get: function () {
-          return this.$store.state.selectedContact
-        },
-        set: function (value) {
-          this.$store.state.selectedContact = value
-        }
+      set: function (value) {
+        this.setSearch(value)
       }
     },
-    beforeUpdate: function () {
-      updateT = Date.now()
+    filterSst: {
+      get: function () {
+        return this.$store.state.contacts.filterSst
+      },
+      set: function (value) {
+        this.$store.state.contacts.filterSst = value
+        this.filterChanged()
+      }
     },
-    updated: function () {
-      console.log("updated in", Date.now() - updateT, "ms")
-    },
-    methods: {
-      ...mapActions({
-        filterChanged: On.UPDATE_FILTERED_CONTACTS,
-      }),
-      ...mapMutations({
-        showMore: Do.SHOW_MORE_CONTACTS
-      }),
-      setSearch: debounce(function (value) {
-        this.$store.state.contacts.search = value;
-        this.filterChanged();
-      }, 300),
-      loadMore: function () {
-        console.log("load more contacts...");
-        this.showMore();
+    selectedContact: {
+      get: function () {
+        return this.$store.state.selectedContact
       },
-      imgsrc: contact =>
-        '/static/img/ad-photos/' +
-        (contact.thumbnailPhoto ? contact.sAMAccountName : 'default') +
-        '.jpg',
-      doFilterSst() {
-        this.search = '';
-        this.filterSst = !this.filterSst
-      },
-      goToContact: function (contact, contactId) {
-        // console.log('Contact : ' + contact + ' contactId : ' + contactId)
-        this.$store.state.selectedContact = contact
-        // this.$router.push({ path: 'contactModal', params: { contactId }})
-        // this.$router.push({ name: 'contactModal', params: { contactId }})
-        this.$router.push({path: `/contacts/${contactId}`})
-      },
-      sendMail(mail) {
-        if (mail) window.location = 'mailto:' + mail
-      },
-      callBryan(mobile) {
-        if (mobile) window.location = 'tel:' + mobile
-      },
-      textBryan(mobile) {
-        if (mobile) window.location = 'sms:' + mobile
+      set: function (value) {
+        this.$store.state.selectedContact = value
       }
     }
+  },
+  beforeUpdate: function () {
+    updateT = Date.now()
+  },
+  updated: function () {
+    console.log("updated in", Date.now() - updateT, "ms")
+  },
+  methods: {
+    ...mapActions({
+      filterChanged: On.UPDATE_FILTERED_CONTACTS,
+    }),
+    ...mapMutations({
+      showMore: Do.SHOW_MORE_CONTACTS
+    }),
+    setSearch: debounce(function (value) {
+      this.$store.state.contacts.search = value;
+      this.filterChanged();
+    }, 300),
+    loadMore: function () {
+      console.log("load more contacts...");
+      this.busy = true
+      this.showMore();
+      setTimeout(() => {
+        this.busy = false
+      }, 1000)
+    },
+    imgsrc: contact =>
+      '/static/img/ad-photos/' +
+      (contact.thumbnailPhoto ? contact.sAMAccountName : 'default') +
+      '.jpg',
+    doFilterSst () {
+      this.search = ''
+      this.filterSst ? (this.filterSst = false) : (this.filterSst = true)
+    },
+    goToContact: function (contact, contactId) {
+      // console.log('Contact : ' + contact + ' contactId : ' + contactId)
+      this.$store.state.selectedContact = contact
+      // this.$router.push({ path: 'contactModal', params: { contactId }})
+      // this.$router.push({ name: 'contactModal', params: { contactId }})
+      this.$router.push({ path: `/contacts/${contactId}` })
+    },
+    sendMail (mail) {
+      if (mail) window.location = 'mailto:' + mail
+    },
+    callBryan (mobile) {
+      if (mobile) window.location = 'tel:' + mobile
+    },
+    textBryan (mobile) {
+      if (mobile) window.location = 'sms:' + mobile
+    }
   }
+}
 </script>
