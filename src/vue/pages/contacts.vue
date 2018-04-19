@@ -23,8 +23,7 @@
                   SST
                   <v-icon right dark>local_hospital</v-icon>
                 </v-btn>
-              </v-flex>
-            </v-layout>
+              </v-flex></v-layout>
           </v-container>
           <v-list two-line v-infinite-scroll="loadMore" infinite-scroll-distance="10">
               <template v-for="(contact, index) in visibleContacts">
