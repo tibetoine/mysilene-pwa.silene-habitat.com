@@ -26,8 +26,7 @@
               </v-flex></v-layout>
           </v-container>
           <v-list two-line v-infinite-scroll="loadMore" infinite-scroll-distance="10">
-              <template v-for="(contact, index) in visibleContacts">
-                <v-divider></v-divider>
+              <template v-for="(contact) in visibleContacts">
                 <v-list-tile avatar :key="contact._id" @click="goToContact(contact, contact._id)">
                   <v-badge color="green" left v-if="contact.silenesst == '1'" overlap>
                     <v-icon slot="badge" dark small>local_hospital</v-icon>
@@ -106,7 +105,7 @@
                   </v-menu>
                 </v-list-tile>
               </template>
-            </div>
+              <v-progress-linear :indeterminate="true" v-if="busy"></v-progress-linear>
           </v-list>
         </v-card>
       </v-flex>
