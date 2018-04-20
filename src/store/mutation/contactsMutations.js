@@ -1,5 +1,5 @@
 import Do from '../../const/do'
-
+/* eslint-disable */
 export default {
 
   [Do.SET_CONTACTS]: (state, contacts) => {
@@ -56,7 +56,7 @@ export default {
     state.contacts.filteredList = r
     state.contacts.visibleList = []
 
-    console.log('filtered', r.length, 'contacts in', Date.now() - s, 'ms')
+    // console.log('filtered', r.length, 'contacts in', Date.now() - s, 'ms')
   },
 
   [Do.SHOW_MORE_CONTACTS]: state => {
@@ -74,5 +74,5 @@ const addContacts = (state) => {
     state.contacts.visibleList.push(state.contacts.filteredList[i])
   }
 
-  console.log('contacts', start, 'to', state.contacts.visibleList.length, 'in', Date.now() - s, 'ms')
+  // console.log('contacts', start, 'to', state.contacts.visibleList.length, 'in', Date.now() - s, 'ms')
 }

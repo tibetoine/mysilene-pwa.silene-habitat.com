@@ -170,7 +170,7 @@ export default {
     this.updateT = Date.now()
   },
   updated: function () {
-    console.log('updated in', Date.now() - this.updateT, 'ms')
+    // console.log('updated in', Date.now() - this.updateT, 'ms')
   },
   methods: {
     ...mapActions({
@@ -184,7 +184,7 @@ export default {
       this.filterChanged()
     }, 300),
     loadMore: function () {
-      console.log('load more contacts...')
+      // console.log('load more contacts...')
       this.busy = true
       this.showMore()
       setTimeout(() => {
