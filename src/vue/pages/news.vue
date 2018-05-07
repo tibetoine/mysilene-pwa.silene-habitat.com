@@ -69,7 +69,7 @@
                                 </v-card-title>
                                 <v-card-title :color="getColor(aNews)" style="padding-top:0px;">
                                     <div>
-                                        <span :color="getColor(aNews)">{{aNews.resume}}</span>
+                                        <span v-if="aNews.type !== 'cos-rss'" :color="getColor(aNews)">{{aNews.resume}}</span>
                                     </div>
                                 </v-card-title>
                                 <v-card-actions>
@@ -125,11 +125,15 @@ export default {
       showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG
     }),
     goToNews: function (news, newsId) {
-      // console.log('News : ' + news + ' newsId : ' + newsId)
-      this.$store.state.selectedNews = news
-      // this.$router.push({ path: 'newsModal', params: { newsId }})
-      // this.$router.push({ name: 'newsModal', params: { newsId }})
-      this.$router.push({ path: `/news/${newsId}` })
+      if (news.type.startsWith('cos')) {
+        window.open(news.link, '_blank')
+      } else {
+        // console.log('News : ' + news + ' newsId : ' + newsId)
+        this.$store.state.selectedNews = news
+        // this.$router.push({ path: 'newsModal', params: { newsId }})
+        // this.$router.push({ name: 'newsModal', params: { newsId }})
+        this.$router.push({ path: `/news/${newsId}` })
+      }
     },
     chrinkAuthor: author => {
       if (author.length > 19) {
@@ -167,13 +171,16 @@ export default {
           color = 'red darken-2'
           break
         case 'mouvementsRH':
-          color = 'light-green darken-2'
+          color = 'indigo darken-2'
           break
         case 'actualites':
           color = 'blue darken-2'
-
           break
-
+        case 'cos-rss':
+        case 'cosActu':
+        case 'cosNews':
+          color = 'blue-grey darken-2'
+          break
         default:
           break
       }
@@ -193,10 +200,18 @@ export default {
           break
         case 'actualites':
           label = 'Actualité'
-
           break
-
+        case 'cos-rss':
+          label = 'COS RSS'
+          break
+        case 'cosActu':
+          label = 'COS Actus'
+          break
+        case 'cosNews':
+          label = 'COS News'
+          break
         default:
+          console.log('Type non trouvé : ' + news.type)
           break
       }
       return label
@@ -211,13 +226,16 @@ export default {
           color = '#d32f2f' // red darken-2
           break
         case 'mouvementsRH':
-          color = '#689F38 ' // light-green darken-2
+          color = '#303f9f ' // indigo darken-2
           break
         case 'actualites':
           color = '#1976d2 ' // blue darken-2
-
           break
-
+        case 'cos-rss':
+        case 'cosActu':
+        case 'cosNews':
+          color = '#455A64 ' // blue-grey darken-2
+          break
         default:
           break
       }
@@ -237,9 +255,12 @@ export default {
           break
         case 'facebook':
           icon = 'public'
-
           break
-
+        case 'cos-rss':
+        case 'cosActu':
+        case 'cosNews':
+          icon = 'account_balance'
+          break
         default:
           break
       }

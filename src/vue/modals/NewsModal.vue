@@ -128,9 +128,10 @@ export default {
           break
         case 'actualites':
           color = 'blue darken-2'
-
           break
-
+        case 'cos-rss':
+          color = 'blue-grey darken-2'
+          break
         default:
           break
       }
@@ -150,10 +151,12 @@ export default {
           break
         case 'actualites':
           label = 'Actualité'
-
           break
-
+        case 'cos-rss':
+          label = 'COS'
+          break
         default:
+          console.log('Type non trouvé : ' + news.type)
           break
       }
       return label
@@ -172,9 +175,10 @@ export default {
           break
         case 'actualites':
           color = '#1976d2 ' // blue darken-2
-
           break
-
+        case 'cos-rss':
+          color = '#455A64 ' // blue-grey darken-2
+          break
         default:
           break
       }
@@ -194,9 +198,10 @@ export default {
           break
         case 'facebook':
           icon = 'public'
-
           break
-
+        case 'cos-rss':
+          icon = 'account_balance'
+          break
         default:
           break
       }
