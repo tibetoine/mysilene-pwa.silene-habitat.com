@@ -1,6 +1,8 @@
 <template>
   <v-app id="inspire" >  
-   
+    
+    <login-dialog/>
+    <error-dialog/>
    
    
     <v-navigation-drawer
@@ -44,7 +46,10 @@
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>notifications</v-icon>
-      </v-btn>      
+      </v-btn>   
+      <v-btn v-if="error" @click.stop="showErrorDialog" icon>
+        <v-icon  >warning</v-icon>
+      </v-btn>   
     </v-toolbar>
 
     <router-view></router-view>
@@ -53,15 +58,29 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations, mapGetters } from 'vuex'
 import On from './const/on'
 import Do from './const/do'
+import LoginDialog from './vue/dialogs/LoginDialog'
+import ErrorDialog from './vue/dialogs/ErrorDialog'
 
 export default {
+  components: { LoginDialog, ErrorDialog },
   computed: {
     username () {
       // Nous verrons ce que représente `params` dans un instant.
       return this.$route.params.username
+    },
+    error: {
+      get: function () {
+        return this.$store.state.error.data != null
+      }
+    }
+  },
+  beforeCreate () {
+    if (this.$store.state.login.token == null) {
+      // this.$router.push('/login')
+
     }
   },
   mounted: function () {
@@ -79,8 +98,12 @@ export default {
       loadWeather: On.LOAD_WEATHER
     }),
     ...mapMutations({
-      showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG
-    })
+      showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG,
+      showErrorDialog: Do.SHOW_ERROR_DIALOG
+    }),
+    ...mapGetters([
+      'isAuthenticate'
+    ])
   },
   data: () => ({
     drawer: null,

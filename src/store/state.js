@@ -1,4 +1,17 @@
 export default {
+  login: {
+    userId: null,
+    token: null,
+    loginDialogVisible: false,
+    Authenticate: false,
+    AuthFailure: false,
+    AuthFailMsg: null
+
+  },
+  error: {
+    data: null,
+    showDialog: false
+  },
   selectedContact: null,
   selectedNew: null,
   contacts: {

@@ -6,6 +6,8 @@ import appActions from './actions/appActions'
 import contactsMutations from './mutation/contactsMutations'
 import newsMutations from './mutation/newsMutations'
 import weatherMutations from './mutation/weatherMutations'
+import loginMutations from './mutation/loginMutations'
+import appMutations from './mutation/appMutations'
 
 Vue.use(Vuex)
 
@@ -15,7 +17,9 @@ const store = new Vuex.Store({
   mutations: {
     ...contactsMutations,
     ...newsMutations,
-    ...weatherMutations
+    ...weatherMutations,
+    ...loginMutations,
+    ...appMutations
   },
   actions: {
     ...appActions

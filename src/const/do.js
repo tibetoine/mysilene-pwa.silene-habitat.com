@@ -7,5 +7,11 @@ export default {
   TOGGLE_NEWS_FILTER_DIALOG: 'toggleNewsFilterDialog',
   UPDATE_FILTERED_CONTACTS: 'updateFilteredContacts',
   SHOW_MORE_CONTACTS: 'showMoreContacts',
-  SET_WEATHER: 'setWeather'
+  SET_WEATHER: 'setWeather',
+  LOGIN: 'login',
+  LOGIN_FAIL: 'loginFail',
+  LOGIN_SUCCESS: 'loginSuccess',
+  SHOW_LOGIN_DIALOG: 'showLoginDialog',
+  LOG_ERROR_ON_CLIENT: 'logErrorOnClient',
+  SHOW_ERROR_DIALOG: 'showErrorDialog'
 }
