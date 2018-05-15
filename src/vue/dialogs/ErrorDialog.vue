@@ -5,7 +5,7 @@
             <v-toolbar-title>Détail sur une erreur</v-toolbar-title>
             <v-spacer></v-spacer>            
           </v-toolbar>
-          <div v-if="error!=null">
+          <div style="padding:10px;" v-if="error!=null">
             {{error}}
           </div>
         </v-card>
@@ -28,6 +28,9 @@ export default {
     visible: {
       get: function () {
         return this.$store.state.error.showDialog
+      },
+      set: function (val) {
+        // should not be used
       }
     }
   }

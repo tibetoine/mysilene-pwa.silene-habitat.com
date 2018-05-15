@@ -9,6 +9,7 @@ export default {
   SHOW_MORE_CONTACTS: 'showMoreContacts',
   SET_WEATHER: 'setWeather',
   LOGIN: 'login',
+  LOGOUT: 'logout',
   LOGIN_FAIL: 'loginFail',
   LOGIN_SUCCESS: 'loginSuccess',
   SHOW_LOGIN_DIALOG: 'showLoginDialog',

@@ -9,31 +9,31 @@
             Erreur lors de la connexion :  {{authFailureMsg}}
           </v-alert>
           <form  class="form form--login" v-on:submit.prevent="onSubmit" style="padding:20px;">
-            <div :class="{'is-waiting': loader}">
-              <v-layout column>
-                <v-flex>
-                  <v-text-field
-                    v-model.trim="userId"
-                    name="user"
-                    label="Identifiant"
-                    id="userId"
-                    type="text"
-                    required></v-text-field>
-                </v-flex>
-                <v-flex>
-                  <v-text-field
-                    v-model.trim="password"
-                    name="password"
-                    label="Password"
-                    id="password"
-                    type="password"
-                    required></v-text-field>
-                </v-flex>
-                <v-flex class="text-xs-center" mt-5>
-                  <v-btn color="primary" type="submit">Connexion</v-btn>
-                </v-flex>
-              </v-layout>
-            </div>
+            <v-layout column>
+              <v-flex>
+                <v-text-field
+                  v-model.trim="userId"
+                  name="user"
+                  label="Identifiant"
+                  id="userId"
+                  type="text"
+                  autocomplete="username"
+                  required></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                  v-model.trim="password"
+                  name="password"
+                  label="Password"
+                  id="password"
+                  type="password"
+                  autocomplete="current-password"
+                  required></v-text-field>
+              </v-flex>
+              <v-flex class="text-xs-center" mt-5>
+                <v-btn color="primary" type="submit">Connexion</v-btn>
+              </v-flex>
+            </v-layout>
           </form>
         </v-card>
     </v-dialog>
@@ -53,15 +53,10 @@ export default {
       password: ''
     }
   },
-  beforeCreate () {
-    if (this.$store.state.login.token != null) {
-      // this.$router.push('/')
-    }
-  },
   computed: {
     visible: {
       get: function () {
-        return !this.$store.state.login.isAuthenticate
+        return !this.$store.state.login.Authenticate
       },
       set: function () {
         console.log('should not be used')
@@ -86,14 +81,14 @@ export default {
       loginAction: On.LOGIN
     }),
     onSubmit () {
+      console.log('onSubmit')
       this.loader = true
       this.infoError = false
       var builtUser = {userId: this.userId, password: this.password}
       this.loginAction(builtUser).then(
         response => {
-          // localStorage.setItem('token', response.body.token)
           this.loader = false
-          // this.$router.push('/')
+          this.$router.push('/')
         },
         () => {
           this.loader = false

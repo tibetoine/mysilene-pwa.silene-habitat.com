@@ -1,12 +1,11 @@
 export default {
   login: {
-    userId: null,
-    token: null,
+    userId: localStorage.getItem('user-id') || null,
+    token: localStorage.getItem('user-token') || '',
     loginDialogVisible: false,
     Authenticate: false,
     AuthFailure: false,
     AuthFailMsg: null
-
   },
   error: {
     data: null,

@@ -39,6 +39,18 @@
           
         </v-card-title>        
       </v-card>
+      <v-btn
+        fab
+        bottom
+        right
+        color="orange"
+        dark
+        fixed
+        @click.stop="goBack"
+      >
+        <v-icon>arrow_back</v-icon>
+      </v-btn>
+      
     </v-flex>
   </v-layout>
 </template>
@@ -76,6 +88,9 @@ export default {
     this.fetchData()
   },
   methods: {
+    goBack () {
+      this.$router.go(-1)
+    },
     fetchData () {
       // console.log('--> Fetching data News')
       this.error = this.news = null

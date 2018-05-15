@@ -4,6 +4,18 @@ const url = path => window.location.origin + '/' + path
 const options = body => ({ body: body, json: true })
 
 export default {
+
+  setDefaultAuthorization: token => {
+    const options = req.Request.defaults
+    console.log(token)
+    options.headers = { Authorization: token }
+    req.Request.defaults = options
+  },
+  deleteDefaultAuthorization: token => {
+    const options = req.Request.defaults
+    options.headers = {}
+    req.Request.defaults = options
+  },
   get: path => {
     console.log('URL : ' + url(path))
     return req.get(url(path), options())

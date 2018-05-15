@@ -49,7 +49,62 @@
       </v-btn>   
       <v-btn v-if="error" @click.stop="showErrorDialog" icon>
         <v-icon  >warning</v-icon>
-      </v-btn>   
+      </v-btn>
+
+      
+
+      <v-speed-dial
+        v-if="userAuthenticated!=null"
+        small
+        v-model="fab"
+        direction="bottom"
+      >
+        <v-btn
+          slot="activator"
+          fab
+          hover
+          v-model="fab"
+          icon
+          small          
+        >
+          <v-avatar size="40" color="grey lighten-4">
+            <img
+              :src="findAvatar(userAuthenticated)"
+              alt="UserAvatar"
+            >
+          </v-avatar>
+          <v-icon>close</v-icon>
+        </v-btn>
+        
+        <v-btn
+          fab
+          dark
+          small
+          color="red"
+          @click.stop="logout"
+        >
+          <v-icon>power_off</v-icon>
+        </v-btn>
+      </v-speed-dial>
+
+      <v-btn
+          v-else
+          slot="activator"
+          fab
+          hover
+          v-model="fab"
+          icon
+          small          
+        >
+          <v-avatar size="40" color="grey lighten-4">
+            <img
+              src="/static/img/ad-photos/default.jpg"
+              alt="Connexion"
+            >
+          </v-avatar>          
+        </v-btn>
+
+          
     </v-toolbar>
 
     <router-view></router-view>
@@ -63,6 +118,7 @@ import On from './const/on'
 import Do from './const/do'
 import LoginDialog from './vue/dialogs/LoginDialog'
 import ErrorDialog from './vue/dialogs/ErrorDialog'
+import api from './rest/api'
 
 export default {
   components: { LoginDialog, ErrorDialog },
@@ -75,17 +131,33 @@ export default {
       get: function () {
         return this.$store.state.error.data != null
       }
+    },
+    userAuthenticated: {
+      get: function () {
+        var user = null
+        if (this.$store.state.login.Authenticate) {
+          user = this.$store.state.login.userId
+        }
+        return user
+      }
     }
   },
   beforeCreate () {
-    if (this.$store.state.login.token == null) {
-      // this.$router.push('/login')
-
+    /* Connexion auto si token dans le storage */
+    const token = localStorage.getItem('user-token')
+    const userId = localStorage.getItem('user-id')
+    console.log('TOKEN : ' + token + ' USER ID : ' + userId)
+    if (token && userId) {
+      api.setDefaultAuthorization(token)
+      var user = {_id: userId, token: token}
+      this.$store.dispatch(On.AUTO_LOGIN, user)
     }
+
+    // this.autoLogin(user)
   },
   mounted: function () {
-    this.loadContacts()
-    this.loadNews()
+    // this.loadContacts()
+    // this.loadNews()
     this.loadWeather()
   },
   methods: {
@@ -95,17 +167,22 @@ export default {
     ...mapActions({
       loadContacts: On.LOAD_CONTACTS,
       loadNews: On.LOAD_NEWS,
-      loadWeather: On.LOAD_WEATHER
+      loadWeather: On.LOAD_WEATHER,
+      logout: On.LOGOUT,
+      autoLogin: On.AUTO_LOGIN
     }),
     ...mapMutations({
       showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG,
       showErrorDialog: Do.SHOW_ERROR_DIALOG
     }),
-    ...mapGetters([
-      'isAuthenticate'
-    ])
+    ...mapGetters(['isAuthenticate']),
+    findAvatar: function (userId) {
+      var imgSource = '/static/img/ad-photos/' + userId + '.jpg'
+      return imgSource
+    }
   },
   data: () => ({
+    fab: false,
     drawer: null,
     items: [
       { icon: 'art_track', text: 'News', path: '/news' },

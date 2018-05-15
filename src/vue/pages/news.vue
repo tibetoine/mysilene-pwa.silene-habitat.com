@@ -1,101 +1,106 @@
 <template>
-    <v-content>
-        <v-container fluid fill-height>
-            <v-layout row>
-                <v-flex xs12 md6>
-                    <v-list two-line>
-                        <template v-for="aNews in news">
-                            <v-card style="margin:20px 10px 20px 10px;" v-bind:key="aNews._id">
-                                <v-card-title>
-                                    <v-avatar
-                                size="36px"
-                                slot="activator"
-                                >
-                                  <img
-                                      :src="findAvatar(aNews.author)"
-                                      :alt="'avatar_'+aNews.author"                                        
-                                  >
-                                    
-                                </v-avatar>
-                                <span :title="aNews.author" style="padding-left:10px;">{{aNews.author?chrinkAuthor(aNews.author):'Auteur Inconnu'}}</span>
-                                    <!-- Photo Author --> 
-                                    <!-- Author --> 
-                                    <!-- Photo Author --> 
-                                </v-card-title>
-                                <clazy-load :src="imgsrc(aNews)">
-                                  <v-card-media 
-                                  class="black--text"
-                                  height="200px"
-                                  :src="imgsrc(aNews)"
-                                  :contain="aNews.type=='mouvementsRH'"
-                                  >
-                                      <v-container fill-height fluid style="padding:2px;">
-                                          <v-layout align-end justify-start >
-                                              <v-flex 
-                                              xs2 
-                                              d-flex 
-                                              align-end
-                                              pa-2
-                                              >
-                                                  <v-chip label :color="getColor(aNews)" text-color="white">
-                                                      <v-avatar>
-                                                          <v-icon>{{getIcon(aNews)}}</v-icon>
-                                                      </v-avatar>
-                                                      {{getTypeLabel(aNews)}}
-                                                  </v-chip>
-                                              </v-flex>
-                                          </v-layout>
-                                          <v-layout justify-end >
-                                              <v-flex xs6 sm3 md2 justify-end style="margin-top:10px;margin-right:10px;">
-                                                <v-avatar :class="getColor(aNews)" >
-                                                      <p style="margin:0;padding:0 0 0 1px;text-align:center;line-height:1.1em;">
-                                                          <span class="white--text" style="padding:0;margin:0;font-size:1.5em;padding-left:2px;">{{getDay(aNews)}}</span> 
-                                                              <br/>                                        
-                                                          <span class="white--text" style="padding:0;margin:0;">{{getMonth(aNews)}}</span>
-                                                      </p>
-                                                  </v-avatar>
-                                              </v-flex>
-                                          </v-layout>
-                                      </v-container>
-                                  </v-card-media>
-                                  <div class="preloader" slot="placeholder">
-                                    <v-progress-linear :color="getColor(aNews)" :indeterminate="true"></v-progress-linear>
-                                  </div>
-                                </clazy-load>
-                                <v-card-title>
-                                    <div>
-                                        <span class="headline" :style="'color:'+getFontColor(aNews)+';'">{{aNews.title}}</span>
-                                    </div>
-                                </v-card-title>
-                                <v-card-title :color="getColor(aNews)" style="padding-top:0px;">
-                                    <div>
-                                        <span v-if="aNews.type !== 'cos-rss'" :color="getColor(aNews)">{{aNews.resume}}</span>
-                                    </div>
-                                </v-card-title>
-                                <v-card-actions>
-                                    <v-btn flat color="blue" @click="goToNews(aNews, aNews._id)">Lire la suite > </v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </template>
-                    </v-list>
-                </v-flex>
-            </v-layout>
-        </v-container>
-      <v-btn
-        fab
-        bottom
-        right
-        color="pink"
-        dark
-        fixed
-        @click.stop="showNewsFilterDialog"
-      >
-        <v-icon>settings</v-icon>
-      </v-btn>
-      
+  <v-content>
+    <v-container fluid fill-height>
+      <v-layout row>
+        <v-flex xs12 md6>
+          <div v-if="news==null || news.length <=0">
+            <v-alert :value="true" type="info">
+              Vous devez être connecté pour accéder aux News Silène
+            </v-alert>
+          </div>
+          <v-list two-line>
+              <template v-for="aNews in news">
+                  <v-card style="margin:20px 10px 20px 10px;" v-bind:key="aNews._id">
+                      <v-card-title :style="'background-color:'+getFontColor(aNews)+';'">
+                          <v-avatar
+                      size="36px"
+                      slot="activator"
+                      >
+                        <img
+                            :src="findAvatar(aNews.author)"
+                            :alt="'avatar_'+aNews.author"                                        
+                        >
+                          
+                      </v-avatar>
+                      <span :title="aNews.author" style="padding-left:10px;color:white;">{{aNews.author?chrinkAuthor(aNews.author):'Auteur Inconnu'}}</span>
+                          <!-- Photo Author --> 
+                          <!-- Author --> 
+                          <!-- Photo Author --> 
+                      </v-card-title>
+                      <clazy-load :src="imgsrc(aNews)">
+                        <v-card-media 
+                        class="black--text"
+                        height="200px"
+                        :src="imgsrc(aNews)"
+                        :contain="aNews.type=='mouvementsRH'"
+                        >
+                            <v-container fill-height fluid style="padding:2px;">
+                                <v-layout align-end justify-start >
+                                    <v-flex 
+                                    xs2 
+                                    d-flex 
+                                    align-end
+                                    pa-2
+                                    >
+                                        <v-chip label :color="getColor(aNews)" text-color="white">
+                                            <v-avatar>
+                                                <v-icon>{{getIcon(aNews)}}</v-icon>
+                                            </v-avatar>
+                                            {{getTypeLabel(aNews)}}
+                                        </v-chip>
+                                    </v-flex>
+                                </v-layout>
+                                <v-layout justify-end >
+                                    <v-flex xs6 sm3 md2 justify-end style="margin-top:10px;margin-right:10px;">
+                                      <v-avatar :class="getColor(aNews)" >
+                                            <p style="margin:0;padding:0 0 0 1px;text-align:center;line-height:1.1em;">
+                                                <span class="white--text" style="padding:0;margin:0;font-size:1.5em;padding-left:2px;">{{getDay(aNews)}}</span> 
+                                                    <br/>                                        
+                                                <span class="white--text" style="padding:0;margin:0;">{{getMonth(aNews)}}</span>
+                                            </p>
+                                        </v-avatar>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+                        </v-card-media>
+                        <div class="preloader" slot="placeholder">
+                          <v-progress-linear :color="getColor(aNews)" :indeterminate="true"></v-progress-linear>
+                        </div>
+                      </clazy-load>
+                      <v-card-title>
+                          <div>
+                              <span class="headline" :style="'color:'+getFontColor(aNews)+';'">{{aNews.title}}</span>
+                          </div>
+                      </v-card-title>
+                      <v-card-title :color="getColor(aNews)" style="padding-top:0px;">
+                          <div>
+                              <span v-if="aNews.type !== 'cos-rss'" :color="getColor(aNews)">{{aNews.resume}}</span>
+                          </div>
+                      </v-card-title>
+                      <v-card-actions>
+                          <v-btn flat color="blue" @click="goToNews(aNews, aNews._id)">Lire la suite > </v-btn>
+                      </v-card-actions>
+                  </v-card>
+              </template>
+          </v-list>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <v-btn
+      fab
+      bottom
+      right
+      color="pink"
+      dark
+      fixed
+      @click.stop="showNewsFilterDialog"
+    >
+      <v-icon>settings</v-icon>
+    </v-btn>
+    
 
-      <filter-news-dialog/>
-    </v-content>
+    <filter-news-dialog/>
+  </v-content>
 </template>
 
 <script>

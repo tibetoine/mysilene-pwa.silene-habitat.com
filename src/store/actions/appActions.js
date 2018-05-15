@@ -1,6 +1,7 @@
 import On from '../../const/on'
 import Do from '../../const/do'
 import rest from '../../rest/routes'
+import api from '../../rest/api'
 
 export default {
   [On.LOAD_CONTACTS]: async function ({ commit }) {
@@ -24,26 +25,58 @@ export default {
     commit(Do.SHOW_MORE_CONTACTS)
   },
 
-  [On.LOGIN]: async function ({commit}, user) {
+  [On.LOGIN]: async function ({commit, dispatch}, user) {
     var callbackError = error => {
       console.log('Action : LOGIN FAILURE')
-      console.log(error)
+      // console.log(error)
       var message = 'Authentification impossible!'
       if (error.response && error.response.message) {
         message = error.response.message
+      } else {
+        console.log(error)
       }
+      /* Suppression du user-token si existe */
+      localStorage.removeItem('user-token')
+
+      /* Suppression Header d'Authorization par defaut */
+      api.deleteDefaultAuthorization()
 
       commit(Do.LOGIN_FAIL, message)
-      console.log('commit(Do.LOG_ERROR_ON_CLIENT, error.response)')
+      // console.log('commit(Do.LOG_ERROR_ON_CLIENT, error.response)')
       commit(Do.LOG_ERROR_ON_CLIENT, error.response)
     }
 
     var callbackSuccess = response => {
       // TODO Enregistre le token en local.
       console.log('Action : LOGIN SUCCESS')
+      /* Mise à jour du Local Storage */
+      const token = response.token
+
+      /* Header d'Authorization par defaut */
+      api.setDefaultAuthorization(response.token)
+
+      localStorage.setItem('user-token', token)
+      localStorage.setItem('user-id', user.userId)
       commit(Do.LOGIN_SUCCESS, response)
+
+      /* Dispatch Action */
+      dispatch(On.LOAD_NEWS)
+      dispatch(On.LOAD_CONTACTS)
+      dispatch(On.LOAD_WEATHER)
     }
 
-    commit(Do.LOGIN, user, await rest.login(user, callbackSuccess, callbackError))
+    await rest.login(user, callbackSuccess, callbackError)
+  },
+  [On.LOGOUT]: async function ({ commit }, user) {
+    /* Suppression du user-token si existe */
+    localStorage.removeItem('user-token')
+    commit(Do.LOGOUT)
+  },
+  [On.AUTO_LOGIN]: async function ({ commit, dispatch }, user) {
+    commit(Do.LOGIN_SUCCESS, user)
+
+    /* Dispatch Action */
+    dispatch(On.LOAD_NEWS)
+    dispatch(On.LOAD_CONTACTS)
   }
 }

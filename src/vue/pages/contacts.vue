@@ -2,7 +2,12 @@
   <v-container style="margin-top:50px;">
     <v-layout row>
       <v-flex xs12 md9 offset-md3>
-        <v-card>
+        <div v-if="visibleContacts==null || visibleContacts.length <=0">
+          <v-alert :value="true" type="info">
+            Vous devez être connecté pour accéder aux Contacts Silène
+          </v-alert>
+        </div>
+        <v-card v-else>
           <v-container style="padding:4px;">
             <v-layout row>
               <v-flex xs8 sm-and-up8>
