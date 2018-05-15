@@ -12,11 +12,12 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "nodemon": "^1.17.3",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.16",
+    "nodemon": "^1.17.3",
     "request-promise-lite": "^0.12.0",
     "style-loader": "^0.21.0",
+    "v-offline": "^1.0.9",
     "vue": "^2.5.2",
     "vue-clazy-load": "^0.4.2",
     "vue-infinite-scroll": "^2.0.2",

@@ -90,7 +90,7 @@
       fab
       bottom
       right
-      color="pink"
+      color="orange"
       dark
       fixed
       @click.stop="showNewsFilterDialog"

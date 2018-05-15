@@ -3,6 +3,7 @@
     
     <login-dialog/>
     <error-dialog/>
+    <offline-dialog/>
    
    
     <v-navigation-drawer
@@ -50,7 +51,15 @@
       <v-btn v-if="error" @click.stop="showErrorDialog" icon>
         <v-icon  >warning</v-icon>
       </v-btn>
-
+      
+      <detect-network v-on:detected-condition="detected">
+        
+      </detect-network>
+      
+      <v-btn v-if="!offlineStatus" @click.stop="showOfflineDialog"  icon>
+        <v-icon color="red">wifi_off</v-icon>
+      </v-btn>
+      
       
 
       <v-speed-dial
@@ -118,10 +127,12 @@ import On from './const/on'
 import Do from './const/do'
 import LoginDialog from './vue/dialogs/LoginDialog'
 import ErrorDialog from './vue/dialogs/ErrorDialog'
+import OfflineDialog from './vue/dialogs/OfflineDialog'
 import api from './rest/api'
+import detectNetwork from 'v-offline'
 
 export default {
-  components: { LoginDialog, ErrorDialog },
+  components: { LoginDialog, ErrorDialog, OfflineDialog, detectNetwork },
   computed: {
     username () {
       // Nous verrons ce que représente `params` dans un instant.
@@ -161,6 +172,15 @@ export default {
     this.loadWeather()
   },
   methods: {
+    detected (e) {
+      console.log('offlineStatus : ' + e)
+      if (e) {
+        this.$store.state.offline.read = false
+      } else {
+        this.$store.state.offline.read = true
+      }
+      this.offlineStatus = e
+    },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     },
@@ -173,7 +193,8 @@ export default {
     }),
     ...mapMutations({
       showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG,
-      showErrorDialog: Do.SHOW_ERROR_DIALOG
+      showErrorDialog: Do.SHOW_ERROR_DIALOG,
+      showOfflineDialog: Do.SHOW_OFFLINE_DIALOG
     }),
     ...mapGetters(['isAuthenticate']),
     findAvatar: function (userId) {
@@ -184,6 +205,7 @@ export default {
   data: () => ({
     fab: false,
     drawer: null,
+    offlineStatus: null,
     items: [
       { icon: 'art_track', text: 'News', path: '/news' },
       { icon: 'contacts', text: 'Contacts', path: '/contacts' },

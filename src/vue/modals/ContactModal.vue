@@ -64,7 +64,18 @@
                     </v-list-tile>
                     </v-list>
                 </v-card>
-                </v-flex>
+                <v-btn
+                  fab
+                  bottom
+                  right
+                  color="orange"
+                  dark
+                  fixed
+                  @click.stop="goBack"
+                >
+                  <v-icon>arrow_back</v-icon>
+                </v-btn>
+              </v-flex>
             </v-layout>
         </div>
     </div>
@@ -102,6 +113,9 @@ export default {
     this.fetchData()
   },
   methods: {
+    goBack () {
+      this.$router.go(-1)
+    },
     imgsrc: contact =>
       '/static/img/ad-photos/' +
       (contact.thumbnailPhoto ? contact.sAMAccountName : 'default') +

@@ -9,6 +9,7 @@ export default {
   },
   [Do.SET_NEWS]: (state, news) => {
     state.news.fullList = news
+    state.lastApiCall = new Date()
   }
 
 }

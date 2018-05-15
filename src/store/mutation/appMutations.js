@@ -11,7 +11,14 @@ export default {
     state.error.data = error    
   },
   [Do.SHOW_ERROR_DIALOG]: (state) => {
-    console.log("state.error.showDialog = true  ")
     state.error.showDialog = true    
+  },
+  [Do.SHOW_OFFLINE_DIALOG]: (state) => {
+    state.offline.showDialog = true
+    state.offline.read = true
+  },
+  [Do.HIDE_OFFLINE_DIALOG]: (state) => {
+    state.offline.showDialog = false
+    state.offline.read = true
   }
 }

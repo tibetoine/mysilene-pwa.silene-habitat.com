@@ -7,6 +7,10 @@ export default {
     AuthFailure: false,
     AuthFailMsg: null
   },
+  offline: {
+    showDialog: false
+  },
+  lastApiCall: null,
   error: {
     data: null,
     showDialog: false
