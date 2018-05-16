@@ -60,12 +60,6 @@ export default {
   },
   components: {},
   methods: {
-    contactSetV: function () {
-      console.log('TODO - Contacter Silène Et Vous')
-    },
-    contactHelpline: function () {
-      console.log('TODO - Contacter Helpline')
-    },
     sendMail (mail) {
       if (mail) window.location = 'mailto:' + mail
     },

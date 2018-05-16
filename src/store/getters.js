@@ -5,7 +5,6 @@ export default {
     return state.meteo.lastWeather
   },
   isAuthenticate: state => {
-    console.log('state.login.Authenticate : ' + state.login.Authenticate)
     return state.login.Authenticate
   },
   filteredNews: state =>
