@@ -27,8 +27,6 @@ export default {
 
   [On.LOGIN]: async function ({commit, dispatch}, user) {
     var callbackError = error => {
-      console.log('Action : LOGIN FAILURE')
-      // console.log(error)
       var message = 'Authentification impossible!'
       if (error.response && error.response.message) {
         message = error.response.message
@@ -47,8 +45,6 @@ export default {
     }
 
     var callbackSuccess = response => {
-      // TODO Enregistre le token en local.
-      console.log('Action : LOGIN SUCCESS')
       /* Mise à jour du Local Storage */
       const token = response.token
 

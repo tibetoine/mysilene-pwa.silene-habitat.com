@@ -16,7 +16,6 @@ export default {
   searchContact: state => author => {
     var nomDeFamille = null
     var prenom = null
-    // console.log(author)
     if (author == null || author === '') {
       // console.warn('Pas d'auteur donc je retourne false');
       return null
@@ -30,7 +29,6 @@ export default {
       if (splitedAuthor.length === 2) {
         nomDeFamille = splitedAuthor[0]
         prenom = splitedAuthor[1]
-        // console.log('FLAG : ' + nomDeFamille + ' sdf : ' + prenom)
       } else {
         return false
       }

@@ -59,7 +59,7 @@ export default {
         return !this.$store.state.login.Authenticate
       },
       set: function () {
-        console.log('should not be used')
+        // console.log('should not be used')
       }
     },
     authFailure: {
@@ -67,7 +67,7 @@ export default {
         return this.$store.state.login.AuthFailure
       },
       set: function () {
-        console.log('should not be used')
+        // console.log('should not be used')
       }
     },
     authFailureMsg: {

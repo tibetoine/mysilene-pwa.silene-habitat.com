@@ -10,7 +10,6 @@ export default {
   },
   [Do.LOGIN_SUCCESS]: (state, response) => {    
     
-    console.log(response)
     state.login.AuthFailure = false
     state.login.AuthFailMsg = null
     state.login.Authenticate = true

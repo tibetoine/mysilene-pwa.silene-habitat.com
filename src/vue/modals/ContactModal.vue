@@ -1,70 +1,108 @@
 <template>
-    <div class="contact">
+    <v-container style="margin-top:50px;">
+       
+
         <div class="loading" v-if="loading">
         Chargement...
         </div>
 
         <div v-if="error" class="error">
-        {{ error }}
+        <v-alert :value="true" type="error">
+          {{ error }} 
+          <v-btn fab dark color="orange" @click="goBack">
+            <v-icon>arrow_back</v-icon>
+          </v-btn>
+        </v-alert>
+        
         </div>
 
         <div v-if="selectedContact" class="content">
             <v-layout row>
                 <v-flex xs12 sm6 offset-sm3>
                 <v-card>
-                    <v-card-media src="/static/img/contact.jpg" height="300px">
-                    <v-layout column class="media">
-                        <v-card-title>
-                        <v-btn dark icon>
-                            <v-icon>chevron_left</v-icon>
-                        </v-btn>
-                        <v-spacer></v-spacer>
-                        <v-btn dark icon class="mr-3">
-                            <v-icon>edit</v-icon>
-                        </v-btn>
-                        <v-btn dark icon>
-                            <v-icon>more_vert</v-icon>
-                        </v-btn>
-                        </v-card-title>
-                        <v-spacer></v-spacer>
-                        <v-card-title class="white--text pl-5 pt-5">
-                        <div class="display-1 pl-5 pt-5">{{contact.sn}} {{contact.givenName}}</div>
-                        </v-card-title>
-                    </v-layout>
+                    <v-card-media src="/static/img/contact.jpg" height="200px">
+                      <v-layout column class="media">
+                          <v-card-title>
+                            <v-container fluid grid-list-lg>
+                              <v-layout row>
+                                <v-flex xs7 sm8 md9>
+                                   <v-avatar size="64">
+                                    <img :src="imgsrc(contact)">
+                                  </v-avatar>
+                                </v-flex>
+                                <v-flex xs5 sm4 md3>
+                                  <v-chip v-if="contact.silenesst==1" color="green" text-color="white">
+                                    <v-avatar>
+                                      <v-icon>local_hospital</v-icon>
+                                    </v-avatar>
+                                    SST                        
+                                  </v-chip>
+                                  <v-chip v-else-if="contact.sileneserrefile==1" color="orange" text-color="white">
+                                    <v-avatar>
+                                      <v-icon>security</v-icon>
+                                    </v-avatar>
+                                    Serre File                        
+                                  </v-chip>
+                                  <v-chip v-else-if="contact.sileneguidefile==1" color="blue" text-color="white">
+                                    <v-avatar>
+                                      <v-icon>security</v-icon>
+                                    </v-avatar>
+                                    Guide File                        
+                                  </v-chip>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+                           
+                            
+                          </v-card-title>
+                          <v-spacer></v-spacer>
+                          <v-card-title class="white--text" style="padding-bottom:2px;">
+                            <div class="headline" style="width:100%;">{{contact.sn}} {{contact.givenName}}</div>
+                            <div>{{contact.title}}</div>
+                          </v-card-title>
+                          
+                      </v-layout>
+                      
                     </v-card-media>
                     <v-list two-line>
-                    <v-list-tile @click="callBryan(contact.mobile)">
-                        <v-list-tile-action>
-                        <v-icon color="indigo">phone</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                        <v-list-tile-title>{{contact.mobile}}</v-list-tile-title>
-                        <v-list-tile-sub-title>Mobile</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                        <v-list-tile-action @click="textBryan(contact.mobile)">
-                            <v-icon>chat</v-icon>
-                        </v-list-tile-action>
-                    </v-list-tile>
-                    <v-list-tile v-if="contact.telephoneNumber" @click="callBryan(contact.telephoneNumber)">
-                        <v-list-tile-action></v-list-tile-action>
-                        <v-list-tile-content>
-                        <v-list-tile-title>{{contact.telephoneNumber}}</v-list-tile-title>
-                        <v-list-tile-sub-title>Fixe</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-divider inset></v-divider>
-                    <v-list-tile @click="sendMail(contact.mail)">
-                        <v-list-tile-action>
-                        <v-icon color="indigo">mail</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                        <v-list-tile-title>{{contact.mail}}</v-list-tile-title>
-                        <v-list-tile-sub-title>Email</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
+                      <v-list-tile v-if="contact.mobile" @click="callBryan(contact.mobile)">
+                          <v-list-tile-action>
+                            <v-icon color="indigo">phone</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-content>
+                            <v-list-tile-title>{{contact.mobile}}</v-list-tile-title>
+                            <v-list-tile-sub-title>Mobile</v-list-tile-sub-title>
+                          </v-list-tile-content>
+                          <v-list-tile-action @click="textBryan(contact.mobile)">
+                              <v-icon>chat</v-icon>
+                          </v-list-tile-action>
+                      </v-list-tile>
+                      <v-list-tile v-if="contact.telephoneNumber" @click="callBryan(contact.telephoneNumber)">
+                          <v-list-tile-action>
+                            <v-icon color="indigo">phone</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-content>
+                            <v-list-tile-title>{{contact.telephoneNumber}}</v-list-tile-title>
+                            <v-list-tile-sub-title>Fixe</v-list-tile-sub-title>
+                          </v-list-tile-content>
+                      </v-list-tile>
+                      <v-divider inset></v-divider>
+                      <v-list-tile @click="sendMail(contact.mail)">
+                          <v-list-tile-action>
+                          <v-icon color="indigo">mail</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-content>
+                          <v-list-tile-title>{{contact.mail}}</v-list-tile-title>
+                          <v-list-tile-sub-title>Email</v-list-tile-sub-title>
+                          </v-list-tile-content>
+                      </v-list-tile>
                     </v-list>
                 </v-card>
-                <v-btn
+                
+              </v-flex>
+            </v-layout>
+        </div>
+        <v-btn
                   fab
                   bottom
                   right
@@ -75,10 +113,7 @@
                 >
                   <v-icon>arrow_back</v-icon>
                 </v-btn>
-              </v-flex>
-            </v-layout>
-        </div>
-    </div>
+    </v-container>
 </template>
 
 <script>
@@ -129,7 +164,8 @@ export default {
         this.loading = false
       } else {
         this.error = 'Impossible de charger le contact'
-        console.error('MySilene : Can not load contact !')
+        this.loading = false
+        console.error('MySilene : Can not load contact from state !')
       }
     },
     sendMail (mail) {

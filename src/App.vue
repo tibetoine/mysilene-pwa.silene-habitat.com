@@ -90,7 +90,7 @@
           dark
           small
           color="red"
-          @click.stop="logout"
+          @click="logout"
         >
           <v-icon>power_off</v-icon>
         </v-btn>

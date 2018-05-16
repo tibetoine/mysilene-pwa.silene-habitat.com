@@ -2,7 +2,7 @@
   <v-container style="margin-top:50px;">
     <v-layout row>
       <v-flex xs12 md9 offset-md3>
-        <div v-if="visibleContacts==null || visibleContacts.length <=0">
+        <div v-if="!auth">
           <v-alert :value="true" type="info">
             Vous devez être connecté pour accéder aux Contacts Silène
           </v-alert>
@@ -33,8 +33,20 @@
           <v-list two-line v-infinite-scroll="loadMore" infinite-scroll-distance="10" infinite-scroll-throttle-delay="50">
               <template v-for="(contact) in visibleContacts">
                 <v-list-tile avatar :key="contact._id" @click="goToContact(contact, contact._id)">
-                  <v-badge color="green" left v-if="contact.silenesst == '1'" overlap>
+                  <v-badge v-if="contact.silenesst == '1'" color="green" left  overlap>
                     <v-icon slot="badge" dark small>local_hospital</v-icon>
+                    <v-list-tile-avatar>
+                      <img :src="imgsrc(contact)">
+                    </v-list-tile-avatar>
+                  </v-badge>
+                  <v-badge v-else-if="contact.sileneserrefile == '1'" color="orange" left  overlap>
+                    <v-icon slot="badge" dark small>security</v-icon>
+                    <v-list-tile-avatar>
+                      <img :src="imgsrc(contact)">
+                    </v-list-tile-avatar>
+                  </v-badge>
+                  <v-badge v-else-if="contact.sileneguidefile == '1'" color="blue" left  overlap>
+                    <v-icon slot="badge" dark small>security</v-icon>
                     <v-list-tile-avatar>
                       <img :src="imgsrc(contact)">
                     </v-list-tile-avatar>
@@ -142,7 +154,8 @@ export default {
     ...mapState({
       filterSst: state => state.contacts.filterSst,
       selectedContact: state => state.selectedContact,
-      visibleContacts: state => state.contacts.visibleList
+      visibleContacts: state => state.contacts.visibleList,
+      auth: state => state.login.Authenticate
     }),
     ...mapGetters({ contacts: 'partialContacts' }),
     search: {
