@@ -2,6 +2,7 @@
     <v-dialog width="800px" v-model="visible" :persistent="false" transition="dialog-bottom-transition" :overlay="true" scrollable>
         <v-card tile>
           <v-toolbar card dark color="primary">
+            <v-icon>lock</v-icon>
             <v-toolbar-title>Connexion requise</v-toolbar-title>
             <v-spacer></v-spacer>            
           </v-toolbar>
@@ -81,7 +82,6 @@ export default {
       loginAction: On.LOGIN
     }),
     onSubmit () {
-      console.log('onSubmit')
       this.loader = true
       this.infoError = false
       var builtUser = {userId: this.userId, password: this.password}

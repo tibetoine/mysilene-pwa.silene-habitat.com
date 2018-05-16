@@ -2,6 +2,7 @@
     <v-dialog width="800px" v-model="visible" transition="dialog-bottom-transition" :overlay="true" scrollable>
         <v-card tile>
           <v-toolbar card dark color="primary">
+            <v-icon>bug_report</v-icon>
             <v-toolbar-title>Détail sur une erreur</v-toolbar-title>
             <v-spacer></v-spacer>            
           </v-toolbar>
