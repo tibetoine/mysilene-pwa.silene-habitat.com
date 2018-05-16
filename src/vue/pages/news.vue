@@ -29,10 +29,10 @@
                       </v-card-title>
                       <clazy-load :src="imgsrc(aNews)">
                         <v-card-media 
-                        class="black--text"
+                        :class="getClass(aNews)"
                         height="200px"
                         :src="imgsrc(aNews)"
-                        :contain="aNews.type=='mouvementsRH'"
+                        
                         >
                             <v-container fill-height fluid style="padding:2px;">
                                 <v-layout align-end justify-start >
@@ -221,6 +221,11 @@ export default {
       }
       return label
     },
+    getClass: news => {
+      var aClass = 'black--text'
+      if (news.type === 'mouvementsRH') aClass += ' mouvementsRH'
+      return aClass
+    },
     getFontColor: news => {
       var color = '#009688' // teal
       switch (news.type) {
@@ -309,3 +314,14 @@ export default {
   }
 }
 </script> 
+<style> 
+  .mouvementsRH>div.card__media__background{
+    max-height: 200px;
+    max-width: 200px;
+    border-radius: 50%;
+    position:absolute;
+    left:50%;
+    transform: translate(-50%);
+    
+  }
+</style>
