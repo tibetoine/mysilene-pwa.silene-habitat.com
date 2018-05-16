@@ -73,8 +73,8 @@
                             <v-list-tile-title>{{contact.mobile}}</v-list-tile-title>
                             <v-list-tile-sub-title>Mobile</v-list-tile-sub-title>
                           </v-list-tile-content>
-                          <v-list-tile-action @click="textBryan(contact.mobile)">
-                              <v-icon>chat</v-icon>
+                          <v-list-tile-action @click.stop="textBryan(contact.mobile)">
+                              <v-icon color="indigo">chat</v-icon>
                           </v-list-tile-action>
                       </v-list-tile>
                       <v-list-tile v-if="contact.telephoneNumber" @click="callBryan(contact.telephoneNumber)">
