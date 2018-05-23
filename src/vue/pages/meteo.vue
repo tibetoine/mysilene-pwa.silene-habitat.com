@@ -7,8 +7,12 @@
             <div class="weather">
               <div class="current">
                 <h1 class="location">Saint-Nazaire</h1>
-
-                <div class="row">
+                <div v-if="!weather.currently">
+                   <v-alert :value="true" type="info">
+                    Impossible de récupérer la météo.
+                  </v-alert>
+                </div>
+                <div v-else class="row">
                   <div class="col main">
                     <div>{{ date(weather.currently.time * 1000) }}</div>
                     <div>{{ weather.currently.summary }}</div>
