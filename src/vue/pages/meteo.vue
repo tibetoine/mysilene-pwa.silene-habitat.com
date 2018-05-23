@@ -10,7 +10,7 @@
 
                 <div class="row">
                   <div class="col main">
-                    <div>{{ date(weather.currently.time * 1000, weather.timezone) }}</div>
+                    <div>{{ date(weather.currently.time * 1000) }}</div>
                     <div>{{ weather.currently.summary }}</div>
                     <div class="icon-and-temperature">
                       <div class="icon">
@@ -36,10 +36,10 @@
                       Vent: <strong>{{ weather.currently.windSpeed }} km/h</strong>
                     </li>
                     <li>
-                      Levé soleil: <strong>{{ timestamp(weather.daily.data[0].sunriseTime * 1000, weather.timezone)}}</strong>
+                      Levé soleil: <strong>{{ timestamp(weather.daily.data[0].sunriseTime * 1000)}}</strong>
                     </li>
                     <li>
-                      Couché soleil: <strong>{{ timestamp(weather.daily.data[0].sunsetTime * 1000, weather.timezone)}}</strong>
+                      Couché soleil: <strong>{{ timestamp(weather.daily.data[0].sunsetTime * 1000)}}</strong>
                     </li>
                   </ul>
                 </div> <!-- end .row -->
@@ -56,12 +56,8 @@
 <script>
   import WeatherIcon from '../components/WeatherIcon'
   import Forecast from '../components/Forecast'
-  import moment from 'moment'
-  import 'moment-timezone'
 
-  moment.locale('fr')
-
-export default {
+  export default {
     name: 'meteo',
     components: {
       WeatherIcon,
@@ -74,11 +70,21 @@ export default {
     },
 
     methods: {
-      date (time, zone) {
-        return moment(time).tz(zone).format('dddd  Do MMMM YYYY')
+      date (time) {
+        var days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+        var months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+        var date = new Date(time)
+        var day = days[ date.getDay() ]
+        var month = months[ date.getMonth() ]
+        var dayInMonth = date.getUTCDate()
+        var returnedDate = day + ' ' + dayInMonth + ' ' + month + ' ' + date.getUTCFullYear()
+        return returnedDate
       },
-      timestamp (time, zone) {
-        return moment(time).tz(zone).format('HH:mm')
+      timestamp (time) {
+        var date = new Date(time)
+        var minutes = date.getMinutes()
+        var hour = date.getHours()
+        return hour + 'h' + minutes
       },
       toPercentage (value) {
         return Math.round(value * 100)

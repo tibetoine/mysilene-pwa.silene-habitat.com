@@ -14,8 +14,6 @@
 
 <script>
 import WeatherIcon from './WeatherIcon'
-import moment from 'moment'
-import 'moment-timezone'
 
 export default {
   name: 'forecast',
@@ -31,8 +29,9 @@ export default {
     }
   },
   methods: {
-    dayOfWeek (time, zone) {
-      return moment(time).tz(zone).format('ddd')
+    dayOfWeek (time) {
+      var days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+      return days[ new Date(time).getDay() ]
     }
   }
 }

@@ -157,7 +157,6 @@ export default {
     /* Connexion auto si token dans le storage */
     const token = localStorage.getItem('user-token')
     const userId = localStorage.getItem('user-id')
-    console.log('TOKEN : ' + token + ' USER ID : ' + userId)
     if (token && userId) {
       api.setDefaultAuthorization(token)
       var user = {_id: userId, token: token}
@@ -173,7 +172,6 @@ export default {
   },
   methods: {
     detected (e) {
-      console.log('offlineStatus : ' + e)
       if (e) {
         this.$store.state.offline.read = false
       } else {

@@ -6,18 +6,28 @@ import api from '../../rest/api'
 export default {
   [On.LOAD_CONTACTS]: async function ({ commit }) {
     /* 1/ Appel REST à l'API  */
-    const contacts = await rest.getContacts()
+    const response = await rest.getContacts()
+
+    const contacts = response.body
 
     /* 2/ Enregistrement dans le store */
     commit(Do.SET_CONTACTS, contacts)
   },
 
   [On.LOAD_NEWS]: async function ({ commit }) {
-    commit(Do.SET_NEWS, await rest.getNews())
+    const response = await rest.getNews()
+
+    const news = response.body
+
+    commit(Do.SET_NEWS, news)
   },
 
   [On.LOAD_WEATHER]: async function ({ commit }) {
-    commit(Do.SET_WEATHER, await rest.getLastWeather())
+    const response = await rest.getLastWeather()
+
+    const lastWeather = response.body
+
+    commit(Do.SET_WEATHER, lastWeather)
   },
 
   [On.UPDATE_FILTERED_CONTACTS]: function ({commit}) {
@@ -28,8 +38,8 @@ export default {
   [On.LOGIN]: async function ({commit, dispatch}, user) {
     var callbackError = error => {
       var message = 'Authentification impossible!'
-      if (error.response && error.response.message) {
-        message = error.response.message
+      if (error.bodyText) {
+        message = error.bodyText
       } else {
         console.log(error)
       }
@@ -46,10 +56,10 @@ export default {
 
     var callbackSuccess = response => {
       /* Mise à jour du Local Storage */
-      const token = response.token
+      const token = response.body.token
 
       /* Header d'Authorization par defaut */
-      api.setDefaultAuthorization(response.token)
+      api.setDefaultAuthorization(token)
 
       localStorage.setItem('user-token', token)
       localStorage.setItem('user-id', user.userId)

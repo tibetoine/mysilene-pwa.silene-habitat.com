@@ -1,27 +1,22 @@
-import req from 'request-promise-lite'
+import Vue from 'vue'
 
 const url = path => window.location.origin + '/' + path
-const options = body => ({ body: body, json: true })
+const options = () => ({emulateJSON: true})
 
 export default {
 
   setDefaultAuthorization: token => {
-    const options = req.Request.defaults
-    console.log(token)
-    options.headers = { Authorization: token }
-    req.Request.defaults = options
+    Vue.http.headers.common['Authorization'] = token
   },
   deleteDefaultAuthorization: token => {
-    const options = req.Request.defaults
-    options.headers = {}
-    req.Request.defaults = options
+    Vue.http.headers.common['Authorization'] = null
   },
   get: path => {
-    console.log('URL : ' + url(path))
-    return req.get(url(path), options())
+    var obj = Vue.http.get(url(path), options())
+    return obj
   },
 
-  post: (path, body, callbackSuccess, callbackError) => req.post(url(path), options(body)).then((response) => {
+  post: (path, body, callbackSuccess, callbackError) => Vue.http.post(url(path), body, options()).then((response) => {
     if (callbackSuccess) {
       callbackSuccess(response)
     }
@@ -31,7 +26,7 @@ export default {
     }
   }),
 
-  del: path => req.del(url(path)),
+  del: path => Vue.http.del(url(path)),
 
-  put: (path, body) => req.put(url(path), options(body))
+  put: (path, body) => Vue.http.put(url(path), body, options())
 }

@@ -1,15 +1,18 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
+import VueResource from 'vue-resource'
 import router from './router'
 import store from './store/store'
-import rest from './rest/routes'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-import 'babel-polyfill'
+import rest from './rest/routes'
 import VueClazyLoad from 'vue-clazy-load'
 import infiniteScroll from 'vue-infinite-scroll'
+
+Vue.use(VueResource)
 
 /* Couleurs Silène (A partir du logo) */
 // Jaune : #fabd00
@@ -18,7 +21,6 @@ import infiniteScroll from 'vue-infinite-scroll'
 // Oeil Bleu foncé : #004c95
 // Chapeau bleu droit : #2a91cd
 // Chapeau vert gauche : #83ba00
-
 Vue.use(Vuetify, { theme: {
   primary: '#83ba00',
   secondary: '#006eb5',

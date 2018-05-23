@@ -3,12 +3,17 @@
     <v-container fluid fill-height>
       <v-layout row>
         <v-flex xs12 md6>
-          <div v-if="news==null || news.length <=0">
+          <div v-if="!auth">
             <v-alert :value="true" type="info">
               Vous devez être connecté pour accéder aux News Silène
             </v-alert>
           </div>
-          <v-list two-line>
+          <div v-else-if="news==null || news.length <=0">
+            <v-alert :value="true" type="info">
+              Aucune News Silène à afficher
+            </v-alert>
+          </div>
+          <v-list v-else two-line>
               <template v-for="aNews in news">
                   <v-card style="margin:20px 10px 20px 10px;" v-bind:key="aNews._id">
                       <v-card-title :style="'background-color:'+getFontColor(aNews)+';'">
@@ -113,7 +118,8 @@ export default {
   name: 'news',
   computed: {
     ...mapState({
-      selectedNews: state => state.selectedNews
+      selectedNews: state => state.selectedNews,
+      auth: state => state.login.Authenticate
     }),
     ...mapGetters({ news: 'filteredNews' }),
     selectedNews: {
