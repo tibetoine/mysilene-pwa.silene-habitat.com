@@ -10,7 +10,10 @@
             Erreur lors de la connexion :  {{authFailureMsg}}
           </v-alert>
           <form  class="form form--login" v-on:submit.prevent="onSubmit" style="padding:20px;">
-            <v-layout column>
+            <div v-if="loading">
+               <v-progress-circular indeterminate color="primary"></v-progress-circular>
+            </div>
+            <v-layout v-else column>
               <v-flex>
                 <v-text-field
                   v-model.trim="userId"
@@ -48,13 +51,20 @@ export default {
   name: 'login-dialog',
   data () {
     return {
-      loader: false,
       infoError: false,
       userId: '',
       password: ''
     }
   },
   computed: {
+    loading: {
+      get: function () {
+        return this.$store.state.login.loading
+      },
+      set: function (val) {
+        this.$store.state.login.loading = val
+      }
+    },
     visible: {
       get: function () {
         return !this.$store.state.login.Authenticate
@@ -79,22 +89,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      loginAction: On.LOGIN
+      loginAction: On.LOGIN,
+      loginWaiting: On.LOGIN_WAITING,
+      loginStop: On.LOGIN_STOP
     }),
     onSubmit () {
-      this.loader = true
+      this.loginWaiting()
       this.infoError = false
       var builtUser = {userId: this.userId, password: this.password}
-      this.loginAction(builtUser).then(
-        response => {
-          this.loader = false
-          this.$router.push('/')
-        },
-        () => {
-          this.loader = false
-          this.password = ''
-        }
-      ).catch((error) => {
+      this.loginAction(builtUser).catch((error) => {
+        this.loginStop()
         this.infoError = true
         console.log(error)
       })

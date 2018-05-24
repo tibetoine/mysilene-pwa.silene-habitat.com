@@ -38,8 +38,8 @@ export default {
   [On.LOGIN]: async function ({commit, dispatch}, user) {
     var callbackError = error => {
       var message = 'Authentification impossible!'
-      if (error.bodyText) {
-        message = error.bodyText
+      if (error.body && error.body.message) {
+        message = error.body.message
       } else {
         console.log(error)
       }
@@ -51,7 +51,8 @@ export default {
 
       commit(Do.LOGIN_FAIL, message)
       // console.log('commit(Do.LOG_ERROR_ON_CLIENT, error.response)')
-      commit(Do.LOG_ERROR_ON_CLIENT, error.response)
+      commit(Do.LOG_ERROR_ON_CLIENT, error.body)
+      commit(Do.LOGIN_STOP)
     }
 
     var callbackSuccess = response => {
@@ -63,8 +64,8 @@ export default {
 
       localStorage.setItem('user-token', token)
       localStorage.setItem('user-id', user.userId)
-      commit(Do.LOGIN_SUCCESS, response)
-
+      commit(Do.LOGIN_SUCCESS, response.body)
+      commit(Do.LOGIN_STOP)
       /* Dispatch Action */
       dispatch(On.LOAD_NEWS)
       dispatch(On.LOAD_CONTACTS)
@@ -84,5 +85,12 @@ export default {
     /* Dispatch Action */
     dispatch(On.LOAD_NEWS)
     dispatch(On.LOAD_CONTACTS)
+  },
+  [On.LOGIN_WAITING]: function ({ commit }) {
+    commit(Do.LOGIN_WAITING)
+  },
+  [On.LOGIN_STOP]: function ({ commit }) {
+    commit(Do.LOGIN_STOP)
   }
+
 }

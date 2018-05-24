@@ -15,5 +15,7 @@ export default {
   SHOW_LOGIN_DIALOG: 'showLoginDialog',
   LOG_ERROR_ON_CLIENT: 'logErrorOnClient',
   SHOW_ERROR_DIALOG: 'showErrorDialog',
-  SHOW_OFFLINE_DIALOG: 'showOfflineDialog'
+  SHOW_OFFLINE_DIALOG: 'showOfflineDialog',
+  LOGIN_WAITING: 'loginWaiting',
+  LOGIN_STOP: 'loginStop'
 }

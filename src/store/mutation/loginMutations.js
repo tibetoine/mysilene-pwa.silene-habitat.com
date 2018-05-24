@@ -4,12 +4,13 @@ export default {
 
   
   [Do.LOGIN_FAIL]: (state, errorMessage) => {    
+    state.login.loading = false
     state.login.Authenticate = false
     state.login.AuthFailure = true
     state.login.AuthFailMsg = errorMessage
   },
   [Do.LOGIN_SUCCESS]: (state, response) => {    
-    
+    state.login.loading = false
     state.login.AuthFailure = false
     state.login.AuthFailMsg = null
     state.login.Authenticate = true
@@ -29,5 +30,12 @@ export default {
     //TODO : à vérifier en cas réel
     state.login.userId = null
     state.login.token = null
+  },
+  [Do.LOGIN_WAITING]: (state) => {
+    console.log('state.login.loading = true')
+    state.login.loading = true
+  },
+  [Do.LOGIN_STOP]: (state) => {
+    state.login.loading = false
   }
 }

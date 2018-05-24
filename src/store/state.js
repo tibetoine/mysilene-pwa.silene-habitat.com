@@ -5,7 +5,8 @@ export default {
     loginDialogVisible: false,
     Authenticate: false,
     AuthFailure: false,
-    AuthFailMsg: null
+    AuthFailMsg: null,
+    loading: false
   },
   offline: {
     showDialog: false

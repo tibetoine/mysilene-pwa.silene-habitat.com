@@ -9,5 +9,7 @@ export default {
   AUTO_LOGIN: 'autoLogin',
   LOGOUT: 'logout',
   LOGIN_SUCCESS: 'loginSuccess',
-  LOGIN_FAILURE: 'loginFailure'
+  LOGIN_FAILURE: 'loginFailure',
+  LOGIN_WAITING: 'loginWaiting',
+  LOGIN_STOP: 'loginStop'
 }
