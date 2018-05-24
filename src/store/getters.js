@@ -9,8 +9,8 @@ export default {
   },
   filteredNews: state =>
     filter(
-      state.news.fullList,
-      news => state.news.selectedTypes.indexOf(news.type) > -1
+      state.news.visibleList,
+      aNews => state.news.selectedTypes.indexOf(aNews.type) > -1
     ),
   searchContact: state => author => {
     var nomDeFamille = null

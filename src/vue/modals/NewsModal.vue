@@ -237,6 +237,11 @@ export default {
           case 'mouvementsRH':
             imgSource = news.image
             break
+          case 'cos-rss':
+          case 'cosActu':
+          case 'cosNews':
+            imgSource = '/static/img/cos.jpg'
+            break
           default:
             break
         }

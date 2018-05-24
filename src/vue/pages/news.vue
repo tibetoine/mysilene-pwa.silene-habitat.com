@@ -13,8 +13,8 @@
               Aucune News Silène à afficher
             </v-alert>
           </div>
-          <v-list v-else two-line v-infinite-scroll="loadMore" infinite-scroll-disabled="endLoading" infinite-scroll-distance="20" infinite-scroll-throttle-delay="50">
-              <template v-for="aNews in visibleNews">
+          <v-list two-line v-infinite-scroll="loadMore"  infinite-scroll-disabled="endLoading" infinite-scroll-distance="10" infinite-scroll-throttle-delay="50">
+              <template v-for="aNews in news">
                   <v-card style="margin:20px 10px 20px 10px;" v-bind:key="aNews._id">
                       <v-card-title :style="'background-color:'+getFontColor(aNews)+';'">
                         <v-avatar
@@ -133,7 +133,7 @@ export default {
     },
     endLoading: {
       get: function () {
-        // console.log('this.$store.state.news.endLoading : ' + this.$store.state.news.endLoading)
+        // console.log('this.busy : ' + this.busy + ' - this.$store.state.news.endLoading : ' + this.$store.state.news.endLoading)
         return this.busy || this.$store.state.news.endLoading
       },
       set: function (value) {
@@ -158,7 +158,7 @@ export default {
       }
     },
     loadMore: function () {
-      console.log('load more news...')
+      // console.log('load more news...')
       this.busy = true
       this.showMore()
       setTimeout(() => {
@@ -315,6 +315,11 @@ export default {
             break
           case 'mouvementsRH':
             imgSource = news.image
+            break
+          case 'cos-rss':
+          case 'cosActu':
+          case 'cosNews':
+            imgSource = '/static/img/cos.jpg'
             break
           default:
             break
