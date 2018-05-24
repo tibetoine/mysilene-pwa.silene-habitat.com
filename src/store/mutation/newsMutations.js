@@ -25,7 +25,7 @@ const addNews = (state) => {
     state.news.visibleList.push(state.news.filteredList[i])
   }
   // On place un indicateur pour dire que le loading de news n'est plus nécessaire
-  if (state.news.visibleList.length === state.news.fullList.length) {
+  if (state.news.fullList.length !== 0 && (state.news.visibleList.length === state.news.fullList.length)) {
     state.news.endLoading = true
   }
 }
