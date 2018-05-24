@@ -62,17 +62,19 @@ export default {
   [Do.SHOW_MORE_CONTACTS]: state => {
     addContacts(state)
   }
-
 }
 
 const addContacts = (state) => {
-  const s = Date.now()
-
   const start = state.contacts.visibleList.length
   const max = Math.min(start + state.contacts.pageSize, state.contacts.filteredList.length)
   for (let i = start; i < max; i++) {
     state.contacts.visibleList.push(state.contacts.filteredList[i])
   }
 
-  // console.log('contacts', start, 'to', state.contacts.visibleList.length, 'in', Date.now() - s, 'ms')
+  // On place un indicateur pour dire que le loading de contacts n'est plus nécessaire
+  if (state.contacts.fullList.length !==0 && (state.contacts.visibleList.length === state.contacts.fullList.length)) {
+    // console.log('yep , ??' + state.contacts.visibleList.length + '   - ' + state.contacts.fullList.length)
+    state.contacts.endLoading = true
+  }
+
 }

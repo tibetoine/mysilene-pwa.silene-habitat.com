@@ -24,7 +24,8 @@ export default {
     fullList: [],
     filteredList: [],
     visibleList: [],
-    pageSize: 15
+    pageSize: 15,
+    endLoading: false
   },
   news: {
     filterDialogVisible: false,
@@ -67,7 +68,11 @@ export default {
       'cosActu',
       'cosNews'
     ],
-    fullList: []
+    fullList: [],
+    filteredList: [],
+    visibleList: [],
+    pageSize: 8,
+    endLoading: false
   },
   meteo: {
     lastWeather: null

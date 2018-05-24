@@ -13,24 +13,20 @@
               Aucune News Silène à afficher
             </v-alert>
           </div>
-          <v-list v-else two-line>
-              <template v-for="aNews in news">
+          <v-list v-else two-line v-infinite-scroll="loadMore" infinite-scroll-disabled="endLoading" infinite-scroll-distance="20" infinite-scroll-throttle-delay="50">
+              <template v-for="aNews in visibleNews">
                   <v-card style="margin:20px 10px 20px 10px;" v-bind:key="aNews._id">
                       <v-card-title :style="'background-color:'+getFontColor(aNews)+';'">
-                          <v-avatar
-                      size="36px"
-                      slot="activator"
-                      >
-                        <img
+                        <v-avatar
+                        size="36px"
+                        slot="activator"
+                        >
+                          <img
                             :src="findAvatar(aNews.author)"
                             :alt="'avatar_'+aNews.author"                                        
-                        >
-                          
-                      </v-avatar>
-                      <span :title="aNews.author" style="padding-left:10px;color:white;">{{aNews.author?chrinkAuthor(aNews.author):'Auteur Inconnu'}}</span>
-                          <!-- Photo Author --> 
-                          <!-- Author --> 
-                          <!-- Photo Author --> 
+                          >
+                        </v-avatar>
+                        <span :title="aNews.author" style="padding-left:10px;color:white;">{{aNews.author?chrinkAuthor(aNews.author):'Auteur Inconnu'}}</span>
                       </v-card-title>
                       <clazy-load :src="imgsrc(aNews)">
                         <v-card-media 
@@ -87,6 +83,7 @@
                       </v-card-actions>
                   </v-card>
               </template>
+              <v-progress-linear :indeterminate="true" v-if="busy"></v-progress-linear>
           </v-list>
         </v-flex>
       </v-layout>
@@ -116,9 +113,13 @@ import FilterNewsDialog from '../dialogs/FilterNewsDialog'
 export default {
   components: { FilterNewsDialog },
   name: 'news',
+  data: () => ({
+    busy: false
+  }),
   computed: {
     ...mapState({
       selectedNews: state => state.selectedNews,
+      visibleNews: state => state.news.visibleList,
       auth: state => state.login.Authenticate
     }),
     ...mapGetters({ news: 'filteredNews' }),
@@ -129,11 +130,21 @@ export default {
       set: function (value) {
         this.$store.state.selectedNews = value
       }
+    },
+    endLoading: {
+      get: function () {
+        // console.log('this.$store.state.news.endLoading : ' + this.$store.state.news.endLoading)
+        return this.busy || this.$store.state.news.endLoading
+      },
+      set: function (value) {
+        this.$store.state.news.endLoading = value
+      }
     }
   },
   methods: {
     ...mapMutations({
-      showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG
+      showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG,
+      showMore: Do.SHOW_MORE_NEWS
     }),
     goToNews: function (news, newsId) {
       if (news.type.startsWith('cos')) {
@@ -145,6 +156,14 @@ export default {
         // this.$router.push({ name: 'newsModal', params: { newsId }})
         this.$router.push({ path: `/news/${newsId}` })
       }
+    },
+    loadMore: function () {
+      console.log('load more news...')
+      this.busy = true
+      this.showMore()
+      setTimeout(() => {
+        this.busy = false
+      }, 1000)
     },
     chrinkAuthor: author => {
       if (author.length > 19) {

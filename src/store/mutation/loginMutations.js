@@ -32,7 +32,6 @@ export default {
     state.login.token = null
   },
   [Do.LOGIN_WAITING]: (state) => {
-    console.log('state.login.loading = true')
     state.login.loading = true
   },
   [Do.LOGIN_STOP]: (state) => {

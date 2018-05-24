@@ -30,7 +30,7 @@
                 </v-btn>
               </v-flex></v-layout>
           </v-container>
-          <v-list two-line v-infinite-scroll="loadMore" infinite-scroll-distance="10" infinite-scroll-throttle-delay="50">
+          <v-list two-line v-infinite-scroll="loadMore" infinite-scroll-disabled="endLoading" infinite-scroll-distance="10" infinite-scroll-throttle-delay="50">
               <template v-for="(contact) in visibleContacts">
                 <v-list-tile avatar :key="contact._id" @click="goToContact(contact, contact._id)">
                   <v-badge v-if="contact.silenesst == '1'" color="green" left  overlap>
@@ -145,10 +145,7 @@ export default {
       { icon: 'chat', title: 'Chat' },
       { icon: 'phonelink_ring', title: 'Mobile' }
     ],
-    updateT: null,
-    busy: false,
-    dialog: false,
-    countLoaded: 0
+    busy: false
   }),
   computed: {
     ...mapState({
@@ -182,13 +179,16 @@ export default {
       set: function (value) {
         this.$store.state.selectedContact = value
       }
+    },
+    endLoading: {
+      get: function () {
+        // console.log('this.$store.state.contacts.endLoading : ' + this.$store.state.contacts.endLoading)
+        return this.busy || this.$store.state.contacts.endLoading
+      },
+      set: function (value) {
+        this.$store.state.contacts.endLoading = value
+      }
     }
-  },
-  beforeUpdate: function () {
-    this.updateT = Date.now()
-  },
-  updated: function () {
-    // console.log('updated in', Date.now() - this.updateT, 'ms')
   },
   methods: {
     ...mapActions({
