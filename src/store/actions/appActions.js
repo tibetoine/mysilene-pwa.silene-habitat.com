@@ -6,20 +6,40 @@ import api from '../../rest/api'
 export default {
   [On.LOAD_CONTACTS]: async function ({ commit }) {
     /* 1/ Appel REST à l'API  */
-    const response = await rest.getContacts()
-
-    const contacts = response.body
-
-    /* 2/ Enregistrement dans le store */
-    commit(Do.SET_CONTACTS, contacts)
+    try {
+      const response = await rest.getContacts()
+      if (response.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      } else {
+        const contacts = response.body
+        /* 2/ Enregistrement dans le store */
+        commit(Do.SET_CONTACTS, contacts)
+      }
+    } catch (error) {
+      if (error && error.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      }
+    }
   },
 
   [On.LOAD_NEWS]: async function ({ commit }) {
-    const response = await rest.getNews()
-
-    const news = response.body
-
-    commit(Do.SET_NEWS, news)
+    try {
+      const response = await rest.getNews()
+      if (response.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      } else {
+        const news = response.body
+        commit(Do.SET_NEWS, news)
+      }
+    } catch (error) {
+      if (error && error.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      }
+    }
   },
 
   [On.LOAD_WEATHER]: async function ({ commit }) {
