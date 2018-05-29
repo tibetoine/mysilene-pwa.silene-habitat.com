@@ -158,7 +158,7 @@ export default {
     const token = localStorage.getItem('user-token')
     const userId = localStorage.getItem('user-id')
     if (token && userId) {
-      api.setDefaultAuthorization(token)
+      api.setDefaultAuthorization(token, userId)
       var user = {_id: userId, token: token}
       this.$store.dispatch(On.AUTO_LOGIN, user)
     }

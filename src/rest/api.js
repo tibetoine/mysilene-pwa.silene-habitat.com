@@ -5,11 +5,13 @@ const options = () => ({emulateJSON: true})
 
 export default {
 
-  setDefaultAuthorization: token => {
-    Vue.http.headers.common['Authorization'] = token
+  setDefaultAuthorization: (token, userId) => {
+    Vue.http.headers.common['authorization'] = token
+    Vue.http.headers.common['userid'] = userId
   },
   deleteDefaultAuthorization: token => {
-    Vue.http.headers.common['Authorization'] = null
+    Vue.http.headers.common['authorization'] = null
+    Vue.http.headers.common['userid'] = null
   },
   get: path => {
     var obj = Vue.http.get(url(path), options())

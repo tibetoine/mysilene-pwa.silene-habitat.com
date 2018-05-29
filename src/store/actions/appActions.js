@@ -60,7 +60,7 @@ export default {
       const token = response.body.token
 
       /* Header d'Authorization par defaut */
-      api.setDefaultAuthorization(token)
+      api.setDefaultAuthorization(token, user.userId)
 
       localStorage.setItem('user-token', token)
       localStorage.setItem('user-id', user.userId)
