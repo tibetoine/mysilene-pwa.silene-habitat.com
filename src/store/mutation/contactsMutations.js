@@ -61,7 +61,15 @@ export default {
 
   [Do.SHOW_MORE_CONTACTS]: state => {
     addContacts(state)
-  }
+  },
+
+  [Do.SHOW_CONTACTS_DIALOG]: (state) => {
+    state.contacts.showDialog = true
+  },
+  [Do.SHOW_CONTACTS_SNACKBAR]: (state, text) => {
+    state.contacts.showSnackbar = true
+    state.contacts.text = text
+  },
 }
 
 const addContacts = (state) => {

@@ -18,5 +18,7 @@ export default {
   SHOW_ERROR_DIALOG: 'showErrorDialog',
   SHOW_OFFLINE_DIALOG: 'showOfflineDialog',
   LOGIN_WAITING: 'loginWaiting',
-  LOGIN_STOP: 'loginStop'
+  LOGIN_STOP: 'loginStop',
+  SHOW_CONTACTS_DIALOG: 'showContactsDialog',
+  SHOW_CONTACTS_SNACKBAR: 'showContactsSnackbar'
 }

@@ -59,6 +59,10 @@
       <v-btn v-if="!offlineStatus" @click.stop="showOfflineDialog"  icon>
         <v-icon color="red">wifi_off</v-icon>
       </v-btn>
+      <!--<v-btn  @click.stop="subscribe"  icon>
+        <v-icon color="red">play_for_work</v-icon>
+      </v-btn>-->
+
       
       
 
@@ -67,6 +71,7 @@
         small
         v-model="fab"
         direction="bottom"
+        open-on-hover
       >
         <v-btn
           slot="activator"
@@ -154,6 +159,8 @@ export default {
     }
   },
   beforeCreate () {
+    window.addEventListener('mysilene-do-load-data', e => this.loadData(e))
+
     /* Connexion auto si token dans le storage */
     const token = localStorage.getItem('user-token')
     const userId = localStorage.getItem('user-id')
@@ -166,11 +173,44 @@ export default {
     // this.autoLogin(user)
   },
   mounted: function () {
-    // this.loadContacts()
-    // this.loadNews()
+    const token = localStorage.getItem('user-token')
+    const userId = localStorage.getItem('user-id')
+    if (token && userId) {
+      /* Hack  : On recharge les données après quelques secondes pour forcer le cache Service Worker à avoir l'API */
+      setTimeout(function () {
+        var doLoadEvent = new Event('mysilene-do-load-data')
+        window.dispatchEvent(doLoadEvent)
+      }, 3000)
+    }
     this.loadWeather()
   },
   methods: {
+    subscribe () {
+      if (Notification.permission === 'denied') {
+        console.log('Notification is Blocked')
+      }
+
+      // const applicationServerKey = this.urlB64ToUint8Array(this.applicationServerPublicKey)
+
+      return this.registration.pushManager.subscribe({
+      // https://developers.google.com/web/fundamentals/push-notifications/subscribing-a-user#uservisibleonly_options
+      // symbolic agreement with the browser that the web app will show
+      // a notification every time a push is received (i.e. no silent push).
+        userVisibleOnly: true
+      })
+        .then((subscription) => {
+        // subscription successful, send subscription info to server
+          console.log('subscription ok')
+          // this.updateSubscriptionOnServer({ subscription, is_active: true })
+          // this.isSubscribed = true
+          return true
+        })
+    },
+    loadData (e) {
+      console.log('Loading Data suite à event', e)
+      this.loadContacts()
+      this.loadNews()
+    },
     detected (e) {
       if (e) {
         this.$store.state.offline.read = false

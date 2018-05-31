@@ -1,7 +1,20 @@
 <template>
   <v-container style="margin-top:50px;">
+    <contact-dialog/>
+    <v-snackbar
+      :timeout="timeout"
+      top
+      right
+      multi-line
+      color="info"
+      v-model="snackbar"
+    >
+      <v-icon dark >error_outline</v-icon>
+      {{ text }}
+      <v-btn flat color="white" @click.native="snackbar = false">Close</v-btn>
+    </v-snackbar>
     <v-layout row>
-      <v-flex xs12 md9 offset-md3>
+      <v-flex xs12 md9 offset-md3>        
         <div v-if="!auth">
           <v-alert :value="true" type="info">
             Vous devez être connecté pour accéder aux Contacts Silène
@@ -58,68 +71,6 @@
                     <v-list-tile-title v-html="contact.sn+' '+contact.givenName"></v-list-tile-title>
                     <v-list-tile-sub-title v-html="contact.title"></v-list-tile-sub-title>
                   </v-list-tile-content>
-                  <v-list-tile-action class="hidden-xs-only" v-on:click.stop="sendMail(contact.mail)">
-                    <v-icon :color="contact.mail ? 'blue' : 'grey'">email</v-icon>
-                  </v-list-tile-action>
-                  <v-list-tile-action class="hidden-xs-only" v-on:click.stop="callBryan(contact.telephoneNumber)">
-                    <v-icon :color="contact.telephoneNumber ? 'blue' : 'grey'">phone</v-icon>
-                  </v-list-tile-action>
-                  <v-list-tile-action class="hidden-xs-only" v-on:click.stop="textBryan(contact.mobile)">
-                    <v-icon :color="contact.mobile ? 'blue' : 'grey'">chat</v-icon>
-                  </v-list-tile-action>
-                  <v-list-tile-action class="hidden-xs-only" v-on:click.stop="callBryan(contact.mobile)">
-                    <v-icon :color="contact.mobile ? 'blue' : 'grey'">phonelink_ring</v-icon>
-                  </v-list-tile-action>
-
-                  <!-- Responsive Design for mobile -->
-                  <v-menu class="hidden-sm-and-up" @click.native.stop>
-                    <v-btn icon slot="activator">
-                      <v-icon>expand_more</v-icon>
-                    </v-btn>
-                    <v-list>
-                      <!-- Mobile -->
-                      <v-list-tile v-on:click.stop="callBryan(contact.mobile)">
-                        <v-list-tile-action>
-                          <v-icon :color="contact.mobile ? 'blue' : 'grey'">phonelink_ring</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                          <v-list-tile-title>Mobile</v-list-tile-title>
-                        </v-list-tile-content>
-                      </v-list-tile>
-
-                      <!-- Phone -->
-                      <v-list-tile v-on:click.stop="callBryan(contact.telephoneNumber)">
-                        <v-list-tile-action>
-                          <v-icon :color="contact.telephoneNumber ? 'blue' : 'grey'">phone</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                          <v-list-tile-title>Fixe</v-list-tile-title>
-                        </v-list-tile-content>
-                      </v-list-tile>
-
-                      <!-- SMS -->
-                      <v-list-tile v-on:click.stop="textBryan(contact.mobile)">
-                        <v-list-tile-action>
-                          <v-icon :color="contact.mobile ? 'blue' : 'grey'">chat</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                          <v-list-tile-title>SMS</v-list-tile-title>
-                        </v-list-tile-content>
-                      </v-list-tile>
-
-                      <!-- Mail -->
-                      <v-list-tile>
-                        <v-list-tile-action v-on:click.stop="sendMail(contact.mail)">
-                          <v-icon :color="contact.mail ? 'blue' : 'grey'">email</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                          <v-list-tile-title>Mail</v-list-tile-title>
-                        </v-list-tile-content>
-                      </v-list-tile>
-
-
-                    </v-list>
-                  </v-menu>
                 </v-list-tile>
               </template>
               <v-progress-linear :indeterminate="true" v-if="busy"></v-progress-linear>
@@ -135,8 +86,10 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { debounce } from 'lodash'
 import Do from '../../const/do'
 import On from '../../const/on'
+import ContactDialog from '../dialogs/ContactDialog'
 
 export default {
+  components: { ContactDialog },
   name: 'contacts',
   data: () => ({
     items: [
@@ -155,6 +108,22 @@ export default {
       auth: state => state.login.Authenticate
     }),
     ...mapGetters({ contacts: 'partialContacts' }),
+    snackbar: {
+      get: function () {
+        return this.$store.state.contacts.showSnackbar
+      },
+      set: function (value) {
+        this.$store.state.contacts.showSnackbar = value
+      }
+    },
+    text: {
+      get: function () {
+        return this.$store.state.contacts.text
+      },
+      set: function (value) {
+        // Nothing here
+      }
+    },
     search: {
       get: function () {
         return this.$store.state.contacts.search
@@ -195,7 +164,8 @@ export default {
       filterChanged: On.UPDATE_FILTERED_CONTACTS
     }),
     ...mapMutations({
-      showMore: Do.SHOW_MORE_CONTACTS
+      showMore: Do.SHOW_MORE_CONTACTS,
+      showDialog: Do.SHOW_CONTACTS_DIALOG
     }),
     setSearch: debounce(function (value) {
       this.$store.state.contacts.search = value
@@ -220,18 +190,7 @@ export default {
     goToContact: function (contact, contactId) {
       // console.log('Contact : ' + contact + ' contactId : ' + contactId)
       this.$store.state.selectedContact = contact
-      // this.$router.push({ path: 'contactModal', params: { contactId }})
-      // this.$router.push({ name: 'contactModal', params: { contactId }})
-      this.$router.push({ path: `/contacts/${contactId}` })
-    },
-    sendMail (mail) {
-      if (mail) window.location = 'mailto:' + mail
-    },
-    callBryan (mobile) {
-      if (mobile) window.location = 'tel:' + mobile
-    },
-    textBryan (mobile) {
-      if (mobile) window.location = 'sms:' + mobile
+      this.showDialog()
     }
   }
 }

@@ -18,6 +18,7 @@
           (window.location.protocol === 'https:' || isLocalhost)) {
         navigator.serviceWorker.register('service-worker.js')
         .then(function(registration) {
+          console.log('flag')
           // updatefound is fired if service-worker.js changes.
           registration.onupdatefound = function() {
             // updatefound is also fired the very first time the SW is installed,
@@ -50,6 +51,22 @@
         }).catch(function(e) {
           console.error('Error during service worker registration:', e);
         });
-      }
+    }
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      console.log('Service Worker and Push is supported');
+    
+      navigator.serviceWorker.register('/sw-push-notification.js')
+          .then(function(registration) {
+            console.log('Service Worker is registered', registration);
+    
+            // our PushManager helper methods
+            window.mysilene.pwa.checkSubscription(registration);
+          })
+          .catch(function(error) {
+            console.error('Service Worker Error', error);
+          });
+    } else {
+      console.warn('Push messaging is not supported');
+    }
   });
 })();

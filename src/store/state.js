@@ -24,8 +24,11 @@ export default {
     fullList: [],
     filteredList: [],
     visibleList: [],
-    pageSize: 15,
-    endLoading: false
+    pageSize: 20,
+    endLoading: false,
+    showDialog: false,
+    showSnackbar: false,
+    text: 'Indisponible pour ce contact'
   },
   news: {
     filterDialogVisible: false,

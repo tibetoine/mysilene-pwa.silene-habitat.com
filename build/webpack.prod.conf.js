@@ -13,6 +13,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const loadMinified = require('./load-minified')
+const babel = require('babel-core');
 
 const env = config.build.env
 
@@ -96,6 +97,24 @@ const webpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
+      },
+      {
+        // copy custom service worker
+        from: path.resolve(__dirname, '../src/custom-service-worker.js'),
+        to: config.build.assetsRoot + '/[name].js',
+        transform: (content, path) => {
+          // and transpile it while copying
+          return babel.transformFileSync(path).code;
+        }
+      },
+      {
+        // copy custom service worker
+        from: path.resolve(__dirname, '../src/sw-push-notification.js'),
+        to: config.build.assetsRoot + '/[name].js',
+        transform: (content, path) => {
+          // and transpile it while copying
+          return babel.transformFileSync(path).code;
+        }
       }
     ]),
     // service worker caching
@@ -103,9 +122,10 @@ const webpackConfig = merge(baseWebpackConfig, {
       cacheId: 'mysilene',
       filename: 'service-worker.js',
       /* Permet de mettre en cache client (service-worker, l'ensemble des ressources dans static */
-      staticFileGlobs: ['dist/**/*.{js,html,css,jpg,jpeg,png}'],
-      minify: true,
+      staticFileGlobs: ['dist/**/*.{js,html,css}'],
+      minify: false,
       stripPrefix: 'dist/',
+      importScripts:[{filename: 'sw-push-notification.js'}],
       runtimeCaching: [        
         {
           urlPattern: '/api/(.*)',
