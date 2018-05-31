@@ -176,6 +176,7 @@ export default {
     const token = localStorage.getItem('user-token')
     const userId = localStorage.getItem('user-id')
     if (token && userId) {
+      // console.log('Ok je load les data car token et userid sont token : ' + token + ' et userId : ' + userId)
       /* Hack  : On recharge les données après quelques secondes pour forcer le cache Service Worker à avoir l'API */
       setTimeout(function () {
         var doLoadEvent = new Event('mysilene-do-load-data')

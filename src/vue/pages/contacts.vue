@@ -11,7 +11,7 @@
     >
       <v-icon dark >error_outline</v-icon>
       {{ text }}
-      <v-btn flat color="white" @click.native="snackbar = false">Close</v-btn>
+      <v-btn flat color="white" @click.stop.native="snackbar = false">Close</v-btn>
     </v-snackbar>
     <v-layout row>
       <v-flex xs12 md9 offset-md3>        

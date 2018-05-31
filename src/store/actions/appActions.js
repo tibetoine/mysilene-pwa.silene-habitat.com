@@ -80,10 +80,11 @@ export default {
       const token = response.body.token
 
       /* Header d'Authorization par defaut */
-      api.setDefaultAuthorization(token, user.userId)
+      var userId = user.userId.trim().toLowerCase()
+      api.setDefaultAuthorization(token, userId)
 
       localStorage.setItem('user-token', token)
-      localStorage.setItem('user-id', user.userId)
+      localStorage.setItem('user-id', userId)
       commit(Do.LOGIN_SUCCESS, response.body)
       commit(Do.LOGIN_STOP)
       /* Dispatch Action */
