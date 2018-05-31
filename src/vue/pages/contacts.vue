@@ -92,6 +92,7 @@ export default {
   components: { ContactDialog },
   name: 'contacts',
   data: () => ({
+    timeout: 5000,
     items: [
       { icon: 'email', title: 'Mail' },
       { icon: 'phone', title: 'Phone' },
