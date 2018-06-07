@@ -1,18 +1,5 @@
 <template>
   <v-container style="margin-top:50px;">
-    <contact-dialog/>
-    <v-snackbar
-      :timeout="timeout"
-      top
-      right
-      multi-line
-      color="info"
-      v-model="snackbar"
-    >
-      <v-icon dark >error_outline</v-icon>
-      {{ text }}
-      <v-btn flat color="white" @click.stop.native="snackbar = false">Close</v-btn>
-    </v-snackbar>
     <v-layout row>
       <v-flex xs12 md9 offset-md3>        
         <div v-if="!auth">
@@ -45,7 +32,7 @@
           </v-container>
           <v-list two-line v-infinite-scroll="loadMore" infinite-scroll-disabled="endLoading" infinite-scroll-distance="10" infinite-scroll-throttle-delay="50">
               <template v-for="(contact) in visibleContacts">
-                <v-list-tile avatar :key="contact._id" @click="goToContact(contact, contact._id)">
+                <v-list-tile avatar :key="contact._id" @click="goToContact(contact)">
                   <v-badge v-if="contact.silenesst == '1'" color="green" left  overlap>
                     <v-icon slot="badge" dark small>local_hospital</v-icon>
                     <v-list-tile-avatar>
@@ -86,10 +73,8 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { debounce } from 'lodash'
 import Do from '../../const/do'
 import On from '../../const/on'
-import ContactDialog from '../dialogs/ContactDialog'
 
 export default {
-  components: { ContactDialog },
   name: 'contacts',
   data: () => ({
     timeout: 5000,
@@ -188,10 +173,11 @@ export default {
       this.search = ''
       this.filterSst ? (this.filterSst = false) : (this.filterSst = true)
     },
-    goToContact: function (contact, contactId) {
+    goToContact: function (contact) {
       // console.log('Contact : ' + contact + ' contactId : ' + contactId)
       this.$store.state.selectedContact = contact
-      this.showDialog()
+      this.$router.push({ path: `/contacts/${contact._id}` })
+      // this.showDialog()
     }
   }
 }

@@ -20,7 +20,7 @@
             <v-layout row>
                 <v-flex xs12 sm6 offset-sm3>
                 <v-card>
-                    <v-card-media src="/static/img/contact.jpg" height="200px">
+                    <v-card-media src="/static/img/contacts.jpg" height="200px">
                       <v-layout column class="media">
                           <v-card-title>
                             <v-container fluid grid-list-lg>

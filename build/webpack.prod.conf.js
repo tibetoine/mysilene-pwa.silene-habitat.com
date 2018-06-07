@@ -122,7 +122,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       cacheId: 'mysilene',
       filename: 'service-worker.js',
       /* Permet de mettre en cache client (service-worker, l'ensemble des ressources dans static */
-      staticFileGlobs: ['dist/**/*.{js,html,css}'],
+      staticFileGlobs: ['dist/**/*.{js,html,css,jpg}'],
       minify: false,
       stripPrefix: 'dist/',
       importScripts:[{filename: 'sw-push-notification.js'}],
