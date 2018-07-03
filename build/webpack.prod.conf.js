@@ -97,24 +97,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
-      },
-      {
-        // copy custom service worker
-        from: path.resolve(__dirname, '../src/custom-service-worker.js'),
-        to: config.build.assetsRoot + '/[name].js',
-        transform: (content, path) => {
-          // and transpile it while copying
-          return babel.transformFileSync(path).code;
-        }
-      },
-      {
-        // copy custom service worker
-        from: path.resolve(__dirname, '../src/sw-push-notification.js'),
-        to: config.build.assetsRoot + '/[name].js',
-        transform: (content, path) => {
-          // and transpile it while copying
-          return babel.transformFileSync(path).code;
-        }
       }
     ]),
     // service worker caching
@@ -124,8 +106,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       /* Permet de mettre en cache client (service-worker, l'ensemble des ressources dans static */
       staticFileGlobs: ['dist/**/*.{js,html,css,jpg}'],
       minify: false,
-      stripPrefix: 'dist/',
-      importScripts:[{filename: 'sw-push-notification.js'}],
+      stripPrefix: 'dist/',      
       runtimeCaching: [        
         {
           urlPattern: '/api/(.*)',

@@ -23,6 +23,24 @@ export default {
       }
     }
   },
+  [On.LOAD_DOCS]: async function ({ commit }) {
+    try {
+      const response = await rest.getDocs()
+      if (response.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      } else {
+        const docs = response.body
+        /* 2/ Enregistrement dans le store */
+        commit(Do.SET_DOCS, docs)
+      }
+    } catch (error) {
+      if (error && error.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      }
+    }
+  },
 
   [On.LOAD_NEWS]: async function ({ commit }) {
     try {
@@ -90,7 +108,7 @@ export default {
       /* Dispatch Action */
       dispatch(On.LOAD_NEWS)
       dispatch(On.LOAD_CONTACTS)
-      dispatch(On.LOAD_WEATHER)
+      dispatch(On.LOAD_DOCS)
     }
 
     await rest.login(user, callbackSuccess, callbackError)
@@ -106,6 +124,7 @@ export default {
     /* Dispatch Action */
     dispatch(On.LOAD_NEWS)
     dispatch(On.LOAD_CONTACTS)
+    dispatch(On.LOAD_DOCS)
   },
   [On.LOGIN_WAITING]: function ({ commit }) {
     commit(Do.LOGIN_WAITING)

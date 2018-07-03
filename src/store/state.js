@@ -18,6 +18,9 @@ export default {
   },
   selectedContact: null,
   selectedNew: null,
+  docs: {
+    fullList: []
+  },
   contacts: {
     search: '',
     filterSst: false,
@@ -60,6 +63,10 @@ export default {
       {
         value: 'cosNews',
         label: 'COS News'
+      },
+      {
+        value: 'docs',
+        label: 'Documents'
       }
     ],
     selectedTypes: [
@@ -69,7 +76,8 @@ export default {
       'mouvementsRH',
       'cos-rss',
       'cosActu',
-      'cosNews'
+      'cosNews',
+      'docs'
     ],
     fullList: [],
     filteredList: [],

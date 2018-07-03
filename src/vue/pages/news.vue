@@ -70,12 +70,12 @@
                       </clazy-load>
                       <v-card-title>
                           <div>
-                              <span class="headline" :style="'color:'+getFontColor(aNews)+';'">{{aNews.title}}</span>
+                              <span class="headline" :style="'color:'+getFontColor(aNews)+';'">{{getNewsTitle(aNews)}}</span>
                           </div>
                       </v-card-title>
                       <v-card-title :color="getColor(aNews)" style="padding-top:0px;">
                           <div>
-                              <span v-if="aNews.type !== 'cos-rss'" :color="getColor(aNews)">{{aNews.resume}}</span>
+                              <span v-if="aNews.type !== 'cos-rss'" :color="getColor(aNews)" >{{getNewsResume(aNews)}}</span>
                           </div>
                       </v-card-title>
                       <v-card-actions>
@@ -147,7 +147,7 @@ export default {
       showMore: Do.SHOW_MORE_NEWS
     }),
     goToNews: function (news, newsId) {
-      if (news.type.startsWith('cos')) {
+      if (news.type.startsWith('cos') || (news.type === 'docs')) {
         window.open(news.link, '_blank')
       } else {
         // console.log('News : ' + news + ' newsId : ' + newsId)
@@ -157,6 +157,7 @@ export default {
         this.$router.push({ path: `/news/${newsId}` })
       }
     },
+
     loadMore: function () {
       // console.log('load more news...')
       this.busy = true
@@ -240,6 +241,9 @@ export default {
         case 'cosNews':
           label = 'COS News'
           break
+        case 'docs':
+          label = 'Documents'
+          break
         default:
           console.log('Type non trouvé : ' + news.type)
           break
@@ -316,6 +320,9 @@ export default {
           case 'mouvementsRH':
             imgSource = news.image
             break
+          case 'docs':
+            imgSource = '/static/img/documents.jpg'
+            break
           case 'cos-rss':
           case 'cosActu':
           case 'cosNews':
@@ -328,12 +335,38 @@ export default {
       // console.log('imgSource : ' + imgSource)
       return imgSource
     },
+    getNewsTitle: function (news) {
+      if (news.type === 'docs') {
+        var typeDocLabel = ''
+        if (['doc-unsa', 'doc-cgt', 'doc-cfdt'].indexOf(news.docType) > -1) {
+          typeDocLabel = 'syndical'
+        }
+        return 'Nouveau document ' + typeDocLabel
+      }
+      return news.title
+    },
+    getNewsResume: function (news) {
+      if (news.type === 'docs') {
+        var typeDocLabel = ''
+        if (['doc-unsa', 'doc-cgt', 'doc-cfdt'].indexOf(news.docType) > -1) {
+          typeDocLabel = 'syndical '
+        }
+        return 'Un nouveau document ' + typeDocLabel + 'est disponible. Cliquez sur "Lire la suite" pour le consulter.'
+      }
+      return news.resume
+    },
     findAvatar: function (author) {
       if (author == null || author === '') {
         return '/static/img/ad-photos/default.jpg'
       }
       var contact = this.$store.getters.searchContact(author)
       if (contact == null) return '/static/img/ad-photos/default.jpg'
+      console.log(author)
+      if (author && ['cfdt', 'cgt', 'unsa'].indexOf(author.trim()) > -1) {
+        console.log('oui')
+        return '/static/img/ad-photos/' + author +
+        '.jpg'
+      }
 
       var imgSource =
         '/static/img/ad-photos/' +

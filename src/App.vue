@@ -178,10 +178,10 @@ export default {
     if (token && userId) {
       // console.log('Ok je load les data car token et userid sont token : ' + token + ' et userId : ' + userId)
       /* Hack  : On recharge les données après quelques secondes pour forcer le cache Service Worker à avoir l'API */
-      setTimeout(function () {
+      /* setTimeout(function () {
         var doLoadEvent = new Event('mysilene-do-load-data')
         window.dispatchEvent(doLoadEvent)
-      }, 3000)
+      }, 3000) */
     }
     this.loadWeather()
   },
@@ -209,8 +209,9 @@ export default {
     },
     loadData (e) {
       console.log('Loading Data suite à event', e)
-      this.loadContacts()
+      this.loadDocs()
       this.loadNews()
+      this.loadContacts()
     },
     detected (e) {
       if (e) {
@@ -225,6 +226,7 @@ export default {
     },
     ...mapActions({
       loadContacts: On.LOAD_CONTACTS,
+      loadDocs: On.LOAD_DOCS,
       loadNews: On.LOAD_NEWS,
       loadWeather: On.LOAD_WEATHER,
       logout: On.LOGOUT,
@@ -249,7 +251,8 @@ export default {
       { icon: 'art_track', text: 'News', path: '/news' },
       { icon: 'contacts', text: 'Contacts', path: '/contacts' },
       { icon: 'cloud', text: 'Météo', path: '/meteo' },
-      { icon: 'help', text: 'Aide', path: '/help' }
+      { icon: 'help', text: 'Aide', path: '/help' },
+      { icon: 'library_books', text: 'Docs', path: '/docs' }
     ]
   }),
 

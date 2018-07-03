@@ -2,6 +2,7 @@
 export default {
   LOAD_DATA: 'loadData',
   LOAD_CONTACTS: 'loadContacts',
+  LOAD_DOCS: 'loadDocs',
   LOAD_NEWS: 'loadNews',
   UPDATE_FILTERED_CONTACTS: 'updateFilteredContacts',
   LOAD_WEATHER: 'loadWeather',

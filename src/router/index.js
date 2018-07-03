@@ -6,6 +6,7 @@ import ContactModal from '../vue/modals/contactModal'
 import NewsModal from '../vue/modals/newsModal'
 import Meteo from '../vue/pages/meteo'
 import Help from '../vue/pages/help'
+import Docs from '../vue/pages/docs' // --> Component Docs
 
 Vue.use(Router)
 
@@ -43,6 +44,11 @@ export default new Router({
       path: '/help',
       component: Help,
       name: 'help'
+    },
+    {
+      path: '/docs',
+      component: Docs,
+      name: 'docs'
     }
 
   ],

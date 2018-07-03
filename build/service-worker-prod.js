@@ -16,7 +16,7 @@
   window.addEventListener('load', function() {
       if ('serviceWorker' in navigator &&
           (window.location.protocol === 'https:' || isLocalhost)) {
-        navigator.serviceWorker.register('service-worker.js')
+        navigator.serviceWorker.register('./OneSignalSDKWorker.js')
         .then(function(registration) {
           // console.log('flag')
           // updatefound is fired if service-worker.js changes.
@@ -52,21 +52,6 @@
           console.error('Error during service worker registration:', e);
         });
     }
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      console.log('Service Worker and Push is supported');
     
-      navigator.serviceWorker.register('/sw-push-notification.js')
-          .then(function(registration) {
-            console.log('Service Worker is registered', registration);
-    
-            // our PushManager helper methods
-            window.mysilene.pwa.checkSubscription(registration);
-          })
-          .catch(function(error) {
-            console.error('Service Worker Error', error);
-          });
-    } else {
-      console.warn('Push messaging is not supported');
-    }
   });
 })();

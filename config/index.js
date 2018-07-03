@@ -40,6 +40,13 @@ module.exports = {
         pathRewrite: {
           '^/shp_img': ''
         }
+      },
+      '/doc_silene': {
+        target: 'http://isidoor.silene-habitat.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/doc_silene': ''
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
