@@ -69,7 +69,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency',
       node_env: process.env.NODE_ENV,
-      oneSignalKey: '<script>var oneSignalKey = \'' + config.build.env.ONE_SIGNAL_KEY + '\'</script>',      
+      oneSignalKey: '<script>var oneSignalKey = \'' + process.env.ONE_SIGNAL_KEY + '\'</script>',      
       serviceWorkerLoader: `<script>${loadMinified(path.join(__dirname,
         './service-worker-prod.js'))}</script>`
     }),
@@ -99,7 +99,16 @@ const webpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
-      }
+      },
+      {
+        // copy custom service worker
+        from: path.resolve(__dirname, './OneSignalSDKWorker.js'),
+        to: config.build.assetsRoot + '/[name].js',
+        transform: (content, path) => {
+          // and transpile it while copying
+          return babel.transformFileSync(path).code;
+        }
+      },
     ]),
     // service worker caching
     new SWPrecacheWebpackPlugin({
