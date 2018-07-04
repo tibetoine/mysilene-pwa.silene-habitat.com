@@ -41,18 +41,20 @@
 
     <!-- OneSignal -->
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <!-- Voir webpack.xxx.conf.js -->
+    <%= htmlWebpackPlugin.options.oneSignalKey %>
     <script>
-      var OneSignalKey = process.env.ONE_SIGNAL_KEY
+      console.log ('oneSignalKey : ',oneSignalKey )
       var OneSignal = window.OneSignal || [];
-        OneSignal.push(function () {
+      OneSignal.push(function () {
           OneSignal.init({
-            appId: OneSignalKey,
-            autoRegister: false,
-            notifyButton: {
+          appId: oneSignalKey,
+          autoRegister: false,
+          notifyButton: {
               enable: true,
-            },
+          },
           });
-        });
+      });
     </script>
   </head>
   <body>

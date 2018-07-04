@@ -59,9 +59,7 @@
       <v-btn v-if="!offlineStatus" @click.stop="showOfflineDialog"  icon>
         <v-icon color="red">wifi_off</v-icon>
       </v-btn>
-      <!--<v-btn  @click.stop="subscribe"  icon>
-        <v-icon color="red">play_for_work</v-icon>
-      </v-btn>-->
+      
 
       
       
@@ -186,27 +184,6 @@ export default {
     this.loadWeather()
   },
   methods: {
-    subscribe () {
-      if (Notification.permission === 'denied') {
-        console.log('Notification is Blocked')
-      }
-
-      // const applicationServerKey = this.urlB64ToUint8Array(this.applicationServerPublicKey)
-
-      return this.registration.pushManager.subscribe({
-      // https://developers.google.com/web/fundamentals/push-notifications/subscribing-a-user#uservisibleonly_options
-      // symbolic agreement with the browser that the web app will show
-      // a notification every time a push is received (i.e. no silent push).
-        userVisibleOnly: true
-      })
-        .then((subscription) => {
-        // subscription successful, send subscription info to server
-          console.log('subscription ok')
-          // this.updateSubscriptionOnServer({ subscription, is_active: true })
-          // this.isSubscribed = true
-          return true
-        })
-    },
     loadData (e) {
       console.log('Loading Data suite à event', e)
       this.loadDocs()

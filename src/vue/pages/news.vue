@@ -68,12 +68,12 @@
                           <v-progress-linear :color="getColor(aNews)" :indeterminate="true"></v-progress-linear>
                         </div>
                       </clazy-load>
-                      <v-card-title>
+                      <v-card-title @click="goToNews(aNews, aNews._id)" style="cursor:pointer;">
                           <div>
                               <span class="headline" :style="'color:'+getFontColor(aNews)+';'">{{getNewsTitle(aNews)}}</span>
                           </div>
-                      </v-card-title>
-                      <v-card-title :color="getColor(aNews)" style="padding-top:0px;">
+                      </v-card-title >
+                      <v-card-title @click="goToNews(aNews, aNews._id)" :color="getColor(aNews)" style="padding-top:0px;cursor:pointer;">
                           <div>
                               <span v-if="aNews.type !== 'cos-rss'" :color="getColor(aNews)" >{{getNewsResume(aNews)}}</span>
                           </div>
@@ -351,7 +351,8 @@ export default {
         if (['doc-unsa', 'doc-cgt', 'doc-cfdt'].indexOf(news.docType) > -1) {
           typeDocLabel = 'syndical '
         }
-        return 'Un nouveau document ' + typeDocLabel + 'est disponible. Cliquez sur "Lire la suite" pour le consulter.'
+
+        return 'Un nouveau document ' + typeDocLabel + '[ ' + news.name + ' ] est disponible. Cliquez sur "Lire la suite" pour le consulter.'
       }
       return news.resume
     },
@@ -361,9 +362,7 @@ export default {
       }
       var contact = this.$store.getters.searchContact(author)
       if (contact == null) return '/static/img/ad-photos/default.jpg'
-      console.log(author)
       if (author && ['cfdt', 'cgt', 'unsa'].indexOf(author.trim()) > -1) {
-        console.log('oui')
         return '/static/img/ad-photos/' + author +
         '.jpg'
       }

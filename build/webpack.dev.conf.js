@@ -36,6 +36,8 @@ module.exports = merge(baseWebpackConfig, {
       filename: 'index.html',
       template: 'index.html',
       inject: true,
+      node_env: process.env.NODE_ENV,
+      oneSignalKey: '<script>var oneSignalKey = \'' + process.env.ONE_SIGNAL_KEY + '\'</script>',     
       serviceWorkerLoader: `<script>${fs.readFileSync(
         path.join(__dirname, './service-worker-dev.js'),
         'utf-8'

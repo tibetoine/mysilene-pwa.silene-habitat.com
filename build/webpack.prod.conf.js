@@ -68,6 +68,8 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency',
+      node_env: process.env.NODE_ENV,
+      oneSignalKey: '<script>var oneSignalKey = \'' + config.build.env.ONE_SIGNAL_KEY + '\'</script>',      
       serviceWorkerLoader: `<script>${loadMinified(path.join(__dirname,
         './service-worker-prod.js'))}</script>`
     }),

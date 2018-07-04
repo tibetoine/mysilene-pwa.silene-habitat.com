@@ -71,7 +71,6 @@ export default {
         // console.log('Contact trouvé pour Prénom : ' + prenom + ' et nom de famille : ' + nomDeFamille);
         return true
       } else {
-        // if (contact.givenName == 'MOYON') console.log('Contact non trouvé pour Prénom : ' + prenom + ' et nom de famille : ' + nomDeFamille + ' avec Contact : givenName ' + contact.givenName + ' sn : ' + contact.sn);
         return false
       }
     })
