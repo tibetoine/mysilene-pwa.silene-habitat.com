@@ -1,6 +1,6 @@
 
 <template>
-  <v-layout column>
+  <v-layout row spacer>
       <v-flex>
        <div class="text-xs-center">{{ dayOfWeek(day.time * 1000) }}</div>
       </v-flex>

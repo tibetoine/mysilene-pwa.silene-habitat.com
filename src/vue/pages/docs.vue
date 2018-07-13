@@ -1,5 +1,70 @@
 <template>
-   <v-container style="margin-top:50px;">
+  <v-container style="margin-top:50px;">
+    <v-layout row wrap>
+       <v-flex xs12 sm6 offset-sm3>
+        <v-expansion-panel popout>
+          <v-expansion-panel-content>
+            <div slot="header">
+              <v-avatar size="24">
+                <img
+                  src="/static/img/ad-photos/cfdt.jpg"
+                  alt="CFDT"
+                >
+              </v-avatar>
+              &nbsp;&nbsp;&nbsp;&nbsp;Documents CFDT
+            </div>
+            <fileLine key="docCfdt" :list=cfdtList></fileLine>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-flex>
+
+       <v-flex xs12 sm6 offset-sm3>
+        <v-expansion-panel popout>
+          <v-expansion-panel-content>
+            <div slot="header">
+              <v-avatar size="24">
+                <img
+                  src="/static/img/ad-photos/cgt.jpg"
+                  alt="CGT"
+                >
+              </v-avatar>
+              &nbsp;&nbsp;&nbsp;&nbsp;Documents CGT
+            </div>
+            <fileLine key="docCgt" :list=cgtList></fileLine>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-flex>
+
+       <v-flex xs12 sm6 offset-sm3>
+        <v-expansion-panel popout>
+          <v-expansion-panel-content>
+            <div slot="header">
+              <v-avatar size="24">
+                <img
+                  src="/static/img/ad-photos/unsa.jpg"
+                  alt="UNSA"
+                >
+              </v-avatar>
+              &nbsp;&nbsp;&nbsp;&nbsp;Documents UNSA
+            </div>
+            <fileLine key="docUnsa" :list=unsaList></fileLine>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-flex>
+
+      <v-flex xs12 sm6 offset-sm3>
+        <v-expansion-panel popout>
+          <v-expansion-panel-content>
+            <div slot="header">Documents du CE</div>
+            <fileLine key="docCe" :list=ceList></fileLine>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-flex>
+
+      
+    </v-layout>
+  </v-container>
+  <!-- <v-container style="margin-top:50px;">
     <v-layout row>
       <v-flex xs12 sm6 offset-sm3>
         <v-toolbar>
@@ -23,16 +88,18 @@
         </v-list>
       </v-flex>      
     </v-layout>
-  </v-container>
+  </v-container> -->
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import FileLine from '../components/FileLine'
 
 // TODO : voir : https://vuetifyjs.com/en/components/lists#example-expansion-lists
 
 export default {
   name: 'docs',
+  components: {FileLine},
   data () {
     return {
       items: [
@@ -58,21 +125,15 @@ export default {
   computed: {
     ...mapState({
       docsList: state => state.docs.fullList,
+      ceList: state => state.docs.ceList,
+      cfdtList: state => state.docs.cfdtList,
+      cgtList: state => state.docs.cgtList,
+      unsaList: state => state.docs.unsaList,
       auth: state => state.login.Authenticate
     })
   },
-  components: {},
   methods: {
-    openDocument (item) {
-      // Todo : display 'Ouverture dans un nouvel onglet'
-      if (item.link) window.open(item.link, '_blank')
-    },
-    sendMail (mail) {
-      if (mail) window.location = 'mailto:' + mail
-    },
-    callBryan (mobile) {
-      if (mobile) window.location = 'tel:' + mobile
-    }
+
   }
 }
 </script>

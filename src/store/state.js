@@ -19,7 +19,12 @@ export default {
   selectedContact: null,
   selectedNew: null,
   docs: {
-    fullList: []
+    fullList: [],
+    ceList: [],
+    cfdtList: [],
+    cgtList: [],
+    unsaList: []
+
   },
   contacts: {
     search: '',

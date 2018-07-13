@@ -45,9 +45,9 @@
       </v-toolbar-title>
       
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <!--<v-btn icon>
         <v-icon>notifications</v-icon>
-      </v-btn>   
+      </v-btn>-->   
       <v-btn v-if="error" @click.stop="showErrorDialog" icon>
         <v-icon  >warning</v-icon>
       </v-btn>
