@@ -1,10 +1,10 @@
 <template>
-  <div style="margin-top:50px;">
+  <div style="margin-top:60px;">
     <v-tabs
       slot="extension"      
       centered
       color="transparent"
-      slider-color="white"
+      slider-color="blue"
     >
       <v-tab key="tab1">
         Personnes
