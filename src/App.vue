@@ -225,7 +225,7 @@ export default {
     drawer: null,
     offlineStatus: null,
     items: [
-      { icon: 'art_track', text: 'News', path: '/news' },
+      { icon: 'art_track', text: 'Actualités', path: '/news' },
       { icon: 'contacts', text: 'Contacts', path: '/contacts' },
       { icon: 'cloud', text: 'Météo', path: '/meteo' },
       { icon: 'help', text: 'Aide', path: '/help' },
