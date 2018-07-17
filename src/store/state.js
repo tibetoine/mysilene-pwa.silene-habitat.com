@@ -36,7 +36,8 @@ export default {
     endLoading: false,
     showDialog: false,
     showSnackbar: false,
-    text: 'Indisponible pour ce contact'
+    text: 'Indisponible pour ce contact',
+    groupedContacts: []
   },
   news: {
     filterDialogVisible: false,

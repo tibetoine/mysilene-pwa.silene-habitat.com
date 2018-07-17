@@ -1,71 +1,151 @@
 <template>
-  <v-container style="margin-top:50px;">
-    <v-layout row>
-      <v-flex xs12 md9 offset-md3>        
-        <div v-if="!auth">
-          <v-alert :value="true" type="info">
-            Vous devez être connecté pour accéder aux Contacts Silène
-          </v-alert>
-        </div>
-        <v-card v-else>
-          <v-container style="padding:4px;">
+  <div style="margin-top:50px;">
+    <v-tabs
+      slot="extension"      
+      centered
+      color="transparent"
+      slider-color="white"
+    >
+      <v-tab key="tab1">
+        Personnes
+      </v-tab>
+      <v-tab key="tab2">
+        Services
+      </v-tab>
+      <v-tabs-items>
+        <v-tab-item key="tab1">
+          <v-container>
             <v-layout row>
-              <v-flex xs8 sm-and-up8>
-                <v-text-field
-                  name="input-1-3"
-                  label="Rechercher .."
-                  single-line
-                  append-icon="search"
-                  v-model="search"
-                ></v-text-field>
+              <v-flex xs12 md9 offset-md3>        
+                <div v-if="!auth">
+                  <v-alert :value="true" type="info">
+                    Vous devez être connecté pour accéder aux Contacts Silène
+                  </v-alert>
+                </div>
+                <v-card v-else>
+                  <v-container style="padding:4px;">
+                    <v-layout row>
+                      <v-flex xs8 sm-and-up8>
+                        <v-text-field
+                          name="input-1-3"
+                          label="Rechercher .."
+                          single-line
+                          append-icon="search"
+                          v-model="search"
+                        ></v-text-field>
+                      </v-flex>
+                      <v-flex xs4 sm-and-up4>
+                        <v-btn
+                          @click="doFilterSst"
+                          :color="filterSst?'green':'grey'"
+                          class="white--text"
+                        >
+                          SST
+                          <v-icon right dark>local_hospital</v-icon>
+                        </v-btn>
+                      </v-flex></v-layout>
+                  </v-container>
+                  <v-list two-line v-infinite-scroll="loadMore" infinite-scroll-disabled="endLoading" infinite-scroll-distance="10" infinite-scroll-throttle-delay="50">
+                      <template v-for="(contact) in visibleContacts">
+                        <v-list-tile avatar :key="contact._id" @click="goToContact(contact)">
+                          <v-badge v-if="contact.silenesst == '1'" color="green" left  overlap>
+                            <v-icon slot="badge" dark small>local_hospital</v-icon>
+                            <v-list-tile-avatar>
+                              <img :src="imgsrc(contact)">
+                            </v-list-tile-avatar>
+                          </v-badge>
+                          <v-badge v-else-if="contact.sileneserrefile == '1'" color="orange" left  overlap>
+                            <v-icon slot="badge" dark small>security</v-icon>
+                            <v-list-tile-avatar>
+                              <img :src="imgsrc(contact)">
+                            </v-list-tile-avatar>
+                          </v-badge>
+                          <v-badge v-else-if="contact.sileneguidefile == '1'" color="blue" left  overlap>
+                            <v-icon slot="badge" dark small>security</v-icon>
+                            <v-list-tile-avatar>
+                              <img :src="imgsrc(contact)">
+                            </v-list-tile-avatar>
+                          </v-badge>
+                          <v-list-tile-avatar v-else>
+                            <img :src="imgsrc(contact)">
+                          </v-list-tile-avatar>
+                          <v-list-tile-content>
+                            <v-list-tile-title v-html="contact.sn+' '+contact.givenName"></v-list-tile-title>
+                            <v-list-tile-sub-title v-html="contact.title"></v-list-tile-sub-title>
+                          </v-list-tile-content>
+                        </v-list-tile>
+                      </template>
+                      <v-progress-linear :indeterminate="true" v-if="busy"></v-progress-linear>
+                  </v-list>
+                </v-card>
               </v-flex>
-              <v-flex xs4 sm-and-up4>
-                <v-btn
-                  @click="doFilterSst"
-                  :color="filterSst?'green':'grey'"
-                  class="white--text"
-                >
-                  SST
-                  <v-icon right dark>local_hospital</v-icon>
-                </v-btn>
-              </v-flex></v-layout>
+            </v-layout>
           </v-container>
-          <v-list two-line v-infinite-scroll="loadMore" infinite-scroll-disabled="endLoading" infinite-scroll-distance="10" infinite-scroll-throttle-delay="50">
-              <template v-for="(contact) in visibleContacts">
-                <v-list-tile avatar :key="contact._id" @click="goToContact(contact)">
-                  <v-badge v-if="contact.silenesst == '1'" color="green" left  overlap>
-                    <v-icon slot="badge" dark small>local_hospital</v-icon>
-                    <v-list-tile-avatar>
-                      <img :src="imgsrc(contact)">
-                    </v-list-tile-avatar>
-                  </v-badge>
-                  <v-badge v-else-if="contact.sileneserrefile == '1'" color="orange" left  overlap>
-                    <v-icon slot="badge" dark small>security</v-icon>
-                    <v-list-tile-avatar>
-                      <img :src="imgsrc(contact)">
-                    </v-list-tile-avatar>
-                  </v-badge>
-                  <v-badge v-else-if="contact.sileneguidefile == '1'" color="blue" left  overlap>
-                    <v-icon slot="badge" dark small>security</v-icon>
-                    <v-list-tile-avatar>
-                      <img :src="imgsrc(contact)">
-                    </v-list-tile-avatar>
-                  </v-badge>
-                  <v-list-tile-avatar v-else>
-                    <img :src="imgsrc(contact)">
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title v-html="contact.sn+' '+contact.givenName"></v-list-tile-title>
-                    <v-list-tile-sub-title v-html="contact.title"></v-list-tile-sub-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </template>
-              <v-progress-linear :indeterminate="true" v-if="busy"></v-progress-linear>
-          </v-list>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+        </v-tab-item>
+        <v-tab-item key="tab2">
+          <v-container>
+            <v-layout row>
+              <v-flex xs12 md9 offset-md3>        
+                <div v-if="!auth">
+                  <v-alert :value="true" type="info">
+                    Vous devez être connecté pour accéder aux Contacts Silène
+                  </v-alert>
+                </div>
+                <v-card v-else>
+                                  
+                  <v-list>
+                    <v-list-group
+                      v-for="(service, key) in groupedContacts"                      
+                      :key="key"                      
+                      no-action
+                    >
+                      <v-list-tile slot="activator"  class="list-hotfix">
+                        <v-list-tile-content>
+                          <v-list-tile-title >{{ service[0] }}</v-list-tile-title>
+                        </v-list-tile-content>
+                      </v-list-tile>
+                      <template v-for="(contact) in service[1]" v-if="contact!=null">
+                        <v-list-tile avatar :key="contact._id" @click="goToContact(contact)">
+                          <v-badge v-if="contact.silenesst == '1'" color="green" left  overlap>
+                            <v-icon slot="badge" dark small>local_hospital</v-icon>
+                            <v-list-tile-avatar>
+                              <img :src="imgsrc(contact)">
+                            </v-list-tile-avatar>
+                          </v-badge>
+                          <v-badge v-else-if="contact.sileneserrefile == '1'" color="orange" left  overlap>
+                            <v-icon slot="badge" dark small>security</v-icon>
+                            <v-list-tile-avatar>
+                              <img :src="imgsrc(contact)">
+                            </v-list-tile-avatar>
+                          </v-badge>
+                          <v-badge v-else-if="contact.sileneguidefile == '1'" color="blue" left  overlap>
+                            <v-icon slot="badge" dark small>security</v-icon>
+                            <v-list-tile-avatar>
+                              <img :src="imgsrc(contact)">
+                            </v-list-tile-avatar>
+                          </v-badge>
+                          <v-list-tile-avatar v-else>
+                            <img :src="imgsrc(contact)">
+                          </v-list-tile-avatar>
+                          <v-list-tile-content>
+                            <v-list-tile-title v-html="contact.sn+' '+contact.givenName"></v-list-tile-title>
+                            <v-list-tile-sub-title v-html="contact.title"></v-list-tile-sub-title>
+                          </v-list-tile-content>
+                        </v-list-tile>
+                      </template>
+                      
+                      
+                    </v-list-group>
+                  </v-list>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-tabs>
+    
+  </div>
 </template>
 
 <script>
@@ -86,11 +166,15 @@ export default {
     ],
     busy: false
   }),
+  created () {
+    this.fetchData()
+  },
   computed: {
     ...mapState({
       filterSst: state => state.contacts.filterSst,
       selectedContact: state => state.selectedContact,
       visibleContacts: state => state.contacts.visibleList,
+      groupedContacts: state => Array.from(state.contacts.groupedContacts),
       auth: state => state.login.Authenticate
     }),
     ...mapGetters({ contacts: 'partialContacts' }),
@@ -157,6 +241,13 @@ export default {
       this.$store.state.contacts.search = value
       this.filterChanged()
     }, 300),
+    fetchData: function () {
+      console.log('ok')
+      console.log(this.groupedContacts)
+      Array.from(this.groupedContacts).forEach(element => {
+        console.log(element)
+      })
+    },
     loadMore: function () {
       // console.log('load more contacts...')
       this.busy = true
@@ -182,3 +273,15 @@ export default {
   }
 }
 </script>
+<style>
+  .list-hotfix {
+      flex: 1 1 auto !important;
+      overflow: hidden;
+  }
+
+  @media screen and (max-width: 600px) {
+    .hot-fix-for-list .list__tile {
+        max-width: 47.5vw
+    }
+  }
+</style>

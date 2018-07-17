@@ -6,6 +6,12 @@ export default {
     // Vue.set(contacts, "contacts", contacts);
     state.contacts.filteredList = state.contacts.fullList = contacts
     addContacts(state)
+
+    
+    state.contacts.groupedContacts = groupBy(contacts, contact => contact.department)
+
+    
+
   },
   [Do.SET_CONTACTS_SEARCH]: (state, search) => {
     state.contacts.search = search
@@ -70,6 +76,27 @@ export default {
     state.contacts.showSnackbar = true
     state.contacts.text = text
   },
+}
+
+const groupBy = (list, keyGetter) => {
+  const map = new Map();
+  list.forEach((item) => {
+    var key = keyGetter(item);
+    if (key === '' || key == null) {
+      return;
+    }
+    
+    const collection = map.get(key);
+    if (!collection) {
+      map.set(key, [item]);
+    } else {
+      collection.push(item);
+    }
+  });
+
+  var mapAsc = new Map([...map.entries()].sort());
+
+  return mapAsc;
 }
 
 const addContacts = (state) => {
