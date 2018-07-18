@@ -228,8 +228,8 @@ export default {
       { icon: 'art_track', text: 'Actualités', path: '/news' },
       { icon: 'contacts', text: 'Contacts', path: '/contacts' },
       { icon: 'cloud', text: 'Météo', path: '/meteo' },
-      { icon: 'help', text: 'Aide', path: '/help' },
-      { icon: 'library_books', text: 'Docs', path: '/docs' }
+      { icon: 'help', text: 'Aide', path: '/help' }
+      /* { icon: 'library_books', text: 'Docs', path: '/docs' } */
     ]
   }),
 
