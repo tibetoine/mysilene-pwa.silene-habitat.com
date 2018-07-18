@@ -16,7 +16,7 @@
   window.addEventListener('load', function() {
       if ('serviceWorker' in navigator &&
           (window.location.protocol === 'https:' || isLocalhost)) {
-        navigator.serviceWorker.register('OneSignalSDKWorker-20180718-1007.js')
+        navigator.serviceWorker.register('OneSignalSDKWorker.js')
         .then(function(registration) {
           // console.log('flag')
           // updatefound is fired if service-worker.js changes.

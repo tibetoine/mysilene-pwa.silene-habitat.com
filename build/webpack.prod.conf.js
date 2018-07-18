@@ -102,7 +102,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       {
         // copy custom service worker
-        from: path.resolve(__dirname, './OneSignalSDKWorker-20180718-1007.js'),
+        from: path.resolve(__dirname, './OneSignalSDKWorker.js'),
         to: config.build.assetsRoot + '/[name].js',
         transform: (content, path) => {
           // and transpile it while copying
