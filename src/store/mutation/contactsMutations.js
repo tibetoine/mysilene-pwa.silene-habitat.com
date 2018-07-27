@@ -36,13 +36,13 @@ export default {
       if (state.contacts.search !== '' && state.contacts.search != null) {
         isFiltered =
           isFiltered ||
-          contact.sn
+          accent_fold(contact.sn)
             .toLowerCase()
             .indexOf(state.contacts.search.toLowerCase()) > -1
         if (contact.givenName != null) {
           isFiltered =
             isFiltered ||
-            contact.givenName
+            accent_fold(contact.givenName)
               .toLowerCase()
               .indexOf(state.contacts.search.toLowerCase()) > -1
         }
@@ -77,6 +77,19 @@ export default {
     state.contacts.text = text
   },
 }
+
+const accentMap = {
+  'á':'a', 'é':'e', 'è':'e', 'î':'i', 'ï':'i' , 'í':'i','ó':'o','ú':'u'
+};
+
+const accent_fold  = (s) => {
+  if (!s) { return ''; }
+  var ret = '';
+  for (var i = 0; i < s.length; i++) {
+    ret += accentMap[s.charAt(i)] || s.charAt(i);
+  }
+  return ret;
+};
 
 const groupBy = (list, keyGetter) => {
   const map = new Map();

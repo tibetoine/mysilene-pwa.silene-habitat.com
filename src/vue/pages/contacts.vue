@@ -167,7 +167,7 @@ export default {
     busy: false
   }),
   created () {
-    this.fetchData()
+    // this.fetchData()
   },
   computed: {
     ...mapState({
@@ -238,14 +238,26 @@ export default {
       showDialog: Do.SHOW_CONTACTS_DIALOG
     }),
     setSearch: debounce(function (value) {
+      value = this.accent_fold(value)
       this.$store.state.contacts.search = value
       this.filterChanged()
     }, 300),
+    accent_fold: function (s) {
+      const accentMap = {
+        'á': 'a', 'é': 'e', 'è': 'e', 'î': 'i', 'ï': 'i', 'í': 'i', 'ó': 'o', 'ú': 'u'
+      }
+      if (!s) { return '' }
+      var ret = ''
+      for (var i = 0; i < s.length; i++) {
+        ret += accentMap[s.charAt(i)] || s.charAt(i)
+      }
+      return ret
+    },
     fetchData: function () {
-      console.log('ok')
-      console.log(this.groupedContacts)
+      // console.log('ok')
+      // console.log(this.groupedContacts)
       Array.from(this.groupedContacts).forEach(element => {
-        console.log(element)
+        // console.log(element)
       })
     },
     loadMore: function () {
