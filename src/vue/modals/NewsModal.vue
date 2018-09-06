@@ -34,7 +34,7 @@
                 <span class="subheading" :color="getColor(news)">{{news.resume}}</span>
             </div>
         </v-card-title>
-        <v-card-title primary-title v-html="news.content">
+        <v-card-title class="newsContent" primary-title v-html="news.content">
           
           
         </v-card-title>        
@@ -267,5 +267,10 @@ export default {
       margin-left:30px;
       padding-right:30px;
       text-align:justify;
+  }
+
+  #content-news img {
+      max-width:100%;
+      height:auto;
   }
 </style>
