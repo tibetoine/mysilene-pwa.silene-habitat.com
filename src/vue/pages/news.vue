@@ -148,7 +148,7 @@ export default {
     }),
     goToNews: function (news, newsId) {
       if (news.type.startsWith('cos') || (news.type === 'docs')) {
-        window.open(news.link, '_blank')
+        window.location = news.link
         return false
       } else {
         // console.log('News : ' + news + ' newsId : ' + newsId)

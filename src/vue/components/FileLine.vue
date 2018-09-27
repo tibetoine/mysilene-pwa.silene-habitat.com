@@ -30,9 +30,7 @@ export default {
     openDocument (item) {
       // Todo : display 'Ouverture dans un nouvel onglet'
       if (item.link) {
-        var yourWindow = window.open()
-        yourWindow.opener = null
-        yourWindow.location = item.link
+        window.location = item.link
       }
     },
     iconFileType (item) {
