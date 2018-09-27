@@ -29,7 +29,11 @@ export default {
   methods: {
     openDocument (item) {
       // Todo : display 'Ouverture dans un nouvel onglet'
-      if (item.link) window.open(item.link, '_blank')
+      if (item.link) {
+        var yourWindow = window.open()
+        yourWindow.opener = null
+        yourWindow.location = item.link
+      }
     },
     iconFileType (item) {
       var iconName = 'pdf' // default
