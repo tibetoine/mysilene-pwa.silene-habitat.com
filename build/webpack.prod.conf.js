@@ -109,6 +109,15 @@ const webpackConfig = merge(baseWebpackConfig, {
           return babel.transformFileSync(path).code;
         }
       },
+      {
+        // copy custom service worker
+        from: path.resolve(__dirname, './OneSignalSDKUpdaterWorker.js'),
+        to: config.build.assetsRoot + '/[name].js',
+        transform: (content, path) => {
+          // and transpile it while copying
+          return babel.transformFileSync(path).code;
+        }
+      },
     ]),
     // service worker caching
     new SWPrecacheWebpackPlugin({
