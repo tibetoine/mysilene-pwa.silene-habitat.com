@@ -10,6 +10,9 @@
           <v-alert :value="true" type="info">
             Il semblerait que vous soyez Hors Ligne. (Dernière connexion : {{lastApiCall}})
           </v-alert>
+          <v-alert :value="true" type="info">
+            Message erreur {{healthcheck}}
+          </v-alert>
           <v-spacer></v-spacer> 
         </v-card>
     </v-dialog>
@@ -26,6 +29,11 @@ export default {
     lastApiCall: {
       get: function () {
         return JSON.stringify(this.$store.state.lastApiCall, null, 4)
+      }
+    },
+    healthcheck: {
+      get: function () {
+        return JSON.stringify(this.$store.state.healthcheck, null, 4)
       }
     },
     visible: {

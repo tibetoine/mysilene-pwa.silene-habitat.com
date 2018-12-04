@@ -23,6 +23,23 @@ export default {
       }
     }
   },
+  [On.HEALTHCHECK]: async function ({ commit }) {
+    try {
+      const response = await rest.healthcheck()
+      if (response.status !== 200) {
+        commit(Do.SET_DOWN, 'ERREUR - Serveur API répond en ' + response.status)
+      } else {
+        if (response.body && response.body.mongo === 'KO') {
+          commit(Do.SET_DOWN, 'ERREUR - La base de données Mongo semble KO' + response)
+        } else {
+          commit(Do.SET_UP)
+        }
+      }
+    } catch (error) {
+      console.log('error : ', error)
+      commit(Do.SET_DOWN, 'ERREUR - Serveur API Down - appel impossible à healthcheck')
+    }
+  },
   [On.LOAD_DOCS]: async function ({ commit }) {
     try {
       const response = await rest.getDocs()

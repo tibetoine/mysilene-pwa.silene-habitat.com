@@ -34,6 +34,10 @@ module.exports = {
         target: 'http://localhost:3000',
         changeOrigin: true
       },
+      '/healthcheck': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+      },
       '/shp_img': {
         target: 'http://isidoor.silene-habitat.com',
         changeOrigin: true,

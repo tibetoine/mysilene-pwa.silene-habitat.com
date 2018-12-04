@@ -1,5 +1,6 @@
 /* Action sur un évenement */
 export default {
+  HEALTHCHECK: 'healthcheck',
   LOAD_DATA: 'loadData',
   LOAD_CONTACTS: 'loadContacts',
   LOAD_DOCS: 'loadDocs',

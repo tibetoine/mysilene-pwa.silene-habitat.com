@@ -1,4 +1,9 @@
 export default {
+  downState: {
+    status: false,
+    downMessage: null,
+    showDialog: false
+  },
   login: {
     userId: localStorage.getItem('user-id') || null,
     token: localStorage.getItem('user-token') || '',

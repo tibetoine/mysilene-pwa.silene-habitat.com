@@ -4,6 +4,7 @@
     <login-dialog/>
     <error-dialog/>
     <offline-dialog/>
+    <down-dialog/>
    
    
     <v-navigation-drawer
@@ -49,7 +50,10 @@
         <v-icon>notifications</v-icon>
       </v-btn>-->   
       <v-btn v-if="error" @click.stop="showErrorDialog" icon>
-        <v-icon  >warning</v-icon>
+        <v-icon>warning</v-icon>
+      </v-btn>
+      <v-btn v-if="isDown" @click.stop="showDownDialog" icon>
+        <v-icon>warning</v-icon>
       </v-btn>
       
       <detect-network v-on:detected-condition="detected">
@@ -128,6 +132,7 @@
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 import On from './const/on'
 import Do from './const/do'
+import DownDialog from './vue/dialogs/DownDialog'
 import LoginDialog from './vue/dialogs/LoginDialog'
 import ErrorDialog from './vue/dialogs/ErrorDialog'
 import OfflineDialog from './vue/dialogs/OfflineDialog'
@@ -135,7 +140,7 @@ import api from './rest/api'
 import detectNetwork from 'v-offline'
 
 export default {
-  components: { LoginDialog, ErrorDialog, OfflineDialog, detectNetwork },
+  components: { LoginDialog, ErrorDialog, OfflineDialog, DownDialog, detectNetwork },
   computed: {
     username () {
       // Nous verrons ce que représente `params` dans un instant.
@@ -144,6 +149,11 @@ export default {
     error: {
       get: function () {
         return this.$store.state.error.data != null
+      }
+    },
+    isDown: {
+      get: function () {
+        return this.$store.state.downState.status === true
       }
     },
     userAuthenticated: {
@@ -171,6 +181,9 @@ export default {
     // this.autoLogin(user)
   },
   mounted: function () {
+    // Vérifie l'état du serveur d'API
+    this.healthcheck()
+
     const token = localStorage.getItem('user-token')
     const userId = localStorage.getItem('user-id')
     if (token && userId) {
@@ -185,7 +198,7 @@ export default {
   },
   methods: {
     loadData (e) {
-      console.log('Loading Data suite à event', e)
+      // console.log('Loading Data suite à event', e)
       this.loadDocs()
       this.loadNews()
       this.loadContacts()
@@ -202,6 +215,7 @@ export default {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     },
     ...mapActions({
+      healthcheck: On.HEALTHCHECK,
       loadContacts: On.LOAD_CONTACTS,
       loadDocs: On.LOAD_DOCS,
       loadNews: On.LOAD_NEWS,
@@ -212,6 +226,7 @@ export default {
     ...mapMutations({
       showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG,
       showErrorDialog: Do.SHOW_ERROR_DIALOG,
+      showDownDialog: Do.SHOW_DOWN_DIALOG,
       showOfflineDialog: Do.SHOW_OFFLINE_DIALOG
     }),
     ...mapGetters(['isAuthenticate']),

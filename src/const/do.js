@@ -1,5 +1,7 @@
 /* Appel de mutation direct */
 export default {
+  SET_DOWN: 'setDown',
+  SET_UP: 'setUp',
   SET_CONTACTS: 'setContacts',
   SET_DOCS: 'setDocs',
   SET_CONTACTS_SEARCH: 'setContactsSearch',
@@ -17,6 +19,7 @@ export default {
   SHOW_LOGIN_DIALOG: 'showLoginDialog',
   LOG_ERROR_ON_CLIENT: 'logErrorOnClient',
   SHOW_ERROR_DIALOG: 'showErrorDialog',
+  SHOW_DOWN_DIALOG: 'showDownDialog',
   SHOW_OFFLINE_DIALOG: 'showOfflineDialog',
   LOGIN_WAITING: 'loginWaiting',
   LOGIN_STOP: 'loginStop',

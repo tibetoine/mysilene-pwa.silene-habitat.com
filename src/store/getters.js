@@ -1,4 +1,5 @@
-import {filter} from 'lodash'
+import { filter } from 'lodash'
+import { removeAccent } from '../shared/helper'
 
 export default {
   lastWeather: state => {
@@ -64,10 +65,10 @@ export default {
       if (contact.sn == null || contact.sn.length === 0) {
         return false
       }
-      if (contact.givenName.toLowerCase() === prenom && contact.sn.toLowerCase() === nomDeFamille) {
+      if (removeAccent(contact.givenName.toLowerCase()) === removeAccent(prenom) && removeAccent(contact.sn.toLowerCase()) === removeAccent(nomDeFamille)) {
         // console.log('Contact trouvé pour Prénom : ' + prenom + ' et nom de famille : ' + nomDeFamille);
         return true
-      } else if (contact.givenName.toLowerCase() === nomDeFamille && contact.sn.toLowerCase() === prenom) {
+      } else if (removeAccent(contact.givenName.toLowerCase()) === removeAccent(nomDeFamille) && removeAccent(contact.sn.toLowerCase()) === removeAccent(prenom)) {
         // console.log('Contact trouvé pour Prénom : ' + prenom + ' et nom de famille : ' + nomDeFamille);
         return true
       } else {
