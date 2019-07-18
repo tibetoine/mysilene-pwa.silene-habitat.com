@@ -19,24 +19,7 @@
                 Aucune News Silène à afficher
               </v-alert>
             </div>
-
-            
-
-            <v-list id="newsListVList" two-line v-infinite-scroll="loadMore"  infinite-scroll-disabled="endLoading" infinite-scroll-distance="10" infinite-scroll-throttle-delay="50">
-                <!-- Barre de recherche --> 
-                <v-toolbar id="tempid" v-if="isSearchVisible" >
-                  <v-text-field
-                    hide-details
-                    label="Rechercher .."
-                    prepend-icon="search"
-                    single-line
-                    v-model="search"
-                  ></v-text-field>
-                  <v-btn icon  @click="closeSearch()">
-                    <v-icon>close</v-icon>
-                  </v-btn>
-                </v-toolbar>
-                
+            <v-list two-line v-infinite-scroll="loadMore"  infinite-scroll-disabled="endLoading" infinite-scroll-distance="10" infinite-scroll-throttle-delay="50">
                 <template v-for="aNews in news">
                     <v-card style="margin:20px 10px 20px 10px;" v-bind:key="aNews._id">
                         <v-card-title :style="'background-color:'+getFontColor(aNews)+';'">
@@ -91,18 +74,18 @@
                             <v-progress-linear :color="getColor(aNews)" :indeterminate="true"></v-progress-linear>
                           </div>
                         </clazy-load>
-                        <v-card-title @click.prevent="goToNews(aNews, aNews._id)" style="cursor:pointer;">
+                        <v-card-title @click="goToNews(aNews, aNews._id)" style="cursor:pointer;">
                             <div>
                                 <span class="headline" :style="'color:'+getFontColor(aNews)+';'">{{getNewsTitle(aNews)}}</span>
                             </div>
                         </v-card-title >
-                        <v-card-title @click.prevent="goToNews(aNews, aNews._id)" :color="getColor(aNews)" style="padding-top:0px;cursor:pointer;">
+                        <v-card-title @click="goToNews(aNews, aNews._id)" :color="getColor(aNews)" style="padding-top:0px;cursor:pointer;">
                             <div>
                                 <span v-if="aNews.type !== 'cos-rss'" :color="getColor(aNews)" >{{getNewsResume(aNews)}}</span>
                             </div>
                         </v-card-title>
                         <v-card-actions>
-                            <v-btn flat color="blue" @click.prevent="goToNews(aNews, aNews._id)">Lire la suite > </v-btn>
+                            <v-btn flat color="blue" @click="goToNews(aNews, aNews._id)">Lire la suite > </v-btn>
                         </v-card-actions>
                     </v-card>
                 </template>
@@ -121,7 +104,7 @@
       fixed
       @click.stop="showNewsFilterDialog"
     >
-      <v-icon>filter_list</v-icon>
+      <v-icon>settings</v-icon>
     </v-btn>
     
 
@@ -130,11 +113,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { debounce } from 'lodash'
-import { removeAccent } from '../../shared/helper'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import Do from '../../const/do'
-import On from '../../const/on'
 import FilterNewsDialog from '../dialogs/FilterNewsDialog'
 
 export default {
@@ -167,39 +147,15 @@ export default {
       set: function (value) {
         this.$store.state.news.endLoading = value
       }
-    },
-    search: {
-      get: function () {
-        return this.$store.state.news.search
-      },
-      set: function (value) {
-        this.setSearch(value)
-      }
-    },
-    isSearchVisible: {
-      get: function () {
-        return this.$store.state.search.visible === false
-      }
     }
   },
   methods: {
-    ...mapActions({
-      filterChanged: On.UPDATE_FILTERED_NEWS
-    }),
     ...mapMutations({
       showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG,
       showMore: Do.SHOW_MORE_NEWS
     }),
-    setSearch: debounce(function (value) {
-      value = removeAccent(value)
-      this.$store.state.news.search = value
-      this.filterChanged()
-    }, 300),
-    setSearchVisible: function (value) {
-      this.$store.state.search.visible = value
-    },
     goToNews: function (news, newsId) {
-      if (news.type.startsWith('cos') || (news.type === 'docs') || (news.type === 'twitter')) {
+      if (news.type.startsWith('cos') || (news.type === 'docs')) {
         window.location = news.link
         return false
       } else {
@@ -248,9 +204,6 @@ export default {
     getColor: news => {
       var color = 'teal'
       switch (news.type) {
-        case 'twitter':
-          color = 'blue lighten-1'
-          break
         case 'flashInfo':
           color = 'orange darken-3'
           break
@@ -276,9 +229,6 @@ export default {
     getTypeLabel: news => {
       var label = 'Type Inconnu'
       switch (news.type) {
-        case 'twitter':
-          label = 'Twitter'
-          break
         case 'flashInfo':
           label = 'Flash Info'
           break
@@ -317,9 +267,6 @@ export default {
     getFontColor: news => {
       var color = '#009688' // teal
       switch (news.type) {
-        case 'twitter':
-          color = '#1DA1F2' // Todo
-          break
         case 'flashInfo':
           color = '#ef6c00' // orange darken-3
           break
@@ -348,9 +295,6 @@ export default {
         case 'flashInfo':
           icon = 'flash_on'
           break
-        case 'twitter':
-          icon = 'public'
-          break
         case 'actualites':
           icon = 'perm_device_information'
           break
@@ -378,9 +322,6 @@ export default {
         switch (news.type) {
           case 'flashInfo':
             imgSource = '/static/img/flashInfo-2.jpeg'
-            break
-          case 'twitter':
-            imgSource = '/static/img/twitter_background_3.jpg'
             break
           case 'actualites':
             imgSource = news.image
@@ -434,25 +375,12 @@ export default {
         return '/static/img/ad-photos/' + author +
         '.jpg'
       }
-      if (author && author === 'Twitter') {
-        return '/static/img/ad-photos/' + author +
-        '.png'
-      }
 
       var imgSource =
         '/static/img/ad-photos/' +
         (contact.thumbnailPhoto ? contact.sAMAccountName : 'default') +
         '.jpg'
       return imgSource
-    },
-    closeSearch: function () {
-      console.log(document.getElementById('newsListVList').offsetWidth)
-      console.log(document.getElementById('tempid').parentNode.offsetWidth)
-      console.log(document.getElementById('tempid').parentNode.id)
-      // document.getElementById('searchBox').style.visibility = 'hidden'
-      // document.getElementById('newsListVList').style.marginTop = 0
-      /* Afficher l'icone de recherche dans le main template */
-      // this.setSearchVisible(true)
     }
   }
 }
@@ -466,11 +394,5 @@ export default {
     left:50%;
     transform: translate(-50%);
     
-  }
-
-
-  #tempid{
-    
-    width:100%;
   }
 </style>

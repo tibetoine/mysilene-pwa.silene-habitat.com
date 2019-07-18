@@ -104,7 +104,7 @@
                           <v-list-tile-title >{{ service[0] }}</v-list-tile-title>
                         </v-list-tile-content>
                       </v-list-tile>
-                      <template v-for="(contact) in service[1]" v-if="contact!=null">
+                      <template v-for="(contact) in service[1]">
                         <v-list-tile avatar :key="contact._id" @click="goToContact(contact)">
                           <v-badge v-if="contact.silenesst == '1'" color="green" left  overlap>
                             <v-icon slot="badge" dark small>local_hospital</v-icon>
@@ -151,6 +151,7 @@
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { debounce } from 'lodash'
+import { removeAccent } from '../../shared/helper'
 import Do from '../../const/do'
 import On from '../../const/on'
 
@@ -238,21 +239,10 @@ export default {
       showDialog: Do.SHOW_CONTACTS_DIALOG
     }),
     setSearch: debounce(function (value) {
-      value = this.accent_fold(value)
+      value = removeAccent(value)
       this.$store.state.contacts.search = value
       this.filterChanged()
     }, 300),
-    accent_fold: function (s) {
-      const accentMap = {
-        'á': 'a', 'é': 'e', 'è': 'e', 'î': 'i', 'ï': 'i', 'í': 'i', 'ó': 'o', 'ú': 'u'
-      }
-      if (!s) { return '' }
-      var ret = ''
-      for (var i = 0; i < s.length; i++) {
-        ret += accentMap[s.charAt(i)] || s.charAt(i)
-      }
-      return ret
-    },
     fetchData: function () {
       // console.log('ok')
       // console.log(this.groupedContacts)

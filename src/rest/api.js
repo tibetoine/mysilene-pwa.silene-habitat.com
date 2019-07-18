@@ -13,11 +13,10 @@ export default {
     Vue.http.headers.common['authorization'] = null
     Vue.http.headers.common['userid'] = null
   },
-  get: path => {
-    var obj = Vue.http.get(url(path), options())
+  get: (path, body) => {
+    var obj = Vue.http.get(url(path), body, options())
     return obj
   },
-
   post: (path, body, callbackSuccess, callbackError) => Vue.http.post(url(path), body, options()).then((response) => {
     if (callbackSuccess) {
       callbackSuccess(response)

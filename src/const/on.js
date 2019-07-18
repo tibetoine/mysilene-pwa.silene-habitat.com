@@ -6,6 +6,7 @@ export default {
   LOAD_DOCS: 'loadDocs',
   LOAD_NEWS: 'loadNews',
   UPDATE_FILTERED_CONTACTS: 'updateFilteredContacts',
+  UPDATE_FILTERED_NEWS: 'updateFilteredNews',
   LOAD_WEATHER: 'loadWeather',
   LOGIN: 'login',
   AUTO_LOGIN: 'autoLogin',
@@ -13,5 +14,7 @@ export default {
   LOGIN_SUCCESS: 'loginSuccess',
   LOGIN_FAILURE: 'loginFailure',
   LOGIN_WAITING: 'loginWaiting',
-  LOGIN_STOP: 'loginStop'
+  LOGIN_STOP: 'loginStop',
+  LOAD_PREFS: 'loadPrefs',
+  SAVE_PREFS: 'savePrefs'
 }

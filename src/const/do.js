@@ -6,9 +6,11 @@ export default {
   SET_DOCS: 'setDocs',
   SET_CONTACTS_SEARCH: 'setContactsSearch',
   SET_NEWS: 'setNews',
+  SET_NEWS_SEARCH: 'setNewsSearch',
   SHOW_NEWS_FILTER_DIALOG: 'showNewsFilterDialog',
   TOGGLE_NEWS_FILTER_DIALOG: 'toggleNewsFilterDialog',
   UPDATE_FILTERED_CONTACTS: 'updateFilteredContacts',
+  UPDATE_FILTERED_NEWS: 'updateFilteredNews',
   SHOW_MORE_CONTACTS: 'showMoreContacts',
   SHOW_MORE_NEWS: 'showMoreNews',
   SET_WEATHER: 'setWeather',
@@ -20,9 +22,11 @@ export default {
   LOG_ERROR_ON_CLIENT: 'logErrorOnClient',
   SHOW_ERROR_DIALOG: 'showErrorDialog',
   SHOW_DOWN_DIALOG: 'showDownDialog',
+  HIDE_SEARCH: 'hideSearch',
   SHOW_OFFLINE_DIALOG: 'showOfflineDialog',
   LOGIN_WAITING: 'loginWaiting',
   LOGIN_STOP: 'loginStop',
   SHOW_CONTACTS_DIALOG: 'showContactsDialog',
-  SHOW_CONTACTS_SNACKBAR: 'showContactsSnackbar'
+  SHOW_CONTACTS_SNACKBAR: 'showContactsSnackbar',
+  SET_PREFS: 'setPrefs'
 }

@@ -5,6 +5,7 @@ import getters from './getters'
 import appActions from './actions/appActions'
 import healthcheckMutations from './mutation/healthcheckMutations'
 import contactsMutations from './mutation/contactsMutations'
+import usersMutations from './mutation/usersMutations'
 import newsMutations from './mutation/newsMutations'
 import weatherMutations from './mutation/weatherMutations'
 import loginMutations from './mutation/loginMutations'
@@ -23,6 +24,7 @@ const store = new Vuex.Store({
     ...weatherMutations,
     ...loginMutations,
     ...docsMutations,
+    ...usersMutations,
     ...appMutations
   },
   actions: {

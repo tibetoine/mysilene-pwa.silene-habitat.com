@@ -16,6 +16,9 @@ export default {
   [Do.SHOW_DOWN_DIALOG]: (state) => {
     state.downState.showDialog = true    
   },
+  [Do.HIDE_SEARCH]: (state) => {
+    state.search.visible = false    
+  },
   [Do.SHOW_OFFLINE_DIALOG]: (state) => {
     state.offline.showDialog = true
     state.offline.read = true

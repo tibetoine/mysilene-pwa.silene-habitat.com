@@ -1,4 +1,7 @@
 export default {
+  search: {
+    visible: false
+  },
   downState: {
     status: false,
     downMessage: null,
@@ -45,6 +48,7 @@ export default {
     groupedContacts: []
   },
   news: {
+    search: '',
     filterDialogVisible: false,
     types: [
       {
@@ -60,8 +64,8 @@ export default {
         label: 'Mouvements RH'
       },
       {
-        value: 'facebook',
-        label: 'Facebook'
+        value: 'twitter',
+        label: 'Twitter'
       },
       {
         value: 'cos-rss',
@@ -80,21 +84,13 @@ export default {
         label: 'Documents'
       }
     ],
-    selectedTypes: [
-      'actualites',
-      'flashInfo',
-      'facebook',
-      'mouvementsRH',
-      'cos-rss',
-      'cosActu',
-      'cosNews',
-      'docs'
-    ],
+    selectedTypes: [],
     fullList: [],
     filteredList: [],
     visibleList: [],
     pageSize: 8,
-    endLoading: false
+    endLoading: false,
+    dirty: false
   },
   meteo: {
     lastWeather: null

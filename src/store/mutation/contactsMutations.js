@@ -1,16 +1,13 @@
 import Do from '../../const/do'
+import { removeAccent } from '../../shared/helper'
 /* eslint-disable */
 export default {
 
   [Do.SET_CONTACTS]: (state, contacts) => {
     // Vue.set(contacts, "contacts", contacts);
     state.contacts.filteredList = state.contacts.fullList = contacts
-    addContacts(state)
-
-    
-    state.contacts.groupedContacts = groupBy(contacts, contact => contact.department)
-
-    
+    addContacts(state)    
+    state.contacts.groupedContacts = groupBy(contacts, contact => contact.department).filter(contact => {return contact!=null})
 
   },
   [Do.SET_CONTACTS_SEARCH]: (state, search) => {
@@ -22,7 +19,7 @@ export default {
   },
 
   [Do.UPDATE_FILTERED_CONTACTS]: state => {
-    const s = Date.now()
+    // const s = Date.now()
 
     const r = state.contacts.fullList.filter(contact => {
       var isFiltered = false
@@ -36,13 +33,13 @@ export default {
       if (state.contacts.search !== '' && state.contacts.search != null) {
         isFiltered =
           isFiltered ||
-          accent_fold(contact.sn)
+          removeAccent(contact.sn)
             .toLowerCase()
             .indexOf(state.contacts.search.toLowerCase()) > -1
         if (contact.givenName != null) {
           isFiltered =
             isFiltered ||
-            accent_fold(contact.givenName)
+            removeAccent(contact.givenName)
               .toLowerCase()
               .indexOf(state.contacts.search.toLowerCase()) > -1
         }
@@ -78,18 +75,6 @@ export default {
   },
 }
 
-const accentMap = {
-  'á':'a', 'é':'e', 'è':'e', 'î':'i', 'ï':'i' , 'í':'i','ó':'o','ú':'u'
-};
-
-const accent_fold  = (s) => {
-  if (!s) { return ''; }
-  var ret = '';
-  for (var i = 0; i < s.length; i++) {
-    ret += accentMap[s.charAt(i)] || s.charAt(i);
-  }
-  return ret;
-};
 
 const groupBy = (list, keyGetter) => {
   const map = new Map();

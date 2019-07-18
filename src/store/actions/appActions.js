@@ -58,7 +58,58 @@ export default {
       }
     }
   },
+  [On.LOAD_PREFS]: async function ({ commit }) {
+    var userId = localStorage.getItem('user-id')
+    try {
+      const response = await rest.getUsers(userId)
+      if (response.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      } else {
+        const user = response.body
+        console.log('***************** user : ', user)
 
+        /* Traitement des Prefs (Existe , existe pas ?) */
+        var prefs = user.prefs
+        if (prefs == null || prefs === undefined || prefs.length === 0) {
+        /* Charge les prefs par défaut en base puis en local */
+          prefs = ['actualites', 'flashInfo', 'mouvementsRH', 'twitter', 'cos-rss', 'cosActu', 'cosNews', 'docs']
+          /* Charge les valeurs par défaut en base */
+          await rest.putUsers(userId, prefs)
+        }
+        /* 2/ Enregistrement dans le store */
+
+        commit(Do.SET_PREFS, prefs)
+      }
+    } catch (error) {
+      if (error && error.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      }
+    }
+  },
+  [On.SAVE_PREFS]: async function ({ commit, state }) {
+    var prefs = state.news.selectedTypes
+    var userId = localStorage.getItem('user-id')
+    try {
+      const response = await rest.putUsers(userId, prefs)
+      if (response.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      } else {
+        /* Console */
+        console.log('OK prefs enregistré en base', prefs)
+      }
+    } catch (error) {
+      if (error && error.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      }
+    }
+
+    /* Sauvegarde en State --> LOL pas nécessaire c'est déjà enregistré depuis la filterDialog ? */
+    // commit(Do.SET_PREFS, prefs)
+  },
   [On.LOAD_NEWS]: async function ({ commit }) {
     try {
       const response = await rest.getNews()
@@ -88,6 +139,10 @@ export default {
   [On.UPDATE_FILTERED_CONTACTS]: function ({commit}) {
     commit(Do.UPDATE_FILTERED_CONTACTS)
     commit(Do.SHOW_MORE_CONTACTS)
+  },
+  [On.UPDATE_FILTERED_NEWS]: function ({commit}) {
+    commit(Do.UPDATE_FILTERED_NEWS)
+    commit(Do.SHOW_MORE_NEWS)
   },
 
   [On.LOGIN]: async function ({commit, dispatch}, user) {
@@ -123,6 +178,7 @@ export default {
       commit(Do.LOGIN_SUCCESS, response.body)
       commit(Do.LOGIN_STOP)
       /* Dispatch Action */
+      dispatch(On.LOAD_PREFS)
       dispatch(On.LOAD_NEWS)
       dispatch(On.LOAD_CONTACTS)
       dispatch(On.LOAD_DOCS)
@@ -139,6 +195,7 @@ export default {
     commit(Do.LOGIN_SUCCESS, user)
 
     /* Dispatch Action */
+    dispatch(On.LOAD_PREFS)
     dispatch(On.LOAD_NEWS)
     dispatch(On.LOAD_CONTACTS)
     dispatch(On.LOAD_DOCS)

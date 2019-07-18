@@ -7,11 +7,13 @@
   "scripts": {
     "dev": "nodemon build/dev-server.js --exec babel-node",
     "start": "node build/dev-server.js --host 0.0.0.0",
-    "build": "node build/build.js",    
+    "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "html2canvas": "^1.0.0-alpha.12",
+    "jspdf": "^1.4.1",
     "nodemon": "^1.17.3",
     "style-loader": "^0.21.0",
     "v-offline": "^1.0.9",

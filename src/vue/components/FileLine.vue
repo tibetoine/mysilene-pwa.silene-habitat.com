@@ -27,8 +27,10 @@ export default {
     }
   },
   methods: {
+
     openDocument (item) {
       // Todo : display 'Ouverture dans un nouvel onglet'
+      // TODO (02/07/2019) : Etudier : https://stackoverflow.com/questions/2898740/iphone-safari-web-app-opens-links-in-new-window
       if (item.link) {
         window.location = item.link
       }
