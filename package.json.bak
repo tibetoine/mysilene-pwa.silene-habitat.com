@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "html2canvas": "^1.0.0-alpha.12",
+    "jspdf": "^1.4.1",
     "nodemon": "^1.17.3",
     "style-loader": "^0.21.0",
     "v-offline": "^1.0.9",

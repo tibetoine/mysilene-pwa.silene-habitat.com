@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import News from '../vue/pages/news'
 import Contacts from '../vue/pages/contacts'
-import Affiche from '../vue/pages/affiche'
 import ContactModal from '../vue/modals/contactModal'
 import NewsModal from '../vue/modals/newsModal'
 import Meteo from '../vue/pages/meteo'
@@ -50,11 +49,6 @@ export default new Router({
       path: '/docs',
       component: Docs,
       name: 'docs'
-    },
-    {
-      path: '/affiche',
-      component: Affiche,
-      name: 'Affiche'
     }
 
   ],
