@@ -149,7 +149,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import { debounce } from 'lodash'
 import { removeAccent } from '../../shared/helper'
 import Do from '../../const/do'
@@ -178,7 +178,6 @@ export default {
       groupedContacts: state => Array.from(state.contacts.groupedContacts),
       auth: state => state.login.Authenticate
     }),
-    ...mapGetters({ contacts: 'partialContacts' }),
     snackbar: {
       get: function () {
         return this.$store.state.contacts.showSnackbar
@@ -259,8 +258,8 @@ export default {
       }, 1000)
     },
     imgsrc: contact =>
-      '/static/img/ad-photos/' +
-      (contact.thumbnailPhoto ? contact.sAMAccountName : 'default') +
+      '/static/img/' +
+      (contact.thumbnailPhoto ? 'ad-photos/' + contact.sAMAccountName : 'default') +
       '.jpg',
     doFilterSst () {
       this.search = ''

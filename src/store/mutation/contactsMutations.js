@@ -7,7 +7,9 @@ export default {
     // Vue.set(contacts, "contacts", contacts);
     state.contacts.filteredList = state.contacts.fullList = contacts
     addContacts(state)    
-    state.contacts.groupedContacts = groupBy(contacts, contact => contact.department).filter(contact => {return contact!=null})
+    // console.log('Je groupe Michel ! ')
+    state.contacts.groupedContacts  = groupBy(contacts, contact => contact.department)    
+    // console.log('Taille :' , state.contacts.groupedContacts)
 
   },
   [Do.SET_CONTACTS_SEARCH]: (state, search) => {
@@ -79,6 +81,7 @@ export default {
 const groupBy = (list, keyGetter) => {
   const map = new Map();
   list.forEach((item) => {
+    if (item == null) return;
     var key = keyGetter(item);
     if (key === '' || key == null) {
       return;

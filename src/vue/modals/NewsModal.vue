@@ -249,9 +249,9 @@ export default {
       return imgSource
     },
     findAvatar: function (author) {
-      if (author == null || author === '') return '/static/img/ad-photos/default.jpg'
+      if (author == null || author === '') return '/static/img/default.jpg'
       var contact = this.$store.getters.searchContact(author)
-      if (contact == null) return '/static/img/ad-photos/default.jpg'
+      if (contact == null) return '/static/img/default.jpg'
 
       var imgSource =
         '/static/img/ad-photos/' +

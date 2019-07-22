@@ -67,7 +67,6 @@ export default {
         commit(Do.LOGOUT)
       } else {
         const user = response.body
-        console.log('***************** user : ', user)
 
         /* Traitement des Prefs (Existe , existe pas ?) */
         var prefs = user.prefs
@@ -98,7 +97,7 @@ export default {
         commit(Do.LOGOUT)
       } else {
         /* Console */
-        console.log('OK prefs enregistré en base', prefs)
+        // console.log('OK prefs enregistré en base', prefs)
       }
     } catch (error) {
       if (error && error.status === 401) {

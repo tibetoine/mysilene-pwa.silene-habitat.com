@@ -16,7 +16,7 @@
             </div>
             <div v-else-if="news==null || news.length <=0">
               <v-alert :value="true" type="info">
-                Aucune News Silène à afficher
+                Chargement des actualités en cours ...
               </v-alert>
             </div>
 
@@ -32,9 +32,7 @@
                     single-line
                     v-model="search"
                   ></v-text-field>
-                  <v-btn icon  @click="closeSearch()">
-                    <v-icon>close</v-icon>
-                  </v-btn>
+                  
                 </v-toolbar>
                 
                 <template v-for="aNews in news">
@@ -426,17 +424,16 @@ export default {
     },
     findAvatar: function (author) {
       if (author == null || author === '') {
-        return '/static/img/ad-photos/default.jpg'
+        return '/static/img/default.jpg'
       }
       var contact = this.$store.getters.searchContact(author)
-      if (contact == null) return '/static/img/ad-photos/default.jpg'
+      if (contact == null) return '/static/img/default.jpg'
       if (author && ['cfdt', 'cgt', 'unsa'].indexOf(author.trim()) > -1) {
         return '/static/img/ad-photos/' + author +
         '.jpg'
       }
       if (author && author === 'Twitter') {
-        return '/static/img/ad-photos/' + author +
-        '.png'
+        return '/static/img/twitter.png'
       }
 
       var imgSource =
