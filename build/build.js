@@ -12,16 +12,9 @@ const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
 const webpackConfig = require('./webpack.prod.conf')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const spinner = ora('building for production...')
 spinner.start()
-
-module.exports = {
-  plugins: [
-    new BundleAnalyzerPlugin()
-  ]
-}
 
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err

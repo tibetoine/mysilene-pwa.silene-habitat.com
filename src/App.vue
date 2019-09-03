@@ -86,7 +86,8 @@
           <v-avatar size="40" style="margin-top:-20px;" color="grey lighten-4">
             <img
               :src="findAvatar(userAuthenticated)"
-              alt="UserAvatar"              
+              alt="UserAvatar" 
+              onerror="this.onerror=null;this.src='/static/img/default.jpg';"             
             >
           </v-avatar>
           <v-icon>close</v-icon>
