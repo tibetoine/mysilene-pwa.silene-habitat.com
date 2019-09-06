@@ -18,12 +18,13 @@
             <!-- Author --> 
             <!-- Photo Author --> 
         </v-card-title>
-        <v-card-media
+        <v-img
         class="black--text"
         height="200px"
         :src="imgsrc(news)"
+        contain=true
         >
-        </v-card-media>
+        </v-img>
         <v-card-title>
             <div>
                 <span class="headline" :style="'color:'+getFontColor(news)+''">{{news.title}}</span>

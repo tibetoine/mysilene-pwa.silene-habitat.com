@@ -50,10 +50,10 @@
                           <span :title="aNews.author" style="padding-left:10px;color:white;">{{aNews.author?chrinkAuthor(aNews.author):'Auteur Inconnu'}}</span>
                         </v-card-title>
                         <clazy-load :src="imgsrc(aNews)">
-                          <v-card-media 
-                          :class="getClass(aNews)"
-                          height="200px"
+                          <v-img 
+                          height="200px"                          
                           :src="imgsrc(aNews)"
+                          :class="getClass(aNews)"
                           
                           >
                               <v-container fill-height fluid style="padding:2px;">
@@ -84,7 +84,7 @@
                                       </v-flex>
                                   </v-layout>
                               </v-container>
-                          </v-card-media>
+                          </v-img>
                           <div class="preloader" slot="placeholder">
                             <v-progress-linear :color="getColor(aNews)" :indeterminate="true"></v-progress-linear>
                           </div>
@@ -455,7 +455,8 @@ export default {
 }
 </script> 
 <style> 
-  .mouvementsRH>div.card__media__background{
+  .mouvementsRH>div.v-image__image
+  {
     max-height: 200px;
     max-width: 200px;
     border-radius: 50%;
@@ -464,8 +465,6 @@ export default {
     transform: translate(-50%);
     
   }
-
-
   #tempid{
     
     width:100%;
