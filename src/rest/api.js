@@ -27,7 +27,7 @@ export default {
     }
   }),
 
-  del: path => Vue.http.del(url(path)),
+  del: path => Vue.http.delete(url(path)),
 
   put: (path, body) => Vue.http.put(url(path), body, options())
 }

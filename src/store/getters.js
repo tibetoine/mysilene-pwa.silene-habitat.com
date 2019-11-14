@@ -8,6 +8,9 @@ export default {
   isAuthenticate: state => {
     return state.login.Authenticate
   },
+  isAdmin: state => {
+    return state.login.isAdmin
+  },
   filteredNews: state =>
     filter(
       state.news.visibleList,

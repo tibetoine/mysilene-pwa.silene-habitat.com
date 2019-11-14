@@ -23,6 +23,25 @@ export default {
       }
     }
   },
+  [On.LOAD_USERS]: async function ({ commit }) {
+    /* 1/ Appel REST à l'API  */
+    try {
+      const response = await rest.getUsers()
+      if (response.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      } else {
+        const users = response.body
+        /* 2/ Enregistrement dans le store */
+        commit(Do.SET_USERS, users)
+      }
+    } catch (error) {
+      if (error && error.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      }
+    }
+  },
   [On.HEALTHCHECK]: async function ({ commit }) {
     try {
       const response = await rest.healthcheck()
@@ -61,7 +80,7 @@ export default {
   [On.LOAD_PREFS]: async function ({ commit }) {
     var userId = localStorage.getItem('user-id')
     try {
-      const response = await rest.getUsers(userId)
+      const response = await rest.getUser(userId)
       if (response.status === 401) {
         localStorage.removeItem('user-token')
         commit(Do.LOGOUT)
@@ -85,6 +104,38 @@ export default {
         localStorage.removeItem('user-token')
         commit(Do.LOGOUT)
       }
+    }
+  },
+  [On.IS_ADMIN]: async function ({ commit, state }) {
+    console.log('isADMIN !!! ')
+    var userId = localStorage.getItem('user-id')
+    try {
+      const response = await rest.isAdmin(userId)
+      if (response.status === 204) {
+        state.login.isAdmin = true
+      } else {
+        state.login.isAdmin = false
+      }
+    } catch (error) {
+      // Je ne sais pas quoi faire si y'a une erreur à ce stade
+      state.login.isAdmin = false
+      console.log(error)
+    }
+  },
+  [On.DELETE_USER]: async function ({ commit, dispatch }, username) {
+    // console.log('OUIIIIIII !!! ', username)
+    try {
+      const response = await rest.deleteUser(username)
+      console.log(response)
+      if (response.status === 200) {
+        commit(Do.DELETE_USER_SUCCESS)
+        dispatch(On.LOAD_USERS)
+      } else {
+        commit(Do.DELETE_USER_ERROR)
+      }
+    } catch (error) {
+      console.log(error)
+      commit(Do.DELETE_USER_ERROR)
     }
   },
   [On.SAVE_PREFS]: async function ({ commit, state }) {
@@ -177,6 +228,7 @@ export default {
       commit(Do.LOGIN_SUCCESS, response.body)
       commit(Do.LOGIN_STOP)
       /* Dispatch Action */
+      dispatch(On.IS_ADMIN)
       dispatch(On.LOAD_PREFS)
       dispatch(On.LOAD_NEWS)
       dispatch(On.LOAD_CONTACTS)
@@ -194,6 +246,7 @@ export default {
     commit(Do.LOGIN_SUCCESS, user)
 
     /* Dispatch Action */
+    dispatch(On.IS_ADMIN)
     dispatch(On.LOAD_PREFS)
     dispatch(On.LOAD_NEWS)
     dispatch(On.LOAD_CONTACTS)

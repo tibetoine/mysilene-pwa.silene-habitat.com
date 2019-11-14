@@ -6,6 +6,7 @@ export default {
   SET_DOCS: 'setDocs',
   SET_CONTACTS_SEARCH: 'setContactsSearch',
   SET_NEWS: 'setNews',
+  SET_USERS: 'setUsers',
   SET_NEWS_SEARCH: 'setNewsSearch',
   SHOW_NEWS_FILTER_DIALOG: 'showNewsFilterDialog',
   TOGGLE_NEWS_FILTER_DIALOG: 'toggleNewsFilterDialog',
@@ -28,5 +29,8 @@ export default {
   LOGIN_STOP: 'loginStop',
   SHOW_CONTACTS_DIALOG: 'showContactsDialog',
   SHOW_CONTACTS_SNACKBAR: 'showContactsSnackbar',
-  SET_PREFS: 'setPrefs'
+  SET_PREFS: 'setPrefs',
+  DELETE_USER_SUCCESS: 'deleteUserSuccess',
+  DELETE_USER_ERROR: 'deleteUserError'
+
 }

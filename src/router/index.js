@@ -7,6 +7,8 @@ import NewsModal from '../vue/modals/newsModal'
 import Meteo from '../vue/pages/meteo'
 import Help from '../vue/pages/help'
 import Docs from '../vue/pages/docs'
+import Bim from '../vue/pages/bim'
+import Admin from '../vue/pages/admin'
 
 Vue.use(Router)
 
@@ -49,6 +51,16 @@ export default new Router({
       path: '/docs',
       component: Docs,
       name: 'docs'
+    },
+    {
+      path: '/bim',
+      component: Bim,
+      name: 'bim'
+    },
+    {
+      path: '/admin',
+      component: Admin,
+      name: 'admin'
     }
 
   ],

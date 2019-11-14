@@ -12,6 +12,7 @@ export default {
     token: localStorage.getItem('user-token') || '',
     loginDialogVisible: false,
     Authenticate: false,
+    isAdmin: false,
     AuthFailure: false,
     AuthFailMsg: null,
     loading: false
@@ -46,6 +47,12 @@ export default {
     showSnackbar: false,
     text: 'Indisponible pour ce contact',
     groupedContacts: []
+  },
+  users: {
+    search: '',
+    usersList: [],
+    deletedUserSuccess: false,
+    deletedUserError: false
   },
   news: {
     search: '',

@@ -26,6 +26,16 @@
             </v-list-tile-content>
           </v-list-tile>
         </template>
+        <v-list-tile v-if="isAdmin" href="" to="/admin" >
+            <v-list-tile-action>
+              <v-icon>build</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Administration
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
       </v-list>
     </v-navigation-drawer>
    
@@ -144,7 +154,6 @@ export default {
   components: { LoginDialog, ErrorDialog, OfflineDialog, DownDialog, detectNetwork },
   computed: {
     username () {
-      // Nous verrons ce que représente `params` dans un instant.
       return this.$route.params.username
     },
     error: {
@@ -164,6 +173,14 @@ export default {
           user = this.$store.state.login.userId
         }
         return user
+      }
+    },
+    isAdmin: {
+      get: function () {
+        if (this.$store.state.login.isAdmin) {
+          return true
+        }
+        return false
       }
     }
   },
@@ -221,8 +238,10 @@ export default {
       loadDocs: On.LOAD_DOCS,
       loadNews: On.LOAD_NEWS,
       loadWeather: On.LOAD_WEATHER,
+      loadBim: On.LOAD_BIM,
       logout: On.LOGOUT,
       autoLogin: On.AUTO_LOGIN
+
     }),
     ...mapMutations({
       showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG,
@@ -230,7 +249,7 @@ export default {
       showDownDialog: Do.SHOW_DOWN_DIALOG,
       showOfflineDialog: Do.SHOW_OFFLINE_DIALOG
     }),
-    ...mapGetters(['isAuthenticate']),
+    ...mapGetters(['isAuthenticate'], ['isAdmin']),
     findAvatar: function (userId) {
       var imgSource = '/static/img/ad-photos/' + userId + '.jpg'
       return imgSource
@@ -244,6 +263,7 @@ export default {
       { icon: 'art_track', text: 'Actualités', path: '/news' },
       { icon: 'contacts', text: 'Contacts', path: '/contacts' },
       { icon: 'cloud', text: 'Météo', path: '/meteo' },
+      /* { icon: 'location_city', text: 'BIM', path: '/bim' }, */
       { icon: 'help', text: 'Aide', path: '/help' }
       /* { icon: 'library_books', text: 'Docs', path: '/docs' } */
     ]

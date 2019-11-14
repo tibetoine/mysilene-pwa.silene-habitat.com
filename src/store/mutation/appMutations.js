@@ -26,5 +26,14 @@ export default {
   [Do.HIDE_OFFLINE_DIALOG]: (state) => {
     state.offline.showDialog = false
     state.offline.read = true
+  },
+  [Do.SET_USERS]: (state, users) => {
+    state.users.usersList = users    
+  },
+  [Do.DELETE_USER_ERROR]: (state) => {
+    state.users.deletedUserError = true   
+  },
+  [Do.DELETE_USER_SUCCESS]: (state) => {
+    state.users.deletedUserSuccess = true  
   }
 }
