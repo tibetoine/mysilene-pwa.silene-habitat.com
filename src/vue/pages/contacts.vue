@@ -1,7 +1,7 @@
 <template>
   <div style="margin-top:60px;">
     <v-tabs
-      slot="extension"      
+      slot="extension"
       centered
       color="transparent"
       slider-color="blue"
@@ -16,7 +16,7 @@
         <v-tab-item key="tab1">
           <v-container>
             <v-layout row>
-              <v-flex xs12 md9 offset-md3>        
+              <v-flex xs12 md9 offset-md3>
                 <div v-if="!auth">
                   <v-alert :value="true" type="info">
                     Vous devez être connecté pour accéder aux Contacts Silène
@@ -73,6 +73,11 @@
                             <v-list-tile-title v-html="contact.sn+' '+contact.givenName"></v-list-tile-title>
                             <v-list-tile-sub-title v-html="contact.title"></v-list-tile-sub-title>
                           </v-list-tile-content>
+                          <v-list-tile-action>
+                            <v-btn icon ripple>
+                              <v-icon color="blue lighten-2" @click.stop="sharingContact(contact)">share</v-icon>
+                            </v-btn>
+                          </v-list-tile-action>
                         </v-list-tile>
                       </template>
                       <v-progress-linear :indeterminate="true" v-if="busy"></v-progress-linear>
@@ -85,18 +90,18 @@
         <v-tab-item key="tab2">
           <v-container>
             <v-layout row>
-              <v-flex xs12 md9 offset-md3>        
+              <v-flex xs12 md9 offset-md3>
                 <div v-if="!auth">
                   <v-alert :value="true" type="info">
                     Vous devez être connecté pour accéder aux Contacts Silène
                   </v-alert>
                 </div>
                 <v-card v-else>
-                                  
+
                   <v-list>
                     <v-list-group
-                      v-for="(service, key) in groupedContacts"                      
-                      :key="key"                      
+                      v-for="(service, key) in groupedContacts"
+                      :key="key"
                       no-action
                     >
                       <v-list-tile slot="activator"  class="list-hotfix">
@@ -131,10 +136,15 @@
                             <v-list-tile-title v-html="contact.sn+' '+contact.givenName"></v-list-tile-title>
                             <v-list-tile-sub-title v-html="contact.title"></v-list-tile-sub-title>
                           </v-list-tile-content>
+                          <v-list-tile-action>
+                            <v-btn icon ripple>
+                              <v-icon color="black lighten-1" @click.prevent="sharingContact(contact)">share</v-icon>
+                            </v-btn>
+                          </v-list-tile-action>
                         </v-list-tile>
                       </template>
-                      
-                      
+
+
                     </v-list-group>
                   </v-list>
                 </v-card>
@@ -144,7 +154,7 @@
         </v-tab-item>
       </v-tabs-items>
     </v-tabs>
-    
+
   </div>
 </template>
 
@@ -270,6 +280,38 @@ export default {
       this.$store.state.selectedContact = contact
       this.$router.push({ path: `/contacts/${contact._id}` })
       // this.showDialog()
+    },
+    sharingContact: function (contact) {
+      let url = `/api-vcard/contacts/${contact.sAMAccountName}/vcard`
+      this.$http({
+        method: 'get',
+        url: url,
+        responseType: 'arraybuffer'
+      })
+        .then((response, status, xhr) => {
+          var filename = ''
+          var disposition = response.headers.get('content-disposition')
+          if (disposition && disposition.indexOf('inline') !== -1) {
+            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+            var matches = filenameRegex.exec(disposition)
+            if (matches != null && matches[1]) {
+              filename = matches[1].replace(/['"]/g, '')
+            }
+          }
+          this.forceFileDownload(response, filename)
+        })
+        .catch((error) => {
+          console.log('Erreur à la récupération du vcard')
+          console.error(error)
+        })
+    },
+    forceFileDownload (response, fileName) {
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', fileName)
+      document.body.appendChild(link)
+      link.click()
     }
   }
 }

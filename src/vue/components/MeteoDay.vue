@@ -1,6 +1,6 @@
 
 <template>
-  <v-layout row spacer>
+  <v-layout column spacer style="margin-bottom:10px;">
       <v-flex>
        <div class="text-xs-center">{{ dayOfWeek(day.time * 1000) }}</div>
       </v-flex>
@@ -12,8 +12,8 @@
       </v-flex>
       <v-flex>
         <div class="text-xs-center">{{ Math.round(day.temperatureMin) }}°</div>
-      </v-flex> 
-  </v-layout>  
+      </v-flex>
+  </v-layout>
 </template>
 
 <script>
