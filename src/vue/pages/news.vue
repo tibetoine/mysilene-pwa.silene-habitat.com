@@ -20,10 +20,10 @@
               </v-alert>
             </div>
 
-            
+
 
             <v-list id="newsListVList" two-line v-infinite-scroll="loadMore"  infinite-scroll-disabled="endLoading" infinite-scroll-distance="10" infinite-scroll-throttle-delay="50">
-                <!-- Barre de recherche --> 
+                <!-- Barre de recherche -->
                 <v-toolbar id="tempid" v-if="isSearchVisible" >
                   <v-text-field
                     hide-details
@@ -32,9 +32,9 @@
                     single-line
                     v-model="search"
                   ></v-text-field>
-                  
+
                 </v-toolbar>
-                
+
                 <template v-for="aNews in news">
                     <v-card style="margin:20px 10px 20px 10px;" v-bind:key="aNews._id">
                         <v-card-title :style="'background-color:'+getFontColor(aNews)+';'">
@@ -44,23 +44,23 @@
                           >
                             <img
                               :src="findAvatar(aNews.author)"
-                              :alt="'avatar_'+aNews.author"                                        
+                              :alt="'avatar_'+aNews.author"
                             >
                           </v-avatar>
                           <span :title="aNews.author" style="padding-left:10px;color:white;">{{aNews.author?chrinkAuthor(aNews.author):'Auteur Inconnu'}}</span>
                         </v-card-title>
                         <clazy-load :src="imgsrc(aNews)">
-                          <v-img 
-                          height="200px"                          
+                          <v-img
+                          height="200px"
                           :src="imgsrc(aNews)"
                           :class="getClass(aNews)"
-                          
+
                           >
                               <v-container fill-height fluid style="padding:2px;">
                                   <v-layout align-end justify-start >
-                                      <v-flex 
-                                      xs2 
-                                      d-flex 
+                                      <v-flex
+                                      xs2
+                                      d-flex
                                       align-end
                                       pa-2
                                       >
@@ -76,8 +76,8 @@
                                       <v-flex xs6 sm3 md2 justify-end style="margin-top:10px;margin-right:10px;">
                                         <v-avatar :class="getColor(aNews)" >
                                               <p style="margin:0;padding:0 0 0 1px;text-align:center;line-height:1.1em;">
-                                                  <span class="white--text" style="padding:0;margin:0;font-size:1.5em;padding-left:2px;">{{getDay(aNews)}}</span> 
-                                                      <br/>                                        
+                                                  <span class="white--text" style="padding:0;margin:0;font-size:1.5em;padding-left:2px;">{{getDay(aNews)}}</span>
+                                                      <br/>
                                                   <span class="white--text" style="padding:0;margin:0;">{{getMonth(aNews)}}</span>
                                               </p>
                                           </v-avatar>
@@ -121,7 +121,7 @@
     >
       <v-icon>filter_list</v-icon>
     </v-btn>
-    
+
 
     <filter-news-dialog/>
   </v-content>
@@ -423,11 +423,12 @@ export default {
       return news.resume
     },
     findAvatar: function (author) {
+      var returnedPhotoProfileURL = '/static/img/default.jpg'
       if (author == null || author === '') {
-        return '/static/img/default.jpg'
+        return returnedPhotoProfileURL
       }
       var contact = this.$store.getters.searchContact(author)
-      if (contact == null) return '/static/img/default.jpg'
+      if (contact == null) return returnedPhotoProfileURL
       if (author && ['cfdt', 'cgt', 'unsa'].indexOf(author.trim()) > -1) {
         return '/static/img/ad-photos/' + author +
         '.jpg'
@@ -436,11 +437,10 @@ export default {
         return '/static/img/twitter.png'
       }
 
-      var imgSource =
-        '/static/img/ad-photos/' +
-        (contact.thumbnailPhoto ? contact.sAMAccountName : 'default') +
-        '.jpg'
-      return imgSource
+      if (contact.thumbnailPhoto) {
+        returnedPhotoProfileURL = `/static/img/ad-photos/${contact.sAMAccountName}.jpg`
+      }
+      return returnedPhotoProfileURL
     },
     closeSearch: function () {
       console.log(document.getElementById('newsListVList').offsetWidth)
@@ -453,8 +453,8 @@ export default {
     }
   }
 }
-</script> 
-<style> 
+</script>
+<style>
   .mouvementsRH>div.v-image__image
   {
     max-height: 200px;
@@ -463,10 +463,10 @@ export default {
     position:absolute;
     left:50%;
     transform: translate(-50%);
-    
+
   }
   #tempid{
-    
+
     width:100%;
   }
 </style>
