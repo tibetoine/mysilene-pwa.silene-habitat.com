@@ -266,6 +266,10 @@ export default {
         case 'cosNews':
           color = 'blue-grey darken-2'
           break
+        case 'docs':
+          color = 'teal'
+          if (news.docType === 'doc-cse') color = 'orange darken-4'
+          break
         default:
           break
       }
@@ -300,6 +304,7 @@ export default {
           break
         case 'docs':
           label = 'Documents'
+          if (news.docType === 'doc-cse') label = 'Oeuvres sociales'
           break
         default:
           console.log('Type non trouvé : ' + news.type)
@@ -335,6 +340,10 @@ export default {
         case 'cosNews':
           color = '#455A64 ' // blue-grey darken-2
           break
+        case 'docs':
+          color = '#009688'
+          if (news.docType === 'doc-cse') color = '#E65100' // orange darken-4
+          break
         default:
           break
       }
@@ -363,6 +372,10 @@ export default {
         case 'cosNews':
           icon = 'account_balance'
           break
+        case 'docs':
+          icon = 'menu_book'
+          if (news.docType === 'doc-cse') icon = 'beach_access'
+          break
         default:
           break
       }
@@ -386,13 +399,14 @@ export default {
           case 'mouvementsRH':
             imgSource = news.image
             break
-          case 'docs':
-            imgSource = '/static/img/documents.jpg'
-            break
           case 'cos-rss':
           case 'cosActu':
           case 'cosNews':
             imgSource = '/static/img/cos.jpg'
+            break
+          case 'docs':
+            imgSource = '/static/img/documents.jpg'
+            if (news.docType === 'doc-cse') imgSource = '/static/img/CSE.jpg'
             break
           default:
             break
@@ -404,10 +418,12 @@ export default {
     getNewsTitle: function (news) {
       if (news.type === 'docs') {
         var typeDocLabel = ''
+        var docLabel = 'Nouveau document '
         if (['doc-unsa', 'doc-cgt', 'doc-cfdt'].indexOf(news.docType) > -1) {
           typeDocLabel = 'syndical'
         }
-        return 'Nouveau document ' + typeDocLabel
+        if (news.docType === 'doc-cse') docLabel = 'Nouvelle Offre de votre CE'
+        return docLabel + typeDocLabel
       }
       return news.title
     },
