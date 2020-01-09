@@ -75,16 +75,8 @@ export default {
         label: 'Twitter'
       },
       {
-        value: 'cos-rss',
-        label: 'COS'
-      },
-      {
-        value: 'cosActu',
-        label: 'COS Actus'
-      },
-      {
-        value: 'cosNews',
-        label: 'COS News'
+        value: 'docs',
+        label: 'Oeuvres Sociales'
       },
       {
         value: 'docs',

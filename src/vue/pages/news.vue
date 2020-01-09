@@ -293,15 +293,6 @@ export default {
         case 'actualites':
           label = 'Actualité'
           break
-        case 'cos-rss':
-          label = 'COS RSS'
-          break
-        case 'cosActu':
-          label = 'COS Actus'
-          break
-        case 'cosNews':
-          label = 'COS News'
-          break
         case 'docs':
           label = 'Documents'
           if (news.docType === 'doc-cse') label = 'Oeuvres sociales'
