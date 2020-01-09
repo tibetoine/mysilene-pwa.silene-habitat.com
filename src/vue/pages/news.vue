@@ -439,11 +439,15 @@ export default {
       return news.resume
     },
     findAvatar: function (author) {
+      console.log(author)
       var returnedPhotoProfileURL = '/static/img/default.jpg'
       if (author == null || author === '') {
         return returnedPhotoProfileURL
       }
       var contact = this.$store.getters.searchContact(author)
+      if (author === 'CSE') {
+        return '/static/img/cse-author.jpg'
+      }
       if (contact == null) return returnedPhotoProfileURL
       if (author && ['cfdt', 'cgt', 'unsa'].indexOf(author.trim()) > -1) {
         return '/static/img/ad-photos/' + author +
