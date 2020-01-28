@@ -11,6 +11,7 @@ import 'vuetify/dist/vuetify.min.css'
 import rest from './rest/routes'
 import VueClazyLoad from 'vue-clazy-load'
 import infiniteScroll from 'vue-infinite-scroll'
+import VueGtag from 'vue-gtag'
 
 Vue.use(VueResource)
 
@@ -33,6 +34,10 @@ Vue.use(Vuetify, { theme: {
 
 Vue.use(VueClazyLoad)
 Vue.use(infiniteScroll)
+
+Vue.use(VueGtag, {
+  config: { id: process.env.GTAG_ANALYTICS }
+}, router)
 
 Vue.config.productionTip = false
 

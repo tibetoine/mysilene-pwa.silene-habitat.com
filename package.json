@@ -17,6 +17,7 @@
     "v-offline": "^1.0.9",
     "vue": "^2.5.2",
     "vue-clazy-load": "^0.4.2",
+    "vue-gtag": "^1.2.0",
     "vue-infinite-scroll": "^2.0.2",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
