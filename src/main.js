@@ -36,7 +36,7 @@ Vue.use(VueClazyLoad)
 Vue.use(infiniteScroll)
 
 Vue.use(VueGtag, {
-  config: { id: process.env.GTAG_ANALYTICS }
+  config: { id: 'UA-117941379-1' }
 }, router)
 
 Vue.config.productionTip = false
