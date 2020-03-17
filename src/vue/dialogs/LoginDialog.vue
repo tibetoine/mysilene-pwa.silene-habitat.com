@@ -67,7 +67,8 @@ export default {
     },
     visible: {
       get: function () {
-        return !this.$store.state.login.Authenticate
+        return false
+        // return !this.$store.state.login.Authenticate
       },
       set: function () {
         // console.log('should not be used')

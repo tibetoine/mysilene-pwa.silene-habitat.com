@@ -9,6 +9,7 @@ import Help from '../vue/pages/help'
 import Docs from '../vue/pages/docs'
 import Bim from '../vue/pages/bim'
 import Admin from '../vue/pages/admin'
+import Shifts from '../vue/pages/shifts'
 
 Vue.use(Router)
 
@@ -61,6 +62,11 @@ export default new Router({
       path: '/admin',
       component: Admin,
       name: 'admin'
+    },
+    {
+      path: '/shifts',
+      component: Shifts,
+      name: 'shifts'
     }
 
   ],
