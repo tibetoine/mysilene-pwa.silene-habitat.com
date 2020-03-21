@@ -68,9 +68,8 @@ export default new Router({
       component: Shifts,
       name: 'shifts'
     }
-
   ],
-  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
     } else {

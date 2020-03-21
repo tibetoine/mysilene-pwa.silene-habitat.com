@@ -33,7 +33,6 @@ export default {
     cfdtList: [],
     cgtList: [],
     unsaList: []
-
   },
   contacts: {
     search: '',

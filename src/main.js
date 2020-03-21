@@ -22,22 +22,28 @@ Vue.use(VueResource)
 // Oeil Bleu foncé : #004c95
 // Chapeau bleu droit : #2a91cd
 // Chapeau vert gauche : #83ba00
-Vue.use(Vuetify, { theme: {
-  primary: '#83ba00',
-  secondary: '#006eb5',
-  accent: '#fabd00',
-  error: '#FF5252',
-  info: '#2196F3',
-  success: '#4CAF50',
-  warning: '#FFC107'
-}})
+Vue.use(Vuetify, {
+  theme: {
+    primary: '#83ba00',
+    secondary: '#006eb5',
+    accent: '#fabd00',
+    error: '#FF5252',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FFC107'
+  }
+})
 
 Vue.use(VueClazyLoad)
 Vue.use(infiniteScroll)
 
-Vue.use(VueGtag, {
-  config: { id: 'UA-117941379-1' }
-}, router)
+Vue.use(
+  VueGtag,
+  {
+    config: { id: 'UA-117941379-1' }
+  },
+  router
+)
 
 Vue.config.productionTip = false
 

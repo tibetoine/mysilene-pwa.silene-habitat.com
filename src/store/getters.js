@@ -60,7 +60,7 @@ export default {
     nomDeFamille = nomDeFamille.toLowerCase()
 
     // console.log('Recherche de contact ');
-    return state.contacts.fullList.find(function (contact) {
+    return state.contacts.fullList.find(function(contact) {
       // console.log('Recherche de contact avec prenom ' + prenom + ' et nom ' + nomDeFamille)
       if (contact.givenName == null || contact.givenName.length === 0) {
         return false
@@ -68,10 +68,18 @@ export default {
       if (contact.sn == null || contact.sn.length === 0) {
         return false
       }
-      if (removeAccent(contact.givenName.toLowerCase()) === removeAccent(prenom) && removeAccent(contact.sn.toLowerCase()) === removeAccent(nomDeFamille)) {
+      if (
+        removeAccent(contact.givenName.toLowerCase()) ===
+          removeAccent(prenom) &&
+        removeAccent(contact.sn.toLowerCase()) === removeAccent(nomDeFamille)
+      ) {
         // console.log('Contact trouvé pour Prénom : ' + prenom + ' et nom de famille : ' + nomDeFamille);
         return true
-      } else if (removeAccent(contact.givenName.toLowerCase()) === removeAccent(nomDeFamille) && removeAccent(contact.sn.toLowerCase()) === removeAccent(prenom)) {
+      } else if (
+        removeAccent(contact.givenName.toLowerCase()) ===
+          removeAccent(nomDeFamille) &&
+        removeAccent(contact.sn.toLowerCase()) === removeAccent(prenom)
+      ) {
         // console.log('Contact trouvé pour Prénom : ' + prenom + ' et nom de famille : ' + nomDeFamille);
         return true
       } else {

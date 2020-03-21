@@ -32,5 +32,4 @@ export default {
   SET_PREFS: 'setPrefs',
   DELETE_USER_SUCCESS: 'deleteUserSuccess',
   DELETE_USER_ERROR: 'deleteUserError'
-
 }

@@ -1,0 +1,116 @@
+{
+  "time_types": {
+    "travail_normal": {
+      "label": "Travail normal",
+      "icon": "apartment",
+      "color": "blue darken-2",
+      "color_hex": "#1976D2",
+      "type": "travail"
+    },
+    "teletravail": {
+      "label": "Télétravail",
+      "icon": "apartment",
+      "color": "blue darken-2",
+      "color_hex": "#1976D2",
+      "type": "travail"
+    },
+    "garde_enfant": {
+      "label": "Garde enfant",
+      "icon": "child_care",
+      "color": "yellow darken-3",
+      "color_hex": "#F9A825",
+      "type": "autre"
+    },
+    "maladie": {
+      "label": "Maladie",
+      "icon": "hotel",
+      "color": "deep-orange darken-2",
+      "color_hex": "#E64A19",
+      "type": "congés"
+    },
+    "congés_payés": {
+      "label": "Congés payés",
+      "icon": "free_breakfast",
+      "color": "deep-orange darken-2",
+      "color_hex": "#E64A19",
+      "type": "congés"
+    },
+    "rtt": {
+      "label": "RTT",
+      "icon": "free_breakfast",
+      "color": "deep-orange darken-2",
+      "color_hex": "#E64A19",
+      "type": "congés"
+    },
+    "rtt_matin": {
+      "label": "RTT matin",
+      "icon": "free_breakfast",
+      "color": "deep-orange darken-2",
+      "color_hex": "#E64A19",
+      "type": "congés"
+    },
+    "rtt_pm": {
+      "label": "RTT après midi",
+      "icon": "free_breakfast",
+      "color": "deep-orange darken-2",
+      "color_hex": "#E64A19",
+      "type": "congés"
+    },
+    "enfant_malade": {
+      "label": "Congés enfant malade",
+      "icon": "hotel",
+      "color": "deep-orange darken-2",
+      "color_hex": "#E64A19",
+      "type": "congés"
+    },
+    "mariage": {
+      "label": "Congés mariage",
+      "icon": "favorite_border",
+      "color": "deep-orange darken-2",
+      "color_hex": "#E64A19",
+      "type": "congés"
+    },
+    "décès": {
+      "label": "Congés décès",
+      "icon": "sentiment_very_dissatisfied",
+      "color": "deep-orange darken-2",
+      "color_hex": "#E64A19",
+      "type": "congés"
+    },
+    "naissance_adoption": {
+      "label": "Congés naissance",
+      "icon": "pregnant_woman",
+      "color": "deep-orange darken-2",
+      "color_hex": "#E64A19",
+      "type": "congés"
+    },
+    "déménagement": {
+      "label": "Congés déménagement",
+      "icon": "house",
+      "color": "deep-orange darken-2",
+      "color_hex": "#E64A19",
+      "type": "congés"
+    },
+    "delegation_syndicale": {
+      "label": "Délégation syndicale",
+      "icon": "work",
+      "color": "blue lighten-2",
+      "color_hex": "#64B5F6",
+      "type": "travail"
+    },
+    "cse_titulaire": {
+      "label": "CSE titulaire",
+      "icon": "work",
+      "color": "blue lighten-2",
+      "color_hex": "#64B5F6",
+      "type": "travail"
+    },
+    "cse_suppleant": {
+      "label": "CSE suppléant",
+      "icon": "work",
+      "color": "blue lighten-2",
+      "color_hex": "#64B5F6",
+      "type": "travail"
+    }
+  }
+}

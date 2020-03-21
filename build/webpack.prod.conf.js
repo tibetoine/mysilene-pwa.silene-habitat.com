@@ -13,7 +13,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const loadMinified = require('./load-minified')
-const babel = require('babel-core');
+const babel = require('babel-core')
 
 const env = config.build.env
 
@@ -69,21 +69,23 @@ const webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency',
       node_env: process.env.NODE_ENV,
-      oneSignalKey: '<script>var oneSignalKey = \'' + process.env.ONE_SIGNAL_KEY + '\'</script>',      
-      serviceWorkerLoader: `<script>${loadMinified(path.join(__dirname,
-        './service-worker-prod.js'))}</script>`
+      oneSignalKey:
+        "<script>var oneSignalKey = '" +
+        process.env.ONE_SIGNAL_KEY +
+        "'</script>",
+      serviceWorkerLoader: `<script>${loadMinified(
+        path.join(__dirname, './service-worker-prod.js')
+      )}</script>`
     }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      minChunks: function (module, count) {
+      minChunks: function(module, count) {
         // any required modules inside node_modules are extracted to vendor
         return (
           module.resource &&
           /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
+          module.resource.indexOf(path.join(__dirname, '../node_modules')) === 0
         )
       }
     }),
@@ -106,7 +108,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsRoot + '/[name].js',
         transform: (content, path) => {
           // and transpile it while copying
-          return babel.transformFileSync(path).code;
+          return babel.transformFileSync(path).code
         }
       },
       {
@@ -115,9 +117,9 @@ const webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsRoot + '/[name].js',
         transform: (content, path) => {
           // and transpile it while copying
-          return babel.transformFileSync(path).code;
+          return babel.transformFileSync(path).code
         }
-      },
+      }
     ]),
     // service worker caching
     new SWPrecacheWebpackPlugin({
@@ -126,8 +128,8 @@ const webpackConfig = merge(baseWebpackConfig, {
       /* Permet de mettre en cache client (service-worker, l'ensemble des ressources dans static */
       staticFileGlobs: ['dist/**/*.{js,html,css,jpg}'],
       minify: false,
-      stripPrefix: 'dist/',      
-      runtimeCaching: [        
+      stripPrefix: 'dist/',
+      runtimeCaching: [
         {
           urlPattern: '/api/(.*)',
           handler: 'networkFirst'
@@ -149,9 +151,7 @@ if (config.build.productionGzip) {
       asset: '[path].gz[query]',
       algorithm: 'gzip',
       test: new RegExp(
-        '\\.(' +
-        config.build.productionGzipExtensions.join('|') +
-        ')$'
+        '\\.(' + config.build.productionGzipExtensions.join('|') + ')$'
       ),
       threshold: 10240,
       minRatio: 0.8
@@ -160,7 +160,8 @@ if (config.build.productionGzip) {
 }
 
 if (config.build.bundleAnalyzerReport) {
-  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+    .BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 

@@ -1,7 +1,6 @@
 import Do from '../../const/do'
 /* eslint-disable */
 export default {
-
   /**
    * Enregistre en state que le serveur est down.
    */

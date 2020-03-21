@@ -1,10 +1,16 @@
 <template>
   <div style="width:100%;height:100%;">
     <WeatherIconClearDay v-if="icon === 'clear-day'"></WeatherIconClearDay>
-    <WeatherIconClearNight v-if="icon === 'clear-night'"></WeatherIconClearNight>
+    <WeatherIconClearNight
+      v-if="icon === 'clear-night'"
+    ></WeatherIconClearNight>
     <WeatherIconCloudy v-if="icon === 'cloudy'"></WeatherIconCloudy>
-    <WeatherIconPartlyCloudyDay v-if="icon === 'partly-cloudy-day'"></WeatherIconPartlyCloudyDay>
-    <WeatherIconPartlyCloudyNight v-if="icon === 'partly-cloudy-night'"></WeatherIconPartlyCloudyNight>
+    <WeatherIconPartlyCloudyDay
+      v-if="icon === 'partly-cloudy-day'"
+    ></WeatherIconPartlyCloudyDay>
+    <WeatherIconPartlyCloudyNight
+      v-if="icon === 'partly-cloudy-night'"
+    ></WeatherIconPartlyCloudyNight>
     <WeatherIconRain v-if="icon === 'rain'"></WeatherIconRain>
     <WeatherIconSleet v-if="icon === 'sleet'"></WeatherIconSleet>
     <WeatherIconSnow v-if="icon === 'snow'"></WeatherIconSnow>

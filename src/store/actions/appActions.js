@@ -4,7 +4,7 @@ import rest from '../../rest/routes'
 import api from '../../rest/api'
 
 export default {
-  [On.LOAD_CONTACTS]: async function ({ commit }) {
+  [On.LOAD_CONTACTS]: async function({ commit }) {
     /* 1/ Appel REST à l'API  */
     try {
       const response = await rest.getContacts()
@@ -23,7 +23,7 @@ export default {
       }
     }
   },
-  [On.LOAD_USERS]: async function ({ commit }) {
+  [On.LOAD_USERS]: async function({ commit }) {
     /* 1/ Appel REST à l'API  */
     try {
       const response = await rest.getUsers()
@@ -42,24 +42,30 @@ export default {
       }
     }
   },
-  [On.HEALTHCHECK]: async function ({ commit }) {
+  [On.HEALTHCHECK]: async function({ commit }) {
     try {
       const response = await rest.healthcheck()
       if (response.status !== 200) {
         commit(Do.SET_DOWN, 'ERREUR - Serveur API répond en ' + response.status)
       } else {
         if (response.body && response.body.mongo === 'KO') {
-          commit(Do.SET_DOWN, 'ERREUR - La base de données Mongo semble KO' + response)
+          commit(
+            Do.SET_DOWN,
+            'ERREUR - La base de données Mongo semble KO' + response
+          )
         } else {
           commit(Do.SET_UP)
         }
       }
     } catch (error) {
       console.log('error : ', error)
-      commit(Do.SET_DOWN, 'ERREUR - Serveur API Down - appel impossible à healthcheck')
+      commit(
+        Do.SET_DOWN,
+        'ERREUR - Serveur API Down - appel impossible à healthcheck'
+      )
     }
   },
-  [On.LOAD_DOCS]: async function ({ commit }) {
+  [On.LOAD_DOCS]: async function({ commit }) {
     try {
       const response = await rest.getDocs()
       if (response.status === 401) {
@@ -77,7 +83,7 @@ export default {
       }
     }
   },
-  [On.LOAD_PREFS]: async function ({ commit }) {
+  [On.LOAD_PREFS]: async function({ commit }) {
     var userId = localStorage.getItem('user-id')
     try {
       const response = await rest.getUser(userId)
@@ -90,8 +96,17 @@ export default {
         /* Traitement des Prefs (Existe , existe pas ?) */
         var prefs = user.prefs
         if (prefs == null || prefs === undefined || prefs.length === 0) {
-        /* Charge les prefs par défaut en base puis en local */
-          prefs = ['actualites', 'flashInfo', 'mouvementsRH', 'twitter', 'cos-rss', 'cosActu', 'cosNews', 'docs']
+          /* Charge les prefs par défaut en base puis en local */
+          prefs = [
+            'actualites',
+            'flashInfo',
+            'mouvementsRH',
+            'twitter',
+            'cos-rss',
+            'cosActu',
+            'cosNews',
+            'docs'
+          ]
           /* Charge les valeurs par défaut en base */
           await rest.putUsers(userId, prefs)
         }
@@ -106,7 +121,7 @@ export default {
       }
     }
   },
-  [On.IS_ADMIN]: async function ({ commit, state }) {
+  [On.IS_ADMIN]: async function({ commit, state }) {
     console.log('isADMIN !!! ')
     var userId = localStorage.getItem('user-id')
     try {
@@ -122,7 +137,7 @@ export default {
       console.log(error)
     }
   },
-  [On.DELETE_USER]: async function ({ commit, dispatch }, username) {
+  [On.DELETE_USER]: async function({ commit, dispatch }, username) {
     // console.log('OUIIIIIII !!! ', username)
     try {
       const response = await rest.deleteUser(username)
@@ -138,7 +153,7 @@ export default {
       commit(Do.DELETE_USER_ERROR)
     }
   },
-  [On.SAVE_PREFS]: async function ({ commit, state }) {
+  [On.SAVE_PREFS]: async function({ commit, state }) {
     var prefs = state.news.selectedTypes
     var userId = localStorage.getItem('user-id')
     try {
@@ -160,7 +175,7 @@ export default {
     /* Sauvegarde en State --> LOL pas nécessaire c'est déjà enregistré depuis la filterDialog ? */
     // commit(Do.SET_PREFS, prefs)
   },
-  [On.LOAD_NEWS]: async function ({ commit }) {
+  [On.LOAD_NEWS]: async function({ commit }) {
     try {
       const response = await rest.getNews()
       if (response.status === 401) {
@@ -178,7 +193,7 @@ export default {
     }
   },
 
-  [On.LOAD_WEATHER]: async function ({ commit }) {
+  [On.LOAD_WEATHER]: async function({ commit }) {
     const response = await rest.getLastWeather()
 
     const lastWeather = response.body
@@ -186,16 +201,16 @@ export default {
     commit(Do.SET_WEATHER, lastWeather)
   },
 
-  [On.UPDATE_FILTERED_CONTACTS]: function ({commit}) {
+  [On.UPDATE_FILTERED_CONTACTS]: function({ commit }) {
     commit(Do.UPDATE_FILTERED_CONTACTS)
     commit(Do.SHOW_MORE_CONTACTS)
   },
-  [On.UPDATE_FILTERED_NEWS]: function ({commit}) {
+  [On.UPDATE_FILTERED_NEWS]: function({ commit }) {
     commit(Do.UPDATE_FILTERED_NEWS)
     commit(Do.SHOW_MORE_NEWS)
   },
 
-  [On.LOGIN]: async function ({commit, dispatch}, user) {
+  [On.LOGIN]: async function({ commit, dispatch }, user) {
     var callbackError = error => {
       var message = 'Authentification impossible!'
       if (error.body && error.body.message) {
@@ -237,12 +252,12 @@ export default {
 
     await rest.login(user, callbackSuccess, callbackError)
   },
-  [On.LOGOUT]: async function ({ commit }, user) {
+  [On.LOGOUT]: async function({ commit }, user) {
     /* Suppression du user-token si existe */
     localStorage.removeItem('user-token')
     commit(Do.LOGOUT)
   },
-  [On.AUTO_LOGIN]: async function ({ commit, dispatch }, user) {
+  [On.AUTO_LOGIN]: async function({ commit, dispatch }, user) {
     commit(Do.LOGIN_SUCCESS, user)
 
     /* Dispatch Action */
@@ -252,11 +267,10 @@ export default {
     dispatch(On.LOAD_CONTACTS)
     dispatch(On.LOAD_DOCS)
   },
-  [On.LOGIN_WAITING]: function ({ commit }) {
+  [On.LOGIN_WAITING]: function({ commit }) {
     commit(Do.LOGIN_WAITING)
   },
-  [On.LOGIN_STOP]: function ({ commit }) {
+  [On.LOGIN_STOP]: function({ commit }) {
     commit(Do.LOGIN_STOP)
   }
-
 }
