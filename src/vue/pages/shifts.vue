@@ -3,7 +3,16 @@
     <shift-dialog></shift-dialog>
 
     <v-fab-transition>
-      <v-btn color="blue darken-2" v-model="fab" dark fab fixed bottom right>
+      <v-btn
+        color="blue darken-2"
+        v-model="fab"
+        dark
+        fab
+        fixed
+        bottom
+        right
+        @click.stop="showShiftDialog"
+      >
         <v-icon>add</v-icon>
       </v-btn>
     </v-fab-transition>
@@ -45,81 +54,34 @@
 <script>
   // import { mapState } from 'vuex'
   // import FileLine from '../components/FileLine'
-  import { mapActions, mapState } from 'vuex'
+  import { mapActions, mapMutations } from 'vuex'
   import On from '../../const/on'
+  import Do from '../../const/do'
   import ShiftRecord from '../components/ShiftRecord'
   import ShiftDialog from '../components/ShiftDialog'
 
   export default {
     name: 'shifts',
     components: { ShiftRecord, ShiftDialog },
-    computed: {
-      ...mapState({
-        users: state => state.users.usersList,
-        deleteSuccess: state => state.users.deletedUserSuccess,
-        deleteError: state => state.users.deletedUserError,
-        computedDateFormatted() {
-          console.log('oui')
-          return this.formatDate(this.date)
-        }
-      })
-    },
+    computed: {},
     mounted: function() {
       // console.log('je charge les données')
       this.loadUsers()
-    },
-    watch: {
-      'currentShift.date'(val) {
-        // console.log('test')
-        this.dateFormatted = this.formatDate(this.currentShift.date)
-      }
     },
     methods: {
       ...mapActions({
         loadUsers: On.LOAD_USERS,
         deleteUser: On.DELETE_USER
       }),
-      initDelete() {
-        this.visible = true
-        this.$store.state.users.deletedUserSuccess = false
-        this.$store.state.users.deletedUserError = false
-      },
-      localDeleteUser() {
-        // console.log('deleteUser : ', this.selectedUser)
-        this.deleteUser(this.selectedUser)
-      },
-      formatDate(date) {
-        if (!date) return null
-
-        const [year, month, day] = date.split('-')
-        return `${month}/${day}/${year}`
-      },
-      initDate(date) {
-        // console.log(date)
-        // console.log(date.day)
-        const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(
-          date
-        )
-        const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(
-          date
-        )
-        const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(
-          date
-        )
-        const r = `${da}/${mo}/${ye}`
-        return r
-      },
-      parseDate(date) {
-        if (!date) return null
-
-        const [month, day, year] = date.split('/')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-      }
+      ...mapMutations({
+        showShiftDialog: Do.SHOW_SHIFT_DIALOG
+      })
     },
     data() {
       return {
         shiftVisible: true,
         historyVisible: true,
+        fab: false,
         checkbox_rtt: null,
         checkbox_rtt_matin: null,
         checkbox_rtt_pm: null,
@@ -251,25 +213,6 @@
               }
             ]
           }
-        ],
-        aShift: {
-          date: '13/01/2018',
-          datetime: '08:50',
-          conges: 'rtt_pm',
-          comment: 'un commentaire'
-        },
-        dateFormatted: null,
-        menu: false,
-        datetimeFormatted: null,
-        menu2: false,
-        selectedUser: '',
-        valid: false,
-        visible: false,
-        confirmText: '',
-        btnDisabled: false,
-        confirmRules: [
-          v => !!v || 'Confirmation est requise',
-          v => v === this.selectedUser || 'Veuillez confirmer'
         ]
       }
     }

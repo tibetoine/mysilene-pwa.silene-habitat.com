@@ -48,7 +48,7 @@
           <v-chip
             small
             label
-            style="width:100%;"
+            style="width:90%;"
             :color="getDetailColor(detail)"
             text-color="white"
           >
@@ -122,7 +122,6 @@
         let min = 0
         let times = time.split(':')
         min = parseInt(times[0]) * 60 + parseInt(times[1])
-        console.log(time, ' min : ', min)
         return min
       },
       getColor(shift) {

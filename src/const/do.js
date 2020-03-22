@@ -31,5 +31,6 @@ export default {
   SHOW_CONTACTS_SNACKBAR: 'showContactsSnackbar',
   SET_PREFS: 'setPrefs',
   DELETE_USER_SUCCESS: 'deleteUserSuccess',
-  DELETE_USER_ERROR: 'deleteUserError'
+  DELETE_USER_ERROR: 'deleteUserError',
+  SHOW_SHIFT_DIALOG: 'showShiftDialog'
 }

@@ -25,6 +25,10 @@ export default {
     data: null,
     showDialog: false
   },
+  shift: {
+    data: null,
+    showDialog: false
+  },
   selectedContact: null,
   selectedNew: null,
   docs: {
