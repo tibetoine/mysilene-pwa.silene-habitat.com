@@ -89,8 +89,10 @@
       },
       visible: {
         get: function() {
-          return false
-          // return !this.$store.state.login.Authenticate
+          // localStorage.setItem('user-id', 'robert')
+          // TODO remettre comme avant (#ShiftDev)
+          // return false
+          return !this.$store.state.login.Authenticate
         },
         set: function() {
           // console.log('should not be used')
@@ -123,7 +125,7 @@
         this.loginAction(builtUser).catch(error => {
           this.loginStop()
           this.infoError = true
-          console.log(error)
+          console.error(error)
         })
       }
     }

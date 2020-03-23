@@ -1,3 +1,23 @@
+import shiftsDataRef from '../data/shifts.json'
+
+const myShiftsDataRef = shiftsDataRef
+
+/**
+ * Retourne le type de shift (voir shifts.json) à partir d'un id de shift
+ * @param {*} shiftTypeId
+ */
+function getShiftTypeById(shiftTypeId) {
+  return myShiftsDataRef.time_types[shiftTypeId].type
+}
+
+/**
+ * Retourne icon
+ * @param {*} shiftTypeId
+ */
+function getShiftIconById(shiftTypeId) {
+  return myShiftsDataRef.time_types[shiftTypeId].icon
+}
+
 const accentMap = {
   à: 'a',
   á: 'a',
@@ -23,4 +43,4 @@ function removeAccent(s) {
   return ret
 }
 
-export { removeAccent }
+export { removeAccent, getShiftTypeById, getShiftIconById }

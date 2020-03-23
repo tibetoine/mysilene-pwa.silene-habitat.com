@@ -356,7 +356,7 @@
             if (news.docType === 'doc-cse') label = 'Oeuvres sociales'
             break
           default:
-            console.log('Type non trouvé : ' + news.type)
+            console.error('Type non trouvé : ' + news.type)
             break
         }
         return label
@@ -496,7 +496,7 @@
         return news.resume
       },
       findAvatar: function(author) {
-        console.log(author)
+        // console.log(author)
         var returnedPhotoProfileURL = '/static/img/default.jpg'
         if (author == null || author === '') {
           return returnedPhotoProfileURL
@@ -520,8 +520,8 @@
       },
       closeSearch: function() {
         console.log(document.getElementById('newsListVList').offsetWidth)
-        console.log(document.getElementById('tempid').parentNode.offsetWidth)
-        console.log(document.getElementById('tempid').parentNode.id)
+        // console.log(document.getElementById('tempid').parentNode.offsetWidth)
+        // console.log(document.getElementById('tempid').parentNode.id)
         // document.getElementById('searchBox').style.visibility = 'hidden'
         // document.getElementById('newsListVList').style.marginTop = 0
         /* Afficher l'icone de recherche dans le main template */

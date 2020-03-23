@@ -1,5 +1,6 @@
 <template>
   <v-container style="margin:0;padding:0;">
+    <confirm ref="confirm"></confirm>
     <v-layout fluid row align-center>
       <v-flex :style="'width:' + mainBadgeWidth + '%;'">
         <v-chip
@@ -7,7 +8,7 @@
           text-color="white"
           @click="showDetails()"
         >
-          <v-badge :color="getColor(shift)" left>
+          <v-badge color="blue-grey darken-4" left>
             <span slot="badge">{{ shift.nb_creneaux }}</span>
             <v-icon>event</v-icon>
           </v-badge>
@@ -20,10 +21,10 @@
       </v-flex>
       <v-spacer></v-spacer>
       <v-flex style="width:7%;">
-        <v-icon>edit</v-icon>
+        <v-icon @click.stop="myEditShift(shift._id)">edit</v-icon>
       </v-flex>
       <v-flex style="width:7%;">
-        <v-icon>delete</v-icon>
+        <v-icon @click.stop="myDeleteShift(shift._id)">delete</v-icon>
       </v-flex>
       <v-flex style="width:7%;">
         <v-icon @click="showDetails()">keyboard_arrow_down</v-icon>
@@ -31,8 +32,8 @@
     </v-layout>
     <v-container v-if="detailVisible" style="margin:0;padding:0;">
       <v-layout
-        v-for="detail in shift.details"
-        v-bind:key="detail.type"
+        v-for="(detail, index) in shift.details"
+        v-bind:key="detail.type + ' - ' + shift.date + ' - ' + index"
         fluid
         row
         align-center
@@ -70,9 +71,14 @@
 </template>
 <script>
   import timeTypes from '../../data/shifts.json'
-
+  import { mapActions, mapMutations } from 'vuex'
+  import On from '../../const/on'
+  import Do from '../../const/do'
+  import { getShiftIconById } from '../../shared/helper'
+  import Confirm from './Confirm'
   export default {
     name: 'shiftrecord',
+    components: { Confirm },
     props: ['shift'],
     data() {
       return {
@@ -99,23 +105,51 @@
         mainBadgeWidth: 40
       }
     },
+    mounted: function() {},
+    computed: {
+      visible: {
+        get: function() {
+          return this.$store.state.shift.showDialog
+        },
+        set: function(val) {
+          this.$store.state.shift.showDialog = val
+        }
+      }
+    },
     methods: {
+      ...mapActions({
+        deleteShift: On.DELETE_SHIFT
+      }),
+      ...mapMutations({
+        showShiftError: Do.SHOW_SHIFT_ERROR
+      }),
+      myDeleteShift(shiftId) {
+        this.$refs.confirm
+          .open(
+            'Supprimer une journée',
+            'Etes-vous sûr de vouloir supprimer cette journée ?',
+            { color: 'red' }
+          )
+          .then(confirm => {
+            if (confirm) {
+              this.deleteShift(shiftId)
+            }
+          })
+      },
+      myEditShift(shiftId) {
+        this.showShiftError(`Cette fonction n'est pas encore disponible`)
+      },
       getLabel(detail) {
-        console.log(this.myTimeTypes.time_types)
         return this.myTimeTypes.time_types[detail.type].label
       },
       getIcon(shift) {
-        if (this.iconSet[shift.conges]) {
-          return this.iconSet[shift.conges]['icon']
-        } else {
-          return 'apartment'
-        }
+        return getShiftIconById(shift.type)
       },
       getDetailIcon(detail) {
         return this.myTimeTypes.time_types[detail.type].icon
       },
       showComment(detail) {
-        console.log(detail.comment)
+        // console.log(detail.comment)
       },
       getTimeInMin(time) {
         if (!time) return 0
@@ -129,9 +163,9 @@
         if (min === 0) {
           return 'grey'
         } else if (min >= 420) {
-          return 'green darken-2'
+          return 'green'
         } else {
-          return 'orange darken-3'
+          return 'orange darken-2'
         }
       },
       getDetailColor(detail) {
@@ -151,7 +185,6 @@
         }
       },
       showDetails() {
-        console.log(this.shift)
         if (this.detailVisible) {
           this.mainBadgeWidth = 40
         } else {

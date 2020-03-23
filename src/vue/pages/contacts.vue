@@ -364,8 +364,7 @@
             this.forceFileDownload(response, filename)
           })
           .catch(error => {
-            console.log('Erreur à la récupération du vcard')
-            console.error(error)
+            console.error('Erreur à la récupération du vcard', error)
           })
       },
       forceFileDownload(response, fileName) {

@@ -1,0 +1,22 @@
+{[
+        {
+          date: '12/03/2018',
+          total_time: '07:50',
+          worked_time: '03:00',
+          not_worked_time: '04:50',
+          nb_creneaux: 2,
+          blocked: 'false',
+          details: [
+            {
+              time: '03:00',
+              type: 'travail_normal',
+              comment:
+                'Un texte relativement long qui parle de commentaire, concernant je ne sais pas quoi mais bon c est juste pour avoir un long texte Un texte relativement long qui parle de commentaire, concernant je ne sais pas quoi mais bon c est juste pour avoir un long texteUn texte relativement long qui parle de commentaire, concernant je ne sais pas quoi mais bon c est juste pour avoir un long texteUn texte relativement long qui parle de commentaire, concernant je ne sais pas quoi mais bon c est juste pour avoir un long texteUn texte relativement long qui parle de commentaire, concernant je ne sais pas quoi mais bon c est juste pour avoir un long texte'
+            },
+            {
+              time: '04:00',
+              type: 'rtt',
+              comment: 'RTT'
+            }]}
+]}
+        

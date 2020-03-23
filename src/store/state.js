@@ -27,7 +27,12 @@ export default {
   },
   shift: {
     data: null,
-    showDialog: false
+    showDialog: false,
+    showSnackbar: false,
+    snackbarColor: 'success',
+    snackbarMessage: 'Message à setter',
+    currentShift: null,
+    allShifts: []
   },
   selectedContact: null,
   selectedNew: null,

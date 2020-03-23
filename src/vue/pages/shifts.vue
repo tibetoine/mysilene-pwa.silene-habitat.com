@@ -2,6 +2,15 @@
   <v-container style="margin-top:50px;">
     <shift-dialog></shift-dialog>
 
+    <v-snackbar
+      :timeout="snackbarTimeout"
+      :color="snackbarColor"
+      v-model="snackbarModel"
+    >
+      {{ snackbarMessage }}
+      <v-btn dark flat @click.native="snackbarModel = false">Close</v-btn>
+    </v-snackbar>
+
     <v-fab-transition>
       <v-btn
         color="blue darken-2"
@@ -42,7 +51,7 @@
       >
         <v-spacer></v-spacer>
         <shift-record
-          v-for="shift in someShifts"
+          v-for="shift in allShifts"
           v-bind:key="shift.date"
           v-bind:shift="shift"
         ></shift-record>
@@ -54,24 +63,50 @@
 <script>
   // import { mapState } from 'vuex'
   // import FileLine from '../components/FileLine'
-  import { mapActions, mapMutations } from 'vuex'
-  import On from '../../const/on'
+  import { mapState, mapActions, mapMutations } from 'vuex'
   import Do from '../../const/do'
+  import On from '../../const/on'
   import ShiftRecord from '../components/ShiftRecord'
   import ShiftDialog from '../components/ShiftDialog'
 
   export default {
     name: 'shifts',
     components: { ShiftRecord, ShiftDialog },
-    computed: {},
+    computed: {
+      ...mapState({
+        allShifts: state => state.shift.allShifts
+      }),
+      snackbarModel: {
+        get: function() {
+          return this.$store.state.shift.showSnackbar
+        },
+        set: function(val) {
+          this.$store.state.shift.showSnackbar = val
+        }
+      },
+      snackbarColor: {
+        get: function() {
+          return this.$store.state.shift.snackbarColor
+        },
+        set: function(val) {
+          this.$store.state.shift.snackbarColor = val
+        }
+      },
+      snackbarMessage: {
+        get: function() {
+          return this.$store.state.shift.snackbarMessage
+        },
+        set: function(val) {
+          this.$store.state.shift.snackbarMessage = val
+        }
+      }
+    },
     mounted: function() {
-      // console.log('je charge les données')
-      this.loadUsers()
+      this.loadShifts()
     },
     methods: {
       ...mapActions({
-        loadUsers: On.LOAD_USERS,
-        deleteUser: On.DELETE_USER
+        loadShifts: On.LOAD_SHIFTS
       }),
       ...mapMutations({
         showShiftDialog: Do.SHOW_SHIFT_DIALOG
@@ -79,6 +114,7 @@
     },
     data() {
       return {
+        snackbarTimeout: 6000,
         shiftVisible: true,
         historyVisible: true,
         fab: false,
@@ -90,130 +126,7 @@
           datetime: null,
           conges: '',
           comment: null
-        },
-        someShifts: [
-          {
-            date: '12/03/2018',
-            total_time: '07:50',
-            worked_time: '03:00',
-            not_worked_time: '04:50',
-            nb_creneaux: 2,
-            details: [
-              {
-                time: '03:00',
-                type: 'travail_normal',
-                comment:
-                  'Un texte relativement long qui parle de commentaire, concernant je ne sais pas quoi mais bon c est juste pour avoir un long texte Un texte relativement long qui parle de commentaire, concernant je ne sais pas quoi mais bon c est juste pour avoir un long texteUn texte relativement long qui parle de commentaire, concernant je ne sais pas quoi mais bon c est juste pour avoir un long texteUn texte relativement long qui parle de commentaire, concernant je ne sais pas quoi mais bon c est juste pour avoir un long texteUn texte relativement long qui parle de commentaire, concernant je ne sais pas quoi mais bon c est juste pour avoir un long texte'
-              },
-              {
-                time: '04:00',
-                type: 'rtt',
-                comment: 'RTT'
-              },
-              {
-                time: '00:50',
-                type: 'garde_enfant',
-                comment: 'RAS'
-              }
-            ]
-          },
-          {
-            date: '13/03/2018',
-            total_time: '06:50',
-            worked_time: '08:50',
-            not_worked_time: '08:50',
-            nb_creneaux: 2,
-            details: [
-              {
-                time: '03:00',
-                type: 'travail_normal',
-                comment: 'RAS'
-              },
-              {
-                time: '04:00',
-                type: 'rtt',
-                comment: 'RTT'
-              },
-              {
-                time: '00:50',
-                type: 'garde_enfant',
-                comment: 'RAS'
-              }
-            ]
-          },
-          {
-            date: '14/03/2018',
-            total_time: '06:50',
-            worked_time: '08:50',
-            not_worked_time: '08:50',
-            nb_creneaux: 2,
-            details: [
-              {
-                time: '03:00',
-                type: 'travail_normal',
-                comment: 'RAS'
-              },
-              {
-                time: '04:00',
-                type: 'rtt',
-                comment: 'RTT'
-              },
-              {
-                time: '00:50',
-                type: 'garde_enfant',
-                comment: 'RAS'
-              }
-            ]
-          },
-          {
-            date: '15/03/2018',
-            total_time: '04:50',
-            worked_time: '08:50',
-            not_worked_time: '08:50',
-            nb_creneaux: 2,
-            details: [
-              {
-                time: '03:00',
-                type: 'travail_normal',
-                comment: 'RAS'
-              },
-              {
-                time: '04:00',
-                type: 'rtt',
-                comment: 'RTT'
-              },
-              {
-                time: '00:50',
-                type: 'garde_enfant',
-                comment: 'RAS'
-              }
-            ]
-          },
-          {
-            date: '16/03/2018',
-            total_time: '00:00',
-            worked_time: '00:00',
-            not_worked_time: '08:50',
-            nb_creneaux: 2,
-            details: [
-              {
-                time: '03:00',
-                type: 'travail_normal',
-                comment: 'RAS'
-              },
-              {
-                time: '04:00',
-                type: 'rtt',
-                comment: 'RTT'
-              },
-              {
-                time: '00:50',
-                type: 'garde_enfant',
-                comment: 'RAS'
-              }
-            ]
-          }
-        ]
+        }
       }
     }
   }

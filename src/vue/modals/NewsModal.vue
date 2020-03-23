@@ -162,7 +162,7 @@
             label = 'COS'
             break
           default:
-            console.log('Type non trouvé : ' + news.type)
+            console.error('Type non trouvé : ' + news.type)
             break
         }
         return label

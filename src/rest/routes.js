@@ -18,5 +18,9 @@ export default {
       callbackError
     )
   },
-  deleteUser: username => api.del(`api-admin/users/${username}`)
+  deleteUser: username => api.del(`api-admin/users/${username}`),
+  deleteShift: shiftId => api.del(`api-shift/shifts/${shiftId}`),
+  putShift: (username, shift) =>
+    api.put(`api-shift/shifts/users/${username}`, shift),
+  getShifts: username => api.get(`api-shift/shifts/users/${username}`)
 }

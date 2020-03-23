@@ -74,6 +74,8 @@
           <v-time-picker
             v-model="currentShift.datetime"
             @input="$refs.menu2.save(currentShift.datetime)"
+            max="10:00"
+            :rules="timeRules"
           ></v-time-picker>
         </v-menu>
         <v-select
@@ -85,7 +87,8 @@
           max-height="auto"
           autocomplete
           scrollable
-          prepend-icon="map"
+          :rules="typeRules"
+          prepend-icon="help_outline"
           :return-object="true"
         >
           <template slot="item" slot-scope="data">
@@ -123,15 +126,20 @@
           prepend-icon="edit"
           textarea
         ></v-text-field>
-        <v-btn centered :disabled="!valid" @click="submit">
-          submit
+        <v-btn color="success" class="mr-4" :disabled="!valid" @click="submit">
+          Valider
+        </v-btn>
+        <v-btn color="error" class="mr-4" @click="clear">
+          Effacer
         </v-btn>
       </v-form>
     </v-card>
   </v-dialog>
 </template>
 <script>
-  import { mapState } from 'vuex'
+  import { mapState, mapActions, mapMutations } from 'vuex'
+  import On from '../../const/on'
+  import Do from '../../const/do'
   import timeTypes from '../../data/shifts.json'
   export default {
     name: 'shiftdialog',
@@ -145,9 +153,9 @@
         shiftVisible: true,
         currentShift: {
           date: null,
-          datetime: null,
+          datetime: '10:00',
           conges: '',
-          comment: null
+          comment: 'Un commentaire'
         },
         dateFormatted: null,
         menu: false,
@@ -165,21 +173,34 @@
           )
         },
         dateRules: [
-          v => !!v || 'La date est requise',
-          v => (v && v.length <= 10) || 'Name must be less than 10 characters'
+          v => {
+            return !!v || 'La date est requise'
+          }
         ],
         timeRules: [
-          v => !!v || `Un nombre d'heures est requis`,
-          v => (v && v.length <= 10) || 'Name must be less than 10 characters'
-        ]
+          v => {
+            return !!v || v == null || `Un nombre d'heures est requis`
+          }
+        ],
+        typeRules: [v => !!v || `Une catégorie est requise`]
       }
     },
     methods: {
+      ...mapActions({
+        saveShift: On.SAVE_SHIFT
+      }),
+      ...mapMutations({
+        hideShiftDialog: Do.HIDE_SHIFT_DIALOG
+      }),
+      clear() {
+        this.currentShift.datetime = ''
+        this.dateFormatted = ''
+        this.selectedType = null
+      },
       parseDate(date) {
-        console.log('parseDate : ', date)
         if (!date) return null
 
-        const [month, day, year] = date.split('/')
+        const [day, month, year] = date.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       },
       formatDate(date) {
@@ -208,7 +229,21 @@
         return theDate.getDay() !== 0
       },
       submit() {
-        console.log('Yeah on submit ! ')
+        /* Appel d'API */
+        let shift = {
+          date: this.parseDate(this.dateFormatted),
+          datetime: this.currentShift.datetime,
+          comment: this.currentShift.comment,
+          type: this.selectedType.id
+        }
+
+        let user = {
+          userId: localStorage.getItem('user-id')
+        }
+        this.saveShift({ user, shift }).then(() => {
+          // console.log('OUai')
+        })
+        // TODO gérer le success
       }
     },
     watch: {
@@ -217,13 +252,12 @@
         this.dateFormatted = this.formatDate(this.currentShift.date)
       },
       selectedType(val) {
-        console.log(val.type)
-        if (val.type === 'congés') {
+        // console.log(val.type)
+        if (val && val.type === 'congés') {
           this.timeVisible = false
         } else {
           this.timeVisible = true
         }
-        console.log(this.timeVisible)
       }
     },
     mounted: function() {
@@ -247,7 +281,6 @@
       },
       ...mapState({
         computedDateFormatted() {
-          console.log('oui')
           return this.formatDate(this.date)
         }
       }),
@@ -271,6 +304,7 @@
         let newArray = Object.keys(types).map(item => {
           // console.log(item, ' - ', types[item])
           let jsonObject = {
+            id: types[item].id,
             name: types[item].label,
             group: types[item].type,
             icon: types[item].icon,

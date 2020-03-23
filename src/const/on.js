@@ -20,5 +20,8 @@ export default {
   LOAD_PREFS: 'loadPrefs',
   SAVE_PREFS: 'savePrefs',
   IS_ADMIN: 'isAdmin',
-  DELETE_USER: 'deleteUser'
+  DELETE_USER: 'deleteUser',
+  SAVE_SHIFT: 'saveShift',
+  LOAD_SHIFTS: 'loadShifts',
+  DELETE_SHIFT: 'deleteShifts'
 }

@@ -15,6 +15,19 @@ export default {
   [Do.SHOW_SHIFT_DIALOG]: state => {
     state.shift.showDialog = true
   },
+  [Do.HIDE_SHIFT_DIALOG]: state => {
+    state.shift.showDialog = false
+  },
+  [Do.SHOW_SHIFT_SUCCESS]: (state, msg) => {
+    state.shift.showSnackbar = true
+    state.shift.snackbarColor = 'success'
+    state.shift.snackbarMessage = msg
+  },
+  [Do.SHOW_SHIFT_ERROR]: (state, msg) => {
+    state.shift.showSnackbar = true
+    state.shift.snackbarColor = 'error'
+    state.shift.snackbarMessage = msg
+  },
   [Do.SHOW_DOWN_DIALOG]: state => {
     state.downState.showDialog = true
   },

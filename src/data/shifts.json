@@ -1,97 +1,112 @@
 {
+  "id": "",
   "time_types": {
     "travail_normal": {
+      "id": "travail_normal",
       "label": "Travail normal",
       "icon": "apartment",
-      "color": "blue darken-2",
-      "color_hex": "#1976D2",
+      "color": "light-blue darken-2",
+      "color_hex": "#0288D1",
       "type": "travail"
     },
     "teletravail": {
+      "id": "teletravail",
       "label": "Télétravail",
       "icon": "apartment",
-      "color": "blue darken-2",
-      "color_hex": "#1976D2",
+      "color": "light-blue darken-2",
+      "color_hex": "#0288D1",
       "type": "travail"
     },
     "garde_enfant": {
+      "id": "garde_enfant",
       "label": "Garde enfant",
       "icon": "child_care",
-      "color": "yellow darken-3",
-      "color_hex": "#F9A825",
+      "color": "purple darken-1",
+      "color_hex": "#8E24AA",
       "type": "autre"
     },
     "maladie": {
+      "id": "maladie",
       "label": "Maladie",
       "icon": "hotel",
-      "color": "deep-orange darken-2",
-      "color_hex": "#E64A19",
-      "type": "congés"
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
     },
     "congés_payés": {
+      "id": "congés_payés",
       "label": "Congés payés",
       "icon": "free_breakfast",
-      "color": "deep-orange darken-2",
-      "color_hex": "#E64A19",
-      "type": "congés"
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
     },
     "rtt": {
+      "id": "rtt",
       "label": "RTT",
       "icon": "free_breakfast",
-      "color": "deep-orange darken-2",
-      "color_hex": "#E64A19",
-      "type": "congés"
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
     },
     "rtt_matin": {
+      "id": "rtt_matin",
       "label": "RTT matin",
       "icon": "free_breakfast",
-      "color": "deep-orange darken-2",
-      "color_hex": "#E64A19",
-      "type": "congés"
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
     },
     "rtt_pm": {
+      "id": "rtt_pm",
       "label": "RTT après midi",
       "icon": "free_breakfast",
-      "color": "deep-orange darken-2",
-      "color_hex": "#E64A19",
-      "type": "congés"
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
     },
     "enfant_malade": {
+      "id": "enfant_malade",
       "label": "Congés enfant malade",
       "icon": "hotel",
-      "color": "deep-orange darken-2",
-      "color_hex": "#E64A19",
-      "type": "congés"
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
     },
     "mariage": {
+      "id": "mariage",
       "label": "Congés mariage",
       "icon": "favorite_border",
-      "color": "deep-orange darken-2",
-      "color_hex": "#E64A19",
-      "type": "congés"
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
     },
-    "décès": {
+    "deces": {
+      "id": "deces",
       "label": "Congés décès",
       "icon": "sentiment_very_dissatisfied",
-      "color": "deep-orange darken-2",
-      "color_hex": "#E64A19",
-      "type": "congés"
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
     },
     "naissance_adoption": {
+      "id": "naissance_adoption",
       "label": "Congés naissance",
       "icon": "pregnant_woman",
-      "color": "deep-orange darken-2",
-      "color_hex": "#E64A19",
-      "type": "congés"
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
     },
-    "déménagement": {
+    "demenagement": {
+      "id": "demenagement",
       "label": "Congés déménagement",
       "icon": "house",
-      "color": "deep-orange darken-2",
-      "color_hex": "#E64A19",
-      "type": "congés"
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
     },
     "delegation_syndicale": {
+      "id": "delegation_syndicale",
       "label": "Délégation syndicale",
       "icon": "work",
       "color": "blue lighten-2",
@@ -99,6 +114,7 @@
       "type": "travail"
     },
     "cse_titulaire": {
+      "id": "cse_titulaire",
       "label": "CSE titulaire",
       "icon": "work",
       "color": "blue lighten-2",
@@ -106,6 +122,7 @@
       "type": "travail"
     },
     "cse_suppleant": {
+      "id": "cse_suppleant",
       "label": "CSE suppléant",
       "icon": "work",
       "color": "blue lighten-2",

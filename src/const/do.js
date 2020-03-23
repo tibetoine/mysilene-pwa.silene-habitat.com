@@ -32,5 +32,10 @@ export default {
   SET_PREFS: 'setPrefs',
   DELETE_USER_SUCCESS: 'deleteUserSuccess',
   DELETE_USER_ERROR: 'deleteUserError',
-  SHOW_SHIFT_DIALOG: 'showShiftDialog'
+  SHOW_SHIFT_DIALOG: 'showShiftDialog',
+  HIDE_SHIFT_DIALOG: 'hideShiftDialog',
+  SHOW_SHIFT_SUCCESS: 'showShiftSuccess',
+  SHOW_SHIFT_ERROR: 'showShiftError',
+  SET_CURRENT_SHIFT: 'setCurrentShift',
+  SET_SHIFTS: 'setShifts'
 }

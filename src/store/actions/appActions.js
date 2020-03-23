@@ -2,6 +2,7 @@ import On from '../../const/on'
 import Do from '../../const/do'
 import rest from '../../rest/routes'
 import api from '../../rest/api'
+import { getShiftTypeById } from '../../shared/helper'
 
 export default {
   [On.LOAD_CONTACTS]: async function({ commit }) {
@@ -58,7 +59,7 @@ export default {
         }
       }
     } catch (error) {
-      console.log('error : ', error)
+      console.error('error healthcheck : ', error)
       commit(
         Do.SET_DOWN,
         'ERREUR - Serveur API Down - appel impossible à healthcheck'
@@ -76,6 +77,20 @@ export default {
         /* 2/ Enregistrement dans le store */
         commit(Do.SET_DOCS, docs)
       }
+    } catch (error) {
+      if (error && error.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      }
+    }
+  },
+  [On.LOAD_SHIFTS]: async function({ commit }) {
+    var userId = localStorage.getItem('user-id')
+    try {
+      const response = await rest.getShifts(userId)
+      let data = response.data
+      var someShifts = data.map(shiftsMap)
+      commit(Do.SET_SHIFTS, someShifts)
     } catch (error) {
       if (error && error.status === 401) {
         localStorage.removeItem('user-token')
@@ -122,7 +137,6 @@ export default {
     }
   },
   [On.IS_ADMIN]: async function({ commit, state }) {
-    console.log('isADMIN !!! ')
     var userId = localStorage.getItem('user-id')
     try {
       const response = await rest.isAdmin(userId)
@@ -134,14 +148,13 @@ export default {
     } catch (error) {
       // Je ne sais pas quoi faire si y'a une erreur à ce stade
       state.login.isAdmin = false
-      console.log(error)
+      console.error('error dans le isAdmin', error)
     }
   },
   [On.DELETE_USER]: async function({ commit, dispatch }, username) {
     // console.log('OUIIIIIII !!! ', username)
     try {
       const response = await rest.deleteUser(username)
-      console.log(response)
       if (response.status === 200) {
         commit(Do.DELETE_USER_SUCCESS)
         dispatch(On.LOAD_USERS)
@@ -149,7 +162,6 @@ export default {
         commit(Do.DELETE_USER_ERROR)
       }
     } catch (error) {
-      console.log(error)
       commit(Do.DELETE_USER_ERROR)
     }
   },
@@ -200,6 +212,39 @@ export default {
 
     commit(Do.SET_WEATHER, lastWeather)
   },
+  [On.SAVE_SHIFT]: async function({ commit, dispatch }, { user, shift }) {
+    var response
+    try {
+      response = await rest.putShift(user.userId, shift)
+    } catch (error) {
+      let errorMessage = `#Shift001 - Erreur lors de l'enregisrement`
+      console.error('#Shift001 - error saving shift', error)
+      commit(Do.SHOW_SHIFT_ERROR, errorMessage)
+      return
+    }
+
+    const updatedShift = response.body
+
+    commit(Do.SET_CURRENT_SHIFT, updatedShift)
+    commit(Do.HIDE_SHIFT_DIALOG)
+    commit(Do.SHOW_SHIFT_SUCCESS, 'Votre créneau a bien été enregistré')
+    dispatch(On.LOAD_SHIFTS)
+  },
+  [On.DELETE_SHIFT]: async function({ commit, dispatch }, shiftId) {
+    try {
+      await rest.deleteShift(shiftId)
+    } catch (error) {
+      let errorMessage = `#Shift002 - Erreur lors de la suppression`
+      console.error('#Shift002 - error deleting shift', error)
+      commit(Do.SHOW_SHIFT_ERROR, errorMessage)
+      return
+    }
+    commit(
+      Do.SHOW_SHIFT_SUCCESS,
+      'Les informations pour cette journée ont été supprimées'
+    )
+    dispatch(On.LOAD_SHIFTS)
+  },
 
   [On.UPDATE_FILTERED_CONTACTS]: function({ commit }) {
     commit(Do.UPDATE_FILTERED_CONTACTS)
@@ -216,7 +261,7 @@ export default {
       if (error.body && error.body.message) {
         message = error.body.message
       } else {
-        console.log(error)
+        console.error(error)
       }
       /* Suppression du user-token si existe */
       localStorage.removeItem('user-token')
@@ -273,4 +318,78 @@ export default {
   [On.LOGIN_STOP]: function({ commit }) {
     commit(Do.LOGIN_STOP)
   }
+}
+
+/**
+ * Transforme ce qui vient de mongo vers un objet exploitable côté client.
+ * @param {*} element
+ */
+function shiftsMap(element) {
+  let times = calculateTimes(element.details)
+  let returnObject = {
+    _id: element._id,
+    date: element.date,
+    total_time: times.total_time,
+    worked_time: times.worked_time,
+    not_worked_time: times.not_worked_time,
+    nb_creneaux: element.details.length,
+    blocked: element.blocked,
+    details: element.details
+  }
+  return returnObject
+}
+/**
+ * Retourne les temps calculés pour le shift passé en parametre.
+ * @param {*} details
+ */
+function calculateTimes(details) {
+  let totalTime = 0
+  let workedTime = 0
+  let notWorkedTime = 0
+
+  for (let index = 0; index < details.length; index++) {
+    const element = details[index]
+
+    if (!element.time) {
+      continue
+    }
+    let type = getShiftTypeById(element.type)
+    totalTime += stringToMinutes(element.time)
+    switch (type) {
+      case 'conges':
+        notWorkedTime += stringToMinutes(element.time)
+        break
+      case 'travail':
+        workedTime += stringToMinutes(element.time)
+        break
+      case 'autre':
+        notWorkedTime += stringToMinutes(element.time)
+        break
+      default:
+        console.error('calculateTimes - switch default : ', type)
+        break
+    }
+  }
+
+  let returnObject = {
+    total_time: minuteToString(totalTime),
+    worked_time: minuteToString(workedTime),
+    not_worked_time: minuteToString(notWorkedTime)
+  }
+  return returnObject
+}
+
+function stringToMinutes(minutesString) {
+  let min = 0
+  let times = minutesString.split(':')
+  min = parseInt(times[0]) * 60 + parseInt(times[1])
+  return min
+}
+
+function minuteToString(minutes) {
+  let hours = Math.trunc(minutes / 60)
+  if (hours < 10) hours = '0' + hours
+  let min = minutes % 60
+  if (min < 10) min = '0' + min
+  return `${hours}:${min}`
 }
