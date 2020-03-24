@@ -1,43 +1,28 @@
 <template>
-  <v-container style="margin-top:50px;">
-    <shift-dialog></shift-dialog>
-
-    <v-snackbar
-      :timeout="snackbarTimeout"
-      :color="snackbarColor"
-      v-model="snackbarModel"
-    >
-      {{ snackbarMessage }}
-      <v-btn dark flat @click.native="snackbarModel = false">Close</v-btn>
-    </v-snackbar>
-
-    <v-fab-transition>
-      <v-btn
-        color="blue darken-2"
-        v-model="fab"
-        dark
-        fab
-        fixed
-        bottom
-        right
-        @click.stop="showShiftDialog"
-        style="bottom:50px;"
-      >
-        <v-icon>add</v-icon>
-      </v-btn>
-    </v-fab-transition>
-
+  <v-container>
     <v-layout column>
-      <v-flex offset-sm3>
+      <v-flex xs12 sm6 offset-sm3>
         <v-toolbar>
           <v-btn icon>
             <v-icon>history</v-icon>
           </v-btn>
           <v-toolbar-title>Temps déclarés</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon>
+            <v-icon @click="historyVisible = !historyVisible"
+              >keyboard_arrow_down</v-icon
+            >
+          </v-btn>
         </v-toolbar>
       </v-flex>
       <v-spacer style="margin-top:15px;"></v-spacer>
-      <v-flex offset-sm3>
+      <v-flex
+        xs12
+        sm6
+        md4
+        offset-sm3
+        v-bind:style="'display:' + (historyVisible ? 'block' : 'none') + ';'"
+      >
         <v-spacer></v-spacer>
         <shift-record
           v-for="shift in allShifts"

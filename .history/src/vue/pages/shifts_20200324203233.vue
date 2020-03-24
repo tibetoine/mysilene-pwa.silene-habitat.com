@@ -1,6 +1,6 @@
 <template>
   <v-container style="margin-top:50px;">
-    <shift-dialog></shift-dialog>
+    <shift-dialog style="height:90%;"></shift-dialog>
 
     <v-snackbar
       :timeout="snackbarTimeout"
@@ -21,7 +21,6 @@
         bottom
         right
         @click.stop="showShiftDialog"
-        style="bottom:50px;"
       >
         <v-icon>add</v-icon>
       </v-btn>

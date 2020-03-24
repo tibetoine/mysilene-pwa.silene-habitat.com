@@ -3,7 +3,6 @@
     v-model="visible"
     transition="dialog-bottom-transition"
     :overlay="true"
-    content-class="shiftDialogClass"
   >
     <v-card tile>
       <v-toolbar>
@@ -50,25 +49,47 @@
             first-day-of-week="1"
           ></v-date-picker>
         </v-menu>
-        <v-text-field
+        <v-menu
           v-if="timeVisible"
-          v-model="currentShift.datetime"
-          :rules="timeRules"
-          label="Nombre d'heures (Ex : 07:00)"
-          prepend-icon="schedule"
-          solo
-        ></v-text-field>
+          ref="menu2"
+          :close-on-content-click="false"
+          v-model="menu2"
+          :nudge-right="40"
+          :return-value.sync="currentShift.datetime"
+          lazy
+          transition="scale-transition"
+          offset-y
+          full-width
+          min-width="290px"
+        >
+          <v-text-field
+            slot="activator"
+            v-model="currentShift.datetime"
+            :rules="timeRules"
+            label="Nombre d'heures"
+            prepend-icon="schedule"
+            solo
+            readonly
+          ></v-text-field>
+          <v-time-picker
+            v-model="currentShift.datetime"
+            @input="$refs.menu2.save(currentShift.datetime)"
+            max="10:00"
+            :rules="timeRules"
+          ></v-time-picker>
+        </v-menu>
         <v-select
-          attach
           :items="selectItems"
           v-model="selectedType"
           label="Choisir votre type de créneau"
           item-text="name"
           item-value="name"
+          max-height="auto"
+          autocomplete
+          scrollable
           :rules="typeRules"
           prepend-icon="help_outline"
           :return-object="true"
-          solo
         >
           <template slot="item" slot-scope="data">
             <template v-if="typeof data.item !== 'object'">
@@ -87,14 +108,24 @@
             </template>
           </template>
         </v-select>
-        <v-textarea
+        <!-- <v-layout row>
+          <v-checkbox v-model="checkbox_rtt" label="Congé journée"></v-checkbox>
+          <v-checkbox
+            v-model="checkbox_rtt_matin"
+            label="Congé matin"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="checkbox_rtt_pm"
+            label="Congé après-midi"
+          ></v-checkbox>
+        </v-layout> -->
+        <v-text-field
           name="comment"
           v-model="currentShift.comment"
           label="Un commentaire ?"
           prepend-icon="edit"
           textarea
-          solo
-        ></v-textarea>
+        ></v-text-field>
         <v-btn color="success" class="mr-4" :disabled="!valid" @click="submit">
           Valider
         </v-btn>
@@ -149,20 +180,6 @@
         timeRules: [
           v => {
             return !!v || v == null || `Un nombre d'heures est requis`
-          },
-          v => {
-            let regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
-            return (
-              regex.test(v) ||
-              `Le temps saisi doit réspecter le format HH:MM (Exemple : 07:00)`
-            )
-          },
-          v => {
-            let times = v.split(':')
-            let minutes = parseInt(times[0]) * 60 + parseInt(times[1])
-            return (
-              minutes <= 10 * 60 || `Le temps saisi ne doit pas dépasser 10h`
-            )
           }
         ],
         typeRules: [v => !!v || `Une catégorie est requise`]

@@ -21,7 +21,6 @@
         bottom
         right
         @click.stop="showShiftDialog"
-        style="bottom:50px;"
       >
         <v-icon>add</v-icon>
       </v-btn>
@@ -34,6 +33,12 @@
             <v-icon>history</v-icon>
           </v-btn>
           <v-toolbar-title>Temps déclarés</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon>
+            <v-icon @click="historyVisible = !historyVisible"
+              >keyboard_arrow_down</v-icon
+            >
+          </v-btn>
         </v-toolbar>
       </v-flex>
       <v-spacer style="margin-top:15px;"></v-spacer>

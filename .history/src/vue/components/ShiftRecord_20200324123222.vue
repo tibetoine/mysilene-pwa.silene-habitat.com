@@ -63,10 +63,7 @@
               <v-icon slot="activator">sms</v-icon>
               <span>{{ detail.comment }}</span>
             </v-tooltip>
-            <v-icon
-              @click.stop="myDeleteDetail(detail._id)"
-              left
-              style="position:absolute;display:inline;right:1em;"
+            <v-icon left style="position:absolute;display:inline;right:1em;"
               >delete</v-icon
             >
           </v-chip>
@@ -129,9 +126,6 @@
       ...mapMutations({
         showShiftError: Do.SHOW_SHIFT_ERROR
       }),
-      myDeleteDetail(detailId) {
-        alert('todo')
-      },
       myDeleteShift(shiftId) {
         this.$refs.confirm
           .open(

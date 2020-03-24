@@ -64,7 +64,7 @@
               <span>{{ detail.comment }}</span>
             </v-tooltip>
             <v-icon
-              @click.stop="myDeleteDetail(detail._id)"
+              @click.stop="deleteDetail(detail._id)"
               left
               style="position:absolute;display:inline;right:1em;"
               >delete</v-icon

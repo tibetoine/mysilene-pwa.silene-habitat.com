@@ -3,7 +3,7 @@
   "time_types": {
     "travail_normal": {
       "id": "travail_normal",
-      "label": "Travail sur site",
+      "label": "Travail normal",
       "icon": "apartment",
       "color": "light-blue darken-2",
       "color_hex": "#0288D1",
@@ -17,7 +17,7 @@
       "color_hex": "#0288D1",
       "type": "travail"
     },
-    "sans_activite": {
+    "teletravail": {
       "id": "sans_activite",
       "label": "Sans activité",
       "icon": "apartment",

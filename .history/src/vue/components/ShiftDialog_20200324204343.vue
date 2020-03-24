@@ -65,6 +65,7 @@
           label="Choisir votre type de créneau"
           item-text="name"
           item-value="name"
+          max-height="auto"
           :rules="typeRules"
           prepend-icon="help_outline"
           :return-object="true"
@@ -87,14 +88,13 @@
             </template>
           </template>
         </v-select>
-        <v-textarea
+        <v-text-field
           name="comment"
           v-model="currentShift.comment"
           label="Un commentaire ?"
           prepend-icon="edit"
           textarea
-          solo
-        ></v-textarea>
+        ></v-text-field>
         <v-btn color="success" class="mr-4" :disabled="!valid" @click="submit">
           Valider
         </v-btn>
@@ -152,6 +152,7 @@
           },
           v => {
             let regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
+            console.log(regex.test(v))
             return (
               regex.test(v) ||
               `Le temps saisi doit réspecter le format HH:MM (Exemple : 07:00)`

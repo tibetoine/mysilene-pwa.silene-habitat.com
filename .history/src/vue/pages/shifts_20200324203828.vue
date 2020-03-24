@@ -21,7 +21,7 @@
         bottom
         right
         @click.stop="showShiftDialog"
-        style="bottom:50px;"
+        style="margin-top:-5em;"
       >
         <v-icon>add</v-icon>
       </v-btn>
