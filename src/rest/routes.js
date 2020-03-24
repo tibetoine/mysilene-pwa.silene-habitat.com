@@ -20,6 +20,10 @@ export default {
   },
   deleteUser: username => api.del(`api-admin/users/${username}`),
   deleteShift: shiftId => api.del(`api-shift/shifts/${shiftId}`),
+  deleteDetail: detailId => {
+    console.log(`api-shift/shifts/details/${detailId}`)
+    return api.del(`api-shift/shifts/details/${detailId}`)
+  },
   putShift: (username, shift) =>
     api.put(`api-shift/shifts/users/${username}`, shift),
   getShifts: username => api.get(`api-shift/shifts/users/${username}`)

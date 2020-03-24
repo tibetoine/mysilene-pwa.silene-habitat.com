@@ -245,6 +245,18 @@ export default {
     )
     dispatch(On.LOAD_SHIFTS)
   },
+  [On.DELETE_DETAILS]: async function({ commit, dispatch }, detailId) {
+    try {
+      await rest.deleteDetail(detailId)
+    } catch (error) {
+      let errorMessage = `#Shift003 - Erreur lors de la suppression d'un détail`
+      console.error('#Shift003 - error deleting detail', error)
+      commit(Do.SHOW_SHIFT_ERROR, errorMessage)
+      return
+    }
+    commit(Do.SHOW_SHIFT_SUCCESS, 'Activité supprimée')
+    dispatch(On.LOAD_SHIFTS)
+  },
 
   [On.UPDATE_FILTERED_CONTACTS]: function({ commit }) {
     commit(Do.UPDATE_FILTERED_CONTACTS)

@@ -124,13 +124,14 @@
     },
     methods: {
       ...mapActions({
-        deleteShift: On.DELETE_SHIFT
+        deleteShift: On.DELETE_SHIFT,
+        deleteDetails: On.DELETE_DETAILS
       }),
       ...mapMutations({
         showShiftError: Do.SHOW_SHIFT_ERROR
       }),
       myDeleteDetail(detailId) {
-        alert('todo')
+        this.deleteDetails(detailId)
       },
       myDeleteShift(shiftId) {
         this.$refs.confirm

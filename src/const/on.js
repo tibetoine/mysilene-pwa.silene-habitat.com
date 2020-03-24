@@ -23,5 +23,6 @@ export default {
   DELETE_USER: 'deleteUser',
   SAVE_SHIFT: 'saveShift',
   LOAD_SHIFTS: 'loadShifts',
-  DELETE_SHIFT: 'deleteShifts'
+  DELETE_SHIFT: 'deleteShifts',
+  DELETE_DETAILS: 'deleteDetails'
 }
