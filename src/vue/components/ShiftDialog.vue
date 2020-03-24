@@ -153,9 +153,9 @@
         shiftVisible: true,
         currentShift: {
           date: null,
-          datetime: '10:00',
+          datetime: '',
           conges: '',
-          comment: 'Un commentaire'
+          comment: ''
         },
         dateFormatted: null,
         menu: false,

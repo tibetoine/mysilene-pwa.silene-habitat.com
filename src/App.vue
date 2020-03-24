@@ -232,7 +232,7 @@
         { icon: 'contacts', text: 'Contacts', path: '/contacts' },
         { icon: 'cloud', text: 'Météo', path: '/meteo' },
         /* { icon: 'location_city', text: 'BIM', path: '/bim' }, */
-        { icon: 'today', text: 'Planning', path: '/shifts' },
+        { icon: 'today', text: 'Gestion de temps', path: '/shifts' },
         { icon: 'help', text: 'Aide', path: '/help' }
         /* { icon: 'library_books', text: 'Docs', path: '/docs' } */
       ]
