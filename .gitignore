@@ -5,6 +5,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /static/img/ad-photos/
+.history/**
 
 # Editor directories and files
 .idea
