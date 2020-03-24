@@ -33,7 +33,7 @@
           <v-btn icon>
             <v-icon>history</v-icon>
           </v-btn>
-          <v-toolbar-title>Temps déclarés</v-toolbar-title>
+          <v-toolbar-title>Historique des temps déclarés</v-toolbar-title>
         </v-toolbar>
       </v-flex>
       <v-spacer style="margin-top:15px;"></v-spacer>
