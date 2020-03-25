@@ -290,9 +290,10 @@ export default {
     var callbackSuccess = response => {
       /* Mise à jour du Local Storage */
       const token = response.body.token
+      const userId = response.body._id.trim().toLowerCase()
 
       /* Header d'Authorization par defaut */
-      var userId = user.userId.trim().toLowerCase()
+      // var userId = user.userId.trim().toLowerCase()
       api.setDefaultAuthorization(token, userId)
 
       localStorage.setItem('user-token', token)
