@@ -11,11 +11,73 @@ export default {
   isAdmin: state => {
     return state.login.isAdmin
   },
+  isRH: state => {
+    return state.login.isRH
+  },
+  isManager: state => {
+    return state.login.isManager
+  },
   filteredNews: state =>
     filter(
       state.news.visibleList,
       aNews => state.news.selectedTypes.indexOf(aNews.type) > -1
     ),
+  selectShiftManagerChildren: state => {
+    let selectArray = []
+
+    /* Ajout de l'utilisateur courant */
+    selectArray.push({ header: 'Moi' })
+    if (state.login.currentContact) {
+      selectArray.push({
+        userId: state.login.currentContact.sAMAccountName,
+        avatar: getAvatar(state.login.currentContact),
+        name:
+          state.login.currentContact.givenName +
+          ' ' +
+          state.login.currentContact.sn
+      })
+    }
+
+    let managerDirectChildren = state.shift.managerChildren.directChildren
+    let managerIndirectChildren = state.shift.managerChildren.indirectChildren
+    if (!managerDirectChildren) {
+      return []
+    }
+
+    /* Ajout des enfants directs */
+    selectArray.push({ header: 'Mes collaborateurs' })
+    for (let index = 0; index < managerDirectChildren.length; index++) {
+      const element = managerDirectChildren[index]
+      selectArray.push({
+        userId: element.sAMAccountName,
+        avatar: getAvatar(element),
+        name: element.prenom + ' ' + element.nom
+      })
+    }
+    /* Ajout des enfants indirects */
+    if (managerIndirectChildren && managerIndirectChildren.length > 0) {
+      for (let index = 0; index < managerIndirectChildren.length; index++) {
+        const element = managerIndirectChildren[index]
+        selectArray.push({
+          header:
+            'Collaborateurs de ' +
+            element.owner.prenom +
+            ' ' +
+            element.owner.nom
+        })
+
+        for (let index2 = 0; index2 < element.children.length; index2++) {
+          const element2 = element.children[index2]
+          selectArray.push({
+            userId: element2.sAMAccountName,
+            avatar: getAvatar(element2),
+            name: element2.prenom + ' ' + element2.nom
+          })
+        }
+      }
+    }
+    return selectArray
+  },
   searchContact: state => author => {
     var nomDeFamille = null
     var prenom = null
@@ -87,4 +149,15 @@ export default {
       }
     })
   }
+}
+
+const getAvatar = contact => {
+  if (!contact) return '/static/img/default.jpg'
+  return (
+    '/static/img/' +
+    (contact.thumbnailPhoto
+      ? 'ad-photos/' + contact.sAMAccountName
+      : 'default') +
+    '.jpg'
+  )
 }

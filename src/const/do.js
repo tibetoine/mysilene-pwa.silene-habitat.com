@@ -37,5 +37,6 @@ export default {
   SHOW_SHIFT_SUCCESS: 'showShiftSuccess',
   SHOW_SHIFT_ERROR: 'showShiftError',
   SET_CURRENT_SHIFT: 'setCurrentShift',
-  SET_SHIFTS: 'setShifts'
+  SET_SHIFTS: 'setShifts',
+  SET_CHOSEN_USER: 'setChosenUser'
 }

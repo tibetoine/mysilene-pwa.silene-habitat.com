@@ -1,16 +1,7 @@
 <template>
   <v-container style="margin-top:50px;">
     <shift-dialog></shift-dialog>
-
-    <v-snackbar
-      :timeout="snackbarTimeout"
-      :color="snackbarColor"
-      v-model="snackbarModel"
-    >
-      {{ snackbarMessage }}
-      <v-btn dark flat @click.native="snackbarModel = false">Close</v-btn>
-    </v-snackbar>
-
+    <snackbar-message></snackbar-message>
     <v-fab-transition>
       <v-btn
         color="blue darken-2"
@@ -28,16 +19,64 @@
     </v-fab-transition>
 
     <v-layout column>
-      <v-flex offset-sm3>
+      <v-flex v-if="isRhOrManager" offset-sm3>
+        <v-select
+          :items="collaborateurs"
+          v-model="chosenUser"
+          label="Pour quel utilisateur souhaitez-vous consulter/saisir des temps"
+          prepend-icon="account_box"
+          item-text="name"
+          item-value="name"
+          :return-object="true"
+          @change="changeUser"
+          autocomplete
+          clearable
+        >
+          <template slot="selection" slot-scope="data">
+            {{ data.item.name }}
+          </template>
+          <template slot="item" slot-scope="data">
+            <template v-if="typeof data.item !== 'object'">
+              <v-list-tile-content v-text="data.item"></v-list-tile-content>
+            </template>
+            <template v-else>
+              <v-list-tile-action>
+                <v-avatar
+                  size="40"
+                  style="margin-top:-20px;"
+                  color="grey lighten-4"
+                >
+                  <img
+                    :src="data.item.avatar"
+                    alt="UserAvatar"
+                    onerror="this.onerror=null;this.src='/static/img/default.jpg';"
+                  /> </v-avatar
+              ></v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </template>
+          </template>
+        </v-select>
+      </v-flex>
+      <v-flex offset-sm3 v-if="chosenUser">
         <v-toolbar>
-          <v-btn icon>
-            <v-icon>history</v-icon>
-          </v-btn>
-          <v-toolbar-title>Historique des temps déclarés</v-toolbar-title>
+          <v-avatar>
+            <img
+              :src="chosenUser.avatar"
+              alt="UserAvatar"
+              onerror="this.onerror=null;this.src='/static/img/default.jpg';"
+            />
+          </v-avatar>
+          <v-toolbar-title
+            >Historique de
+            {{ chosenUser.name }}</v-toolbar-title
+          >
         </v-toolbar>
       </v-flex>
       <v-spacer style="margin-top:15px;"></v-spacer>
-      <v-flex offset-sm3>
+      <v-flex offset-sm3 v-if="chosenUser">
         <v-spacer></v-spacer>
         <shift-record
           v-for="shift in allShifts"
@@ -52,58 +91,72 @@
 <script>
   // import { mapState } from 'vuex'
   // import FileLine from '../components/FileLine'
-  import { mapState, mapActions, mapMutations } from 'vuex'
+  import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
   import Do from '../../const/do'
   import On from '../../const/on'
   import ShiftRecord from '../components/ShiftRecord'
   import ShiftDialog from '../components/ShiftDialog'
+  import SnackbarMessage from '../components/SnackbarMessage'
 
   export default {
     name: 'shifts',
-    components: { ShiftRecord, ShiftDialog },
+    components: { ShiftRecord, ShiftDialog, SnackbarMessage },
     computed: {
       ...mapState({
-        allShifts: state => state.shift.allShifts
+        allShifts: state => {
+          // console.log(state.shift.allShifts)
+          return state.shift.allShifts
+        }
       }),
-      snackbarModel: {
+      ...mapGetters({ collaborateurs: 'selectShiftManagerChildren' }),
+      isRhOrManager: {
         get: function() {
-          return this.$store.state.shift.showSnackbar
-        },
-        set: function(val) {
-          this.$store.state.shift.showSnackbar = val
+          if (
+            this.$store.state.login.roles.includes('manager') ||
+            this.$store.state.login.roles.includes('rh')
+          ) {
+            return true
+          }
+
+          return false
         }
       },
-      snackbarColor: {
+      chosenUser: {
         get: function() {
-          return this.$store.state.shift.snackbarColor
+          return this.$store.state.shift.currentShiftUser
         },
         set: function(val) {
-          this.$store.state.shift.snackbarColor = val
-        }
-      },
-      snackbarMessage: {
-        get: function() {
-          return this.$store.state.shift.snackbarMessage
-        },
-        set: function(val) {
-          this.$store.state.shift.snackbarMessage = val
+          this.$store.state.shift.currentShiftUser = val
         }
       }
     },
     mounted: function() {
       this.loadShifts()
+      this.getChildren()
     },
     methods: {
       ...mapActions({
-        loadShifts: On.LOAD_SHIFTS
+        loadShifts: On.LOAD_SHIFTS,
+        getChildren: On.GET_CHILDREN
       }),
       ...mapMutations({
         showShiftDialog: Do.SHOW_SHIFT_DIALOG
-      })
+      }),
+      changeUser() {
+        /* Je force le chargement des shifts du bon utilisateurs */
+        // console.log('Je recharge les shifts')
+        this.loadShifts()
+      }
+    },
+    watch: {
+      collaborateurs(newValue, oldValue) {
+        if (this.chosenUser == null) {
+          this.chosenUser = newValue[1]
+        }
+      }
     },
     data() {
       return {
-        snackbarTimeout: 6000,
         shiftVisible: true,
         historyVisible: true,
         fab: false,

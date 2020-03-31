@@ -20,9 +20,13 @@ export default {
   LOAD_PREFS: 'loadPrefs',
   SAVE_PREFS: 'savePrefs',
   IS_ADMIN: 'isAdmin',
+  GET_ROLES: 'getRoles',
   DELETE_USER: 'deleteUser',
   SAVE_SHIFT: 'saveShift',
   LOAD_SHIFTS: 'loadShifts',
   DELETE_SHIFT: 'deleteShifts',
-  DELETE_DETAILS: 'deleteDetails'
+  DELETE_DETAILS: 'deleteDetails',
+  EXTRACT_ALL: 'extractAll',
+  GET_CHILDREN: 'getChildren',
+  GET_CONTACT: 'getContact'
 }

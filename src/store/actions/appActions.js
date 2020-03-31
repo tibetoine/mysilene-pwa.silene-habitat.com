@@ -84,10 +84,17 @@ export default {
       }
     }
   },
-  [On.LOAD_SHIFTS]: async function({ commit }) {
-    var userId = localStorage.getItem('user-id')
+  [On.LOAD_SHIFTS]: async function({ commit, state }) {
+    // var userId = localStorage.getItem('user-id')
+    let currentShiftUserId = null
+    var currentShiftUser = state.shift.currentShiftUser
+    if (currentShiftUser == null) {
+      currentShiftUserId = localStorage.getItem('user-id')
+    } else {
+      currentShiftUserId = currentShiftUser.userId
+    }
     try {
-      const response = await rest.getShifts(userId)
+      const response = await rest.getShifts(currentShiftUserId)
       let data = response.data
       var someShifts = data.map(shiftsMap)
       commit(Do.SET_SHIFTS, someShifts)
@@ -149,6 +156,79 @@ export default {
       // Je ne sais pas quoi faire si y'a une erreur à ce stade
       state.login.isAdmin = false
       console.error('error dans le isAdmin', error)
+    }
+  },
+  [On.GET_ROLES]: async function({ commit, state }) {
+    console.log('GET_ROLES')
+    var userId = localStorage.getItem('user-id')
+    try {
+      const response = await rest.getRoles(userId)
+      if (response.status === 200) {
+        state.login.roles = response.data
+      }
+    } catch (error) {
+      // Je ne sais pas quoi faire si y'a une erreur à ce stade
+      state.login.roles = []
+      console.error(
+        'error dans récupération des rôles pour cet utilisateur ',
+        error
+      )
+    }
+  },
+  [On.GET_CHILDREN]: async function({ commit, state }) {
+    var userId = localStorage.getItem('user-id')
+    try {
+      /* Si Manager */
+      var response
+      // console.log('state.login.roles', state.login.roles)
+      if (state.login.roles.includes('rh')) {
+        response = await rest.getAllChildren(userId)
+      } else if (state.login.roles.includes('manager')) {
+        response = await rest.getChildren(userId)
+      }
+      if (!response) {
+        return
+      }
+      if (response.status === 200) {
+        state.shift.managerChildren = response.data
+      }
+    } catch (error) {
+      // Je ne sais pas quoi faire si y'a une erreur à ce stade
+      state.shift.managerChildren = []
+      console.error(
+        'error dans récupération des collaborateur de  ',
+        userId,
+        error
+      )
+    }
+  },
+  [On.GET_CONTACT]: async function({ commit, state }, username) {
+    try {
+      const response = await rest.getContact(username)
+
+      if (response.status === 200) {
+        state.login.currentContact = response.data
+        if (!state.shift.currentShiftUser) {
+          /* L'utilisateur par défaut pour la saisie des temps est l'utilisateur courant */
+          let chosenUser = {
+            userId: state.login.currentContact.sAMAccountName,
+            avatar: getAvatar(state.login.currentContact),
+            name:
+              state.login.currentContact.givenName +
+              ' ' +
+              state.login.currentContact.sn
+          }
+          commit(Do.SET_CHOSEN_USER, chosenUser)
+        }
+      }
+    } catch (error) {
+      // Je ne sais pas quoi faire si y'a une erreur à ce stade
+      state.login.currentContact = []
+      console.error(
+        'error dans récupération des infos de contacts pour ',
+        username,
+        error
+      )
     }
   },
   [On.DELETE_USER]: async function({ commit, dispatch }, username) {
@@ -257,6 +337,19 @@ export default {
     commit(Do.SHOW_SHIFT_SUCCESS, 'Activité supprimée')
     dispatch(On.LOAD_SHIFTS)
   },
+  [On.EXTRACT_ALL]: async function({ commit, dispatch }) {
+    let response
+    try {
+      response = await rest.extractAll()
+    } catch (error) {
+      let errorMessage = `#ApiShift008 - Erreur lors de l'extraction`
+      console.error('#ApiShift008 - error extracting', error)
+      commit(Do.SHOW_SHIFT_ERROR, errorMessage)
+      return
+    }
+    commit(Do.SHOW_SHIFT_SUCCESS, 'Extraction réussie')
+    return response
+  },
 
   [On.UPDATE_FILTERED_CONTACTS]: function({ commit }) {
     commit(Do.UPDATE_FILTERED_CONTACTS)
@@ -302,10 +395,12 @@ export default {
       commit(Do.LOGIN_STOP)
       /* Dispatch Action */
       dispatch(On.IS_ADMIN)
+      dispatch(On.GET_ROLES)
       dispatch(On.LOAD_PREFS)
       dispatch(On.LOAD_NEWS)
       dispatch(On.LOAD_CONTACTS)
       dispatch(On.LOAD_DOCS)
+      dispatch(On.GET_CONTACT, userId)
     }
 
     await rest.login(user, callbackSuccess, callbackError)
@@ -320,10 +415,12 @@ export default {
 
     /* Dispatch Action */
     dispatch(On.IS_ADMIN)
+    dispatch(On.GET_ROLES)
     dispatch(On.LOAD_PREFS)
     dispatch(On.LOAD_NEWS)
     dispatch(On.LOAD_CONTACTS)
     dispatch(On.LOAD_DOCS)
+    dispatch(On.GET_CONTACT, user._id)
   },
   [On.LOGIN_WAITING]: function({ commit }) {
     commit(Do.LOGIN_WAITING)
@@ -405,4 +502,15 @@ function minuteToString(minutes) {
   let min = minutes % 60
   if (min < 10) min = '0' + min
   return `${hours}:${min}`
+}
+
+const getAvatar = contact => {
+  if (!contact) return '/static/img/default.jpg'
+  return (
+    '/static/img/' +
+    (contact.thumbnailPhoto
+      ? 'ad-photos/' + contact.sAMAccountName
+      : 'default') +
+    '.jpg'
+  )
 }

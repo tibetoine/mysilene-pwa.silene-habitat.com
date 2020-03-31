@@ -103,7 +103,7 @@
 </template>
 
 <script>
-  import { mapActions, mapMutations, mapGetters } from 'vuex'
+  import { mapActions, mapMutations, mapGetters, mapState } from 'vuex'
   import On from './const/on'
   import Do from './const/do'
   import DownDialog from './vue/dialogs/DownDialog'
@@ -151,6 +151,61 @@
           }
           return false
         }
+      },
+      roles: {
+        get: function() {
+          if (
+            this.$store.state.login.roles &&
+            this.$store.state.login.roles.length > 0
+          ) {
+            let gtaManager = {
+              icon: 'verified_user',
+              text: 'GTA - Manager ',
+              path: '/gta_manager'
+            }
+            let gtaRH = {
+              icon: 'verified_user',
+              text: 'GTA - RH ',
+              path: '/gta_rh'
+            }
+            if (this.$store.state.login.roles.includes('admin')) {
+              this.items.push({
+                icon: 'build',
+                text: 'Administration',
+                path: '/admin'
+              })
+            }
+
+            if (this.$store.state.login.roles.includes('rh')) {
+              this.items.push(gtaRH)
+            }
+
+            if (this.$store.state.login.roles.includes('manager')) {
+              this.items.push(gtaManager)
+            }
+          }
+        }
+      },
+      isRH: {
+        get: function() {
+          if (this.$store.state.login.isRH) {
+            return true
+          }
+          return false
+        }
+      },
+      isManager: {
+        get: function() {
+          if (this.$store.state.login.isManager) {
+            return true
+          }
+          return false
+        }
+      }
+    },
+    watch: {
+      roles(newValue, oldValue) {
+        // console.log(` Roles : Updating from ${oldValue} to ${newValue}`)
       }
     },
     beforeCreate() {
@@ -170,17 +225,6 @@
     mounted: function() {
       // Vérifie l'état du serveur d'API
       this.healthcheck()
-
-      const token = localStorage.getItem('user-token')
-      const userId = localStorage.getItem('user-id')
-      if (token && userId) {
-        // console.log('Ok je load les data car token et userid sont token : ' + token + ' et userId : ' + userId)
-        /* Hack  : On recharge les données après quelques secondes pour forcer le cache Service Worker à avoir l'API */
-        /* setTimeout(function () {
-        var doLoadEvent = new Event('mysilene-do-load-data')
-        window.dispatchEvent(doLoadEvent)
-      }, 3000) */
-      }
       this.loadWeather()
     },
     methods: {
@@ -211,6 +255,7 @@
         logout: On.LOGOUT,
         autoLogin: On.AUTO_LOGIN
       }),
+      ...mapState([]),
       ...mapMutations({
         showNewsFilterDialog: Do.SHOW_NEWS_FILTER_DIALOG,
         showErrorDialog: Do.SHOW_ERROR_DIALOG,

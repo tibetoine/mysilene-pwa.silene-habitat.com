@@ -10,6 +10,8 @@ import Docs from '../vue/pages/docs'
 import Bim from '../vue/pages/bim'
 import Admin from '../vue/pages/admin'
 import Shifts from '../vue/pages/shifts'
+import ShiftsManager from '../vue/pages/shiftsManager'
+import ShiftsRH from '../vue/pages/shiftsRH'
 
 Vue.use(Router)
 
@@ -67,6 +69,16 @@ export default new Router({
       path: '/shifts',
       component: Shifts,
       name: 'shifts'
+    },
+    {
+      path: '/gta_manager',
+      component: ShiftsManager,
+      name: 'shiftsManager'
+    },
+    {
+      path: '/gta_rh',
+      component: ShiftsRH,
+      name: 'shiftsRH'
     }
   ],
   scrollBehavior(to, from, savedPosition) {

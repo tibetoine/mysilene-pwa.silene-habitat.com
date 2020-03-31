@@ -11,12 +11,6 @@
           <v-icon>alarm_on</v-icon>
         </v-btn>
         <v-toolbar-title>Déclaration de temps</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon>
-          <v-icon @click="shiftVisible = !shiftVisible"
-            >keyboard_arrow_down</v-icon
-          >
-        </v-btn>
       </v-toolbar>
       <v-form style="padding:5px;" v-model="valid">
         <v-menu
@@ -160,7 +154,7 @@
             let times = v.split(':')
             let minutes = parseInt(times[0]) * 60 + parseInt(times[1])
             return (
-              minutes <= 10 * 60 || `Le temps saisi ne doit pas dépasser 10h`
+              minutes <= 15 * 60 || `Le temps saisi ne doit pas dépasser 15h`
             )
           }
         ],
@@ -218,14 +212,19 @@
           comment: this.currentShift.comment,
           type: this.selectedType.id
         }
-
+        let currentUser = this.shiftUser
+        let userId
+        if (currentUser == null) {
+          userId = localStorage.getItem('user-id')
+        } else {
+          userId = currentUser.userId
+        }
         let user = {
-          userId: localStorage.getItem('user-id')
+          userId: userId
         }
         this.saveShift({ user, shift }).then(() => {
           // console.log('OUai')
         })
-        // TODO gérer le success
       }
     },
     watch: {
@@ -237,6 +236,7 @@
         // console.log(val.type)
         if (val && val.type === 'conges') {
           this.timeVisible = false
+          this.currentShift.datetime = ''
         } else {
           this.timeVisible = true
         }
@@ -259,6 +259,14 @@
         },
         set: function(val) {
           this.$store.state.shift.showDialog = val
+        }
+      },
+      shiftUser: {
+        get: function() {
+          return this.$store.state.shift.currentShiftUser
+        },
+        set: function(val) {
+          this.$store.state.shift.currentShiftUser = val
         }
       },
       ...mapState({

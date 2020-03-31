@@ -16,6 +16,10 @@ export default {
     var obj = Vue.http.get(url(path), body, options())
     return obj
   },
+  getXlsx: path => {
+    var obj = Vue.http.get(url(path), { responseType: 'arraybuffer' })
+    return obj
+  },
   post: (path, body, callbackSuccess, callbackError) =>
     Vue.http
       .post(url(path), body, options())

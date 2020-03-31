@@ -20,7 +20,6 @@ export default {
     state.login.token = response.token
   },
   [Do.LOGOUT]: state => {
-    console.log('Logging out ...')
     state.login.AuthFailure = false
     state.login.AuthFailMsg = null
     state.login.Authenticate = false

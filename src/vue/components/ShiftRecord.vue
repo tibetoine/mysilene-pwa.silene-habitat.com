@@ -12,7 +12,7 @@
             <span slot="badge">{{ shift.nb_creneaux }}</span>
             <v-icon>event</v-icon>
           </v-badge>
-          &nbsp;{{ shift.date }}
+          &nbsp;{{ formatDate(shift.date) }}
         </v-chip>
       </v-flex>
       <v-flex v-if="!detailVisible" style="width:40%;" class="text-left">
@@ -132,6 +132,12 @@
       }),
       myDeleteDetail(detailId) {
         this.deleteDetails(detailId)
+      },
+      formatDate(date) {
+        if (!date) return null
+
+        const [year, month, day] = date.split('-')
+        return `${day}/${month}/${year}`
       },
       myDeleteShift(shiftId) {
         this.$refs.confirm

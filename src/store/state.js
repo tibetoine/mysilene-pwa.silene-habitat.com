@@ -9,13 +9,15 @@ export default {
   },
   login: {
     userId: localStorage.getItem('user-id') || null,
+    currentContact: null,
     token: localStorage.getItem('user-token') || '',
     loginDialogVisible: false,
     Authenticate: false,
     isAdmin: false,
     AuthFailure: false,
     AuthFailMsg: null,
-    loading: false
+    loading: false,
+    roles: [] // au départ aucun rôles.
   },
   offline: {
     showDialog: false
@@ -26,13 +28,15 @@ export default {
     showDialog: false
   },
   shift: {
+    currentShiftUser: null,
     data: null,
     showDialog: false,
     showSnackbar: false,
     snackbarColor: 'success',
     snackbarMessage: 'Message à setter',
     currentShift: null,
-    allShifts: []
+    allShifts: [],
+    managerChildren: []
   },
   selectedContact: null,
   selectedNew: null,

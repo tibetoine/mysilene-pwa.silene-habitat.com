@@ -43,4 +43,24 @@ function removeAccent(s) {
   return ret
 }
 
-export { removeAccent, getShiftTypeById, getShiftIconById }
+function forceFileDownload(response, fileName) {
+  // console.log('forceFileDownload - response : ', response)
+  // console.log(response.headers.map['content-type'])
+  let blobData = new Blob([response.data], { type: 'application/vnd.ms-excel' })
+  const url = window.URL.createObjectURL(blobData)
+  const link = document.createElement('a')
+  link.href = url
+  link.setAttribute('download', fileName) // or any other extension
+  document.body.appendChild(link)
+  link.click()
+}
+/*
+function _s2ab(s) {
+  var buf = new ArrayBuffer(s.length)
+  var view = new Uint8Array(buf)
+  for (var i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xff
+  return buf
+}
+*/
+
+export { removeAccent, getShiftTypeById, getShiftIconById, forceFileDownload }
