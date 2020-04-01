@@ -46,13 +46,19 @@ function removeAccent(s) {
 function forceFileDownload(response, fileName) {
   // console.log('forceFileDownload - response : ', response)
   // console.log(response.headers.map['content-type'])
-  let blobData = new Blob([response.data], { type: 'application/vnd.ms-excel' })
-  const url = window.URL.createObjectURL(blobData)
-  const link = document.createElement('a')
-  link.href = url
-  link.setAttribute('download', fileName) // or any other extension
-  document.body.appendChild(link)
-  link.click()
+  let blobData = new Blob([response.data], {
+    type: 'application/vnd.ms-excel'
+  })
+  if (navigator.appVersion.toString().indexOf('.NET') > 0) {
+    window.navigator.msSaveBlob(blobData, 'data.xlsx')
+  } else {
+    const url = window.URL.createObjectURL(blobData)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', fileName) // or any other extension
+    document.body.appendChild(link)
+    link.click()
+  }
 }
 /*
 function _s2ab(s) {

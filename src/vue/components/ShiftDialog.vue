@@ -35,6 +35,7 @@
             readonly
             required
           ></v-text-field>
+          <!-- v-model="currentShift.date"  pb dans IE -->
           <v-date-picker
             v-model="currentShift.date"
             @input="$refs.menu.save(currentShift.date)"
@@ -177,7 +178,12 @@
         if (!date) return null
 
         const [day, month, year] = date.split('/')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+        let parsedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(
+          2,
+          '0'
+        )}`
+        console.log(parsedDate)
+        return parsedDate
       },
       formatDate(date) {
         if (!date) return null
@@ -207,7 +213,7 @@
       submit() {
         /* Appel d'API */
         let shift = {
-          date: this.parseDate(this.dateFormatted),
+          date: this.parseDate(this.dateFormatted).replace(/\u200E/g, ''),
           datetime: this.currentShift.datetime,
           comment: this.currentShift.comment,
           type: this.selectedType.id
