@@ -159,7 +159,6 @@ export default {
     }
   },
   [On.GET_ROLES]: async function({ commit, state }) {
-    console.log('GET_ROLES')
     var userId = localStorage.getItem('user-id')
     try {
       const response = await rest.getRoles(userId)

@@ -31,14 +31,14 @@
             label="Choisir la date"
             hint="JJ/MM/ANNEE (Ex : 12/04/2020)"
             prepend-icon="event"
-            @blur="currentShift.date = parseDate(dateFormatted)"
+            @blur="doOnBlur()"
             readonly
             required
           ></v-text-field>
           <!-- v-model="currentShift.date"  pb dans IE -->
           <v-date-picker
-            v-model="currentShift.date"
-            @input="$refs.menu.save(currentShift.date)"
+            v-model="aDate"
+            @input="$refs.menu.save(aDate)"
             :allowed-dates="allowedDates"
             locale="fr-FR"
             first-day-of-week="1"
@@ -109,6 +109,7 @@
     props: ['shift'],
     data() {
       return {
+        aDate: null,
         timeVisible: true,
         selectedType: null,
         myTimeTypes: timeTypes,
@@ -174,6 +175,9 @@
         this.dateFormatted = ''
         this.selectedType = null
       },
+      doOnBlur() {
+        this.currentShift.date = this.parseDate(this.dateFormatted)
+      },
       parseDate(date) {
         if (!date) return null
 
@@ -182,7 +186,6 @@
           2,
           '0'
         )}`
-        console.log(parsedDate)
         return parsedDate
       },
       formatDate(date) {
@@ -192,8 +195,6 @@
         return `${day}/${month}/${year}`
       },
       initDate(date) {
-        // console.log(date)
-        // console.log(date.day)
         const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(
           date
         )
@@ -204,7 +205,8 @@
           date
         )
         const r = `${da}/${mo}/${ye}`
-        return r
+        this.currentShift.date = `${ye}-${mo}-${da}`
+        this.dateFormatted = r
       },
       allowedDates: val => {
         let theDate = new Date(val)
@@ -238,6 +240,9 @@
         // console.log('test')
         this.dateFormatted = this.formatDate(this.currentShift.date)
       },
+      aDate(val) {
+        this.currentShift.date = val
+      },
       selectedType(val) {
         // console.log(val.type)
         if (val && val.type === 'conges') {
@@ -253,9 +258,7 @@
 
       /* Si pas de currentShift, je mets la date du jour par défaut */
       if (!this.currentShift.date) {
-        let dateIni = this.initDate(new Date())
-        // console.log(dateIni)
-        this.dateFormatted = dateIni
+        this.initDate(new Date())
       }
     },
     computed: {

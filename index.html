@@ -1,67 +1,128 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MySilene</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-16.png">
-    <!--[if IE]><link rel="shortcut icon" href="/static/img/icons/favicon.ico"><![endif]-->
-    <!-- Add to home screen for Android and modern mobile browsers -->
-    <link rel="manifest" href="<%= htmlWebpackPlugin.files.publicPath %>static/manifest.json">
-    <meta name="theme-color" content="#4DBA87">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>MySilene</title>
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-16.png"
+        />
+        <!--[if IE
+            ]><link rel="shortcut icon" href="/static/img/icons/favicon.ico"
+        /><![endif]-->
+        <!-- Add to home screen for Android and modern mobile browsers -->
+        <link
+            rel="manifest"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/manifest.json"
+        />
+        <meta name="theme-color" content="#4DBA87" />
 
-    <!-- Add to home screen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="MySilene">
-    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="16x16" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-16x16.png">
-    <link rel="apple-touch-icon" sizes="32x32" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-32x32.png">
-    <link rel="apple-touch-icon" sizes="64x64" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-64x64.png">
-    <link rel="apple-touch-icon" sizes="96x96" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-96x96.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="196x196" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-196x196.png">
-    <link rel="apple-touch-startup-image" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon.png">
+        <!-- Add to home screen for Safari on iOS -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="apple-mobile-web-app-title" content="MySilene" />
+        <link
+            rel="apple-touch-icon"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="16x16"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-16x16.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="32x32"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-32x32.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="64x64"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-64x64.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="96x96"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-96x96.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="144x144"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-144x144.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="196x196"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-196x196.png"
+        />
+        <link
+            rel="apple-touch-startup-image"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon.png"
+        />
 
-    <link rel="icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/animated_favicon.gif" type="image/gif">
+        <link
+            rel="icon"
+            href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/animated_favicon.gif"
+            type="image/gif"
+        />
 
+        <!-- Add to home screen for Windows -->
+        <meta
+            name="msapplication-TileImage"
+            content="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-144.png"
+        />
+        <meta name="msapplication-TileColor" content="#000000" />
+        <% for (var chunk of webpack.chunks) { for (var file of chunk.files) {
+        if (file.match(/\.(js|css)$/)) { %>
+        <link
+            rel="<%= chunk.initial?'preload':'prefetch' %>"
+            href="<%= htmlWebpackPlugin.files.publicPath + file %>"
+            as="<%= file.match(/\.css$/)?'style':'script' %>"
+        />
+        <% }}} %>
+        <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700%7CMaterial+Icons"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
 
-    <!-- Add to home screen for Windows -->
-    <meta name="msapplication-TileImage" content="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-144.png">
-    <meta name="msapplication-TileColor" content="#000000">
-    <% for (var chunk of webpack.chunks) {
-        for (var file of chunk.files) {
-          if (file.match(/\.(js|css)$/)) { %>
-    <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>
-    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700%7CMaterial+Icons' rel="stylesheet">
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
-
-    <!-- OneSignal -->
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-    <!-- Voir webpack.xxx.conf.js -->
-    <%= htmlWebpackPlugin.options.oneSignalKey %>
-    <script>      
-      var OneSignal = window.OneSignal || [];
-      OneSignal.push(function () {
-          OneSignal.init({
-          appId: oneSignalKey,          
-          autoRegister: false,
-          notifyButton: {
-              enable: true,
-          },
-          });
-      });
-    </script>
-  </head>
-  <body>
-    <noscript>
-      This is your fallback content in case JavaScript fails to load.
-    </noscript>
-    <div id="app"></div>
-    <!-- Todo: only include in production -->
-    <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
-    <!-- built files will be auto injected -->
-  </body>
+        <!-- OneSignal -->
+        <script
+            src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"
+            async=""
+        ></script>
+        <!-- Voir webpack.xxx.conf.js -->
+        <%= htmlWebpackPlugin.options.oneSignalKey %>
+        <script>
+            var OneSignal = window.OneSignal || []
+            OneSignal.push(function () {
+                    OneSignal.init({
+                    appId: oneSignalKey,
+                    autoRegister: false,
+                    notifyButton: {
+                        enable: true
+                    }
+                })
+            })
+        </script>
+    </head>
+    <body>
+        <noscript>
+            This is your fallback content in case JavaScript fails to load.
+        </noscript>
+        <div id="app"></div>
+        <!-- Todo: only include in production -->
+        <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
+        <!-- built files will be auto injected -->
+    </body>
 </html>

@@ -31,9 +31,15 @@
           @change="changeUser"
           autocomplete
           clearable
+          :loading="collaborateursLoading"
         >
           <template slot="selection" slot-scope="data">
             {{ data.item.name }}
+          </template>
+          <template slot="no-data">
+            <v-list-tile-content>
+              <v-list-tile-title>Aucun collaborateur trouvé</v-list-tile-title>
+            </v-list-tile-content>
           </template>
           <template slot="item" slot-scope="data">
             <template v-if="typeof data.item !== 'object'">
@@ -54,7 +60,6 @@
               ></v-list-tile-action>
               <v-list-tile-content>
                 <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
-                </v-list-tile-title>
               </v-list-tile-content>
             </template>
           </template>
@@ -69,10 +74,7 @@
               onerror="this.onerror=null;this.src='/static/img/default.jpg';"
             />
           </v-avatar>
-          <v-toolbar-title
-            >Historique de
-            {{ chosenUser.name }}</v-toolbar-title
-          >
+          <v-toolbar-title>Historique de {{ chosenUser.name }}</v-toolbar-title>
         </v-toolbar>
       </v-flex>
       <v-spacer style="margin-top:15px;"></v-spacer>
