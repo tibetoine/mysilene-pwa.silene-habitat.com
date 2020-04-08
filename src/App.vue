@@ -23,17 +23,7 @@
               </v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-        </template>
-        <v-list-tile v-if="isAdmin" href="" to="/admin">
-          <v-list-tile-action>
-            <v-icon>build</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Administration
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        </template>        
       </v-list>
     </v-navigation-drawer>
 
@@ -103,7 +93,7 @@
 </template>
 
 <script>
-  import { mapActions, mapMutations, mapGetters, mapState } from 'vuex'
+  import { mapActions, mapMutations, mapState } from 'vuex'
   import On from './const/on'
   import Do from './const/do'
   import DownDialog from './vue/dialogs/DownDialog'
@@ -144,12 +134,9 @@
           return user
         }
       },
-      isAdmin: {
+      isAuthenticate: {
         get: function() {
-          if (this.$store.state.login.isAdmin) {
-            return true
-          }
-          return false
+          return this.$store.state.login.Authenticate
         }
       },
       roles: {
@@ -185,27 +172,21 @@
             }
           }
         }
-      },
-      isRH: {
-        get: function() {
-          if (this.$store.state.login.isRH) {
-            return true
-          }
-          return false
-        }
-      },
-      isManager: {
-        get: function() {
-          if (this.$store.state.login.isManager) {
-            return true
-          }
-          return false
-        }
       }
+  
     },
     watch: {
       roles(newValue, oldValue) {
         // console.log(` Roles : Updating from ${oldValue} to ${newValue}`)
+      },
+      isAuthenticate(newValue, oldValue) {
+        // console.log(` isAuthenticate : Updating from ${oldValue} to ${newValue}`)
+        if (newValue === false) {
+          this.$router.push({ path: '/home' })
+        }
+        if (newValue === true) {
+          this.$router.push({ path: '/news' })
+        }
       }
     },
     beforeCreate() {
@@ -262,7 +243,6 @@
         showDownDialog: Do.SHOW_DOWN_DIALOG,
         showOfflineDialog: Do.SHOW_OFFLINE_DIALOG
       }),
-      ...mapGetters(['isAuthenticate'], ['isAdmin']),
       findAvatar: function(userId) {
         var imgSource = '/static/img/ad-photos/' + userId + '.jpg'
         return imgSource

@@ -11,7 +11,7 @@
           </div>
           <div v-else>
             <div v-if="!auth">
-              <v-alert :value="true" type="info">
+              <v-alert :value="true" type="info" icon="lock">
                 Vous devez être connecté pour accéder aux News Silène
               </v-alert>
             </div>

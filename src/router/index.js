@@ -12,6 +12,7 @@ import Admin from '../vue/pages/admin'
 import Shifts from '../vue/pages/shifts'
 import ShiftsManager from '../vue/pages/shiftsManager'
 import ShiftsRH from '../vue/pages/shiftsRH'
+import Home from '../vue/pages/home'
 
 Vue.use(Router)
 
@@ -19,7 +20,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: News
+      component: Home
     },
     {
       path: '/news',
@@ -79,6 +80,11 @@ export default new Router({
       path: '/gta_rh',
       component: ShiftsRH,
       name: 'shiftsRH'
+    },
+    {
+      path: '/home',
+      component: Home,
+      name: 'home'
     }
   ],
   scrollBehavior(to, from, savedPosition) {

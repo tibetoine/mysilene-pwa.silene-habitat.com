@@ -18,8 +18,8 @@
       "type": "travail"
     },
     "sans_activite": {
-      "id": "sans_activite",
-      "label": "Sans activité",
+      "id": "dispense_activite",
+      "label": "Dispense activité",
       "icon": "apartment",
       "color": "light-blue darken-2",
       "color_hex": "#0288D1",
@@ -44,6 +44,14 @@
     "congés_payés": {
       "id": "congés_payés",
       "label": "Congés payés",
+      "icon": "free_breakfast",
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
+    },
+    "demi_congés_payés": {
+      "id": "demi_congés_payés",
+      "label": "Demi Congé payé (1/2 journée)",
       "icon": "free_breakfast",
       "color": "orange darken-1",
       "color_hex": "#FB8C00",
@@ -101,6 +109,22 @@
       "id": "naissance_adoption",
       "label": "Congés naissance",
       "icon": "pregnant_woman",
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
+    },
+    "conge_maternite": {
+      "id": "conge_maternite",
+      "label": "Congé maternité",
+      "icon": "pregnant_woman",
+      "color": "orange darken-1",
+      "color_hex": "#FB8C00",
+      "type": "conges"
+    },
+    "conge_parental": {
+      "id": "conge_parental",
+      "label": "Congé parental",
+      "icon": "child_friendly",
       "color": "orange darken-1",
       "color_hex": "#FB8C00",
       "type": "conges"

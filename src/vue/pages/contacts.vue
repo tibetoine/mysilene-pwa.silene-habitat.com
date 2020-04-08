@@ -13,7 +13,7 @@
             <v-layout row>
               <v-flex xs12 md9 offset-md3>
                 <div v-if="!auth">
-                  <v-alert :value="true" type="info">
+                  <v-alert :value="true" type="info" icon="lock">
                     Vous devez être connecté pour accéder aux Contacts Silène
                   </v-alert>
                 </div>
@@ -126,7 +126,7 @@
             <v-layout row>
               <v-flex xs12 md9 offset-md3>
                 <div v-if="!auth">
-                  <v-alert :value="true" type="info">
+                  <v-alert :value="true" type="info" icon="lock">
                     Vous devez être connecté pour accéder aux Contacts Silène
                   </v-alert>
                 </div>

@@ -11,6 +11,10 @@
           <v-icon>alarm_on</v-icon>
         </v-btn>
         <v-toolbar-title>Déclaration de temps</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="visible= !visible">
+          <v-icon>close</v-icon>
+        </v-btn>
       </v-toolbar>
       <v-form style="padding:5px;" v-model="valid">
         <v-menu
@@ -44,14 +48,21 @@
             first-day-of-week="1"
           ></v-date-picker>
         </v-menu>
+        
         <v-text-field
           v-if="timeVisible"
           v-model="currentShift.datetime"
           :rules="timeRules"
-          label="Nombre d'heures (Ex : 07:00)"
-          prepend-icon="schedule"
+          label="Nombre d'heures"
+          prepend-icon="schedule"          
           solo
-        ></v-text-field>
+        >
+          <v-tooltip slot="append" bottom>
+            <v-icon slot="activator" color="secondary" dark>info</v-icon>
+            <span>Note : Pour enregistrer 7h et 50 min il faut saisir '07:50'. Donc si on saisit '03:50', cela veut dire 3h et 50 min.</span>
+          </v-tooltip>
+        </v-text-field>
+            
         <v-select
           attach
           :items="selectItems"
@@ -109,6 +120,7 @@
     props: ['shift'],
     data() {
       return {
+        showTooltip: false,
         aDate: null,
         timeVisible: true,
         selectedType: null,
