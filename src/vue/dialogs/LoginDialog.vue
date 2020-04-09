@@ -43,6 +43,7 @@
               type="text"
               autocomplete="username"
               required
+              
             ></v-text-field>
           </v-flex>
           <v-flex>
@@ -54,6 +55,9 @@
               type="password"
               autocomplete="current-password"
               required
+              :append-icon="value ? 'visibility' : 'visibility_off'"
+              @click:append="() => (value = !value)"
+              :type="value ? 'password' : 'text'"
             ></v-text-field>
           </v-flex>
           <v-flex class="text-xs-center" mt-5>
@@ -73,6 +77,7 @@
     name: 'login-dialog',
     data() {
       return {
+        value: true,
         infoError: false,
         userId: '',
         password: ''
