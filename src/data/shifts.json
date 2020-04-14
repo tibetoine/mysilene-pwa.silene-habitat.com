@@ -17,7 +17,7 @@
       "color_hex": "#0288D1",
       "type": "travail"
     },
-    "sans_activite": {
+    "dispense_activite": {
       "id": "dispense_activite",
       "label": "Dispense activité",
       "icon": "apartment",
