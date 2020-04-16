@@ -5,7 +5,7 @@ import api from '../../rest/api'
 import { getShiftTypeById } from '../../shared/helper'
 
 export default {
-  [On.LOAD_CONTACTS]: async function({ commit }) {
+  [On.LOAD_CONTACTS]: async function ({ commit }) {
     /* 1/ Appel REST à l'API  */
     try {
       const response = await rest.getContacts()
@@ -24,7 +24,7 @@ export default {
       }
     }
   },
-  [On.LOAD_USERS]: async function({ commit }) {
+  [On.LOAD_USERS]: async function ({ commit }) {
     /* 1/ Appel REST à l'API  */
     try {
       const response = await rest.getUsers()
@@ -43,7 +43,7 @@ export default {
       }
     }
   },
-  [On.HEALTHCHECK]: async function({ commit }) {
+  [On.HEALTHCHECK]: async function ({ commit }) {
     try {
       const response = await rest.healthcheck()
       if (response.status !== 200) {
@@ -66,7 +66,7 @@ export default {
       )
     }
   },
-  [On.LOAD_DOCS]: async function({ commit }) {
+  [On.LOAD_DOCS]: async function ({ commit }) {
     try {
       const response = await rest.getDocs()
       if (response.status === 401) {
@@ -84,7 +84,7 @@ export default {
       }
     }
   },
-  [On.LOAD_SHIFTS]: async function({ commit, state }) {
+  [On.LOAD_SHIFTS]: async function ({ commit, state }) {
     // var userId = localStorage.getItem('user-id')
     let currentShiftUserId = null
     var currentShiftUser = state.shift.currentShiftUser
@@ -102,10 +102,15 @@ export default {
       if (error && error.status === 401) {
         localStorage.removeItem('user-token')
         commit(Do.LOGOUT)
+      } else {
+        console.error(
+          'Impossible de charger correctement les activités ',
+          error
+        )
       }
     }
   },
-  [On.LOAD_PREFS]: async function({ commit }) {
+  [On.LOAD_PREFS]: async function ({ commit }) {
     var userId = localStorage.getItem('user-id')
     try {
       const response = await rest.getUser(userId)
@@ -143,7 +148,7 @@ export default {
       }
     }
   },
-  [On.IS_ADMIN]: async function({ commit, state }) {
+  [On.IS_ADMIN]: async function ({ commit, state }) {
     var userId = localStorage.getItem('user-id')
     try {
       const response = await rest.isAdmin(userId)
@@ -158,7 +163,7 @@ export default {
       console.error('error dans le isAdmin', error)
     }
   },
-  [On.GET_ROLES]: async function({ commit, state }) {
+  [On.GET_ROLES]: async function ({ commit, state }) {
     var userId = localStorage.getItem('user-id')
     try {
       const response = await rest.getRoles(userId)
@@ -174,7 +179,7 @@ export default {
       )
     }
   },
-  [On.GET_CHILDREN]: async function({ commit, state }) {
+  [On.GET_CHILDREN]: async function ({ commit, state }) {
     var userId = localStorage.getItem('user-id')
     try {
       /* Si Manager */
@@ -201,7 +206,7 @@ export default {
       )
     }
   },
-  [On.GET_CONTACT]: async function({ commit, state }, username) {
+  [On.GET_CONTACT]: async function ({ commit, state }, username) {
     try {
       const response = await rest.getContact(username)
 
@@ -230,7 +235,7 @@ export default {
       )
     }
   },
-  [On.DELETE_USER]: async function({ commit, dispatch }, username) {
+  [On.DELETE_USER]: async function ({ commit, dispatch }, username) {
     // console.log('OUIIIIIII !!! ', username)
     try {
       const response = await rest.deleteUser(username)
@@ -244,7 +249,7 @@ export default {
       commit(Do.DELETE_USER_ERROR)
     }
   },
-  [On.SAVE_PREFS]: async function({ commit, state }) {
+  [On.SAVE_PREFS]: async function ({ commit, state }) {
     var prefs = state.news.selectedTypes
     var userId = localStorage.getItem('user-id')
     try {
@@ -266,7 +271,7 @@ export default {
     /* Sauvegarde en State --> LOL pas nécessaire c'est déjà enregistré depuis la filterDialog ? */
     // commit(Do.SET_PREFS, prefs)
   },
-  [On.LOAD_NEWS]: async function({ commit }) {
+  [On.LOAD_NEWS]: async function ({ commit }) {
     try {
       const response = await rest.getNews()
       if (response.status === 401) {
@@ -284,14 +289,14 @@ export default {
     }
   },
 
-  [On.LOAD_WEATHER]: async function({ commit }) {
+  [On.LOAD_WEATHER]: async function ({ commit }) {
     const response = await rest.getLastWeather()
 
     const lastWeather = response.body
 
     commit(Do.SET_WEATHER, lastWeather)
   },
-  [On.SAVE_SHIFT]: async function({ commit, dispatch }, { user, shift }) {
+  [On.SAVE_SHIFT]: async function ({ commit, dispatch }, { user, shift }) {
     var response
     try {
       response = await rest.putShift(user.userId, shift)
@@ -309,7 +314,7 @@ export default {
     commit(Do.SHOW_SHIFT_SUCCESS, 'Votre créneau a bien été enregistré')
     dispatch(On.LOAD_SHIFTS)
   },
-  [On.DELETE_SHIFT]: async function({ commit, dispatch }, shiftId) {
+  [On.DELETE_SHIFT]: async function ({ commit, dispatch }, shiftId) {
     try {
       await rest.deleteShift(shiftId)
     } catch (error) {
@@ -324,7 +329,7 @@ export default {
     )
     dispatch(On.LOAD_SHIFTS)
   },
-  [On.DELETE_DETAILS]: async function({ commit, dispatch }, detailId) {
+  [On.DELETE_DETAILS]: async function ({ commit, dispatch }, detailId) {
     try {
       await rest.deleteDetail(detailId)
     } catch (error) {
@@ -336,7 +341,7 @@ export default {
     commit(Do.SHOW_SHIFT_SUCCESS, 'Activité supprimée')
     dispatch(On.LOAD_SHIFTS)
   },
-  [On.EXTRACT_ALL]: async function({ commit, dispatch }) {
+  [On.EXTRACT_ALL]: async function ({ commit, dispatch }) {
     let response
     try {
       response = await rest.extractAll()
@@ -350,17 +355,17 @@ export default {
     return response
   },
 
-  [On.UPDATE_FILTERED_CONTACTS]: function({ commit }) {
+  [On.UPDATE_FILTERED_CONTACTS]: function ({ commit }) {
     commit(Do.UPDATE_FILTERED_CONTACTS)
     commit(Do.SHOW_MORE_CONTACTS)
   },
-  [On.UPDATE_FILTERED_NEWS]: function({ commit }) {
+  [On.UPDATE_FILTERED_NEWS]: function ({ commit }) {
     commit(Do.UPDATE_FILTERED_NEWS)
     commit(Do.SHOW_MORE_NEWS)
   },
 
-  [On.LOGIN]: async function({ commit, dispatch }, user) {
-    var callbackError = error => {
+  [On.LOGIN]: async function ({ commit, dispatch }, user) {
+    var callbackError = (error) => {
       var message = 'Authentification impossible!'
       if (error.body && error.body.message) {
         message = error.body.message
@@ -379,7 +384,7 @@ export default {
       commit(Do.LOGIN_STOP)
     }
 
-    var callbackSuccess = response => {
+    var callbackSuccess = (response) => {
       /* Mise à jour du Local Storage */
       const token = response.body.token
       const userId = response.body._id.trim().toLowerCase()
@@ -404,12 +409,12 @@ export default {
 
     await rest.login(user, callbackSuccess, callbackError)
   },
-  [On.LOGOUT]: async function({ commit }, user) {
+  [On.LOGOUT]: async function ({ commit }, user) {
     /* Suppression du user-token si existe */
     localStorage.removeItem('user-token')
     commit(Do.LOGOUT)
   },
-  [On.AUTO_LOGIN]: async function({ commit, dispatch }, user) {
+  [On.AUTO_LOGIN]: async function ({ commit, dispatch }, user) {
     commit(Do.LOGIN_SUCCESS, user)
 
     /* Dispatch Action */
@@ -421,10 +426,10 @@ export default {
     dispatch(On.LOAD_DOCS)
     dispatch(On.GET_CONTACT, user._id)
   },
-  [On.LOGIN_WAITING]: function({ commit }) {
+  [On.LOGIN_WAITING]: function ({ commit }) {
     commit(Do.LOGIN_WAITING)
   },
-  [On.LOGIN_STOP]: function({ commit }) {
+  [On.LOGIN_STOP]: function ({ commit }) {
     commit(Do.LOGIN_STOP)
   }
 }
@@ -462,6 +467,7 @@ function calculateTimes(details) {
     if (!element.time) {
       continue
     }
+    console.log('element.type', element.type)
     let type = getShiftTypeById(element.type)
     totalTime += stringToMinutes(element.time)
     switch (type) {
@@ -503,7 +509,7 @@ function minuteToString(minutes) {
   return `${hours}:${min}`
 }
 
-const getAvatar = contact => {
+const getAvatar = (contact) => {
   if (!contact) return '/static/img/default.jpg'
   return (
     '/static/img/' +
