@@ -12,11 +12,11 @@
         </v-btn>
         <v-toolbar-title>Déclaration de temps</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon @click="visible= !visible">
+        <v-btn icon @click="visible = !visible">
           <v-icon>close</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-form style="padding:5px;" v-model="valid">
+      <v-form style="padding: 5px;" v-model="valid">
         <v-menu
           ref="menu"
           :close-on-content-click="false"
@@ -48,21 +48,24 @@
             first-day-of-week="1"
           ></v-date-picker>
         </v-menu>
-        
+
         <v-text-field
           v-if="timeVisible"
           v-model="currentShift.datetime"
           :rules="timeRules"
           label="Nombre d'heures"
-          prepend-icon="schedule"          
+          prepend-icon="schedule"
           solo
         >
           <v-tooltip slot="append" bottom>
             <v-icon slot="activator" color="secondary" dark>info</v-icon>
-            <span>Note : Pour enregistrer 7h et 50 min il faut saisir '07:50'. Donc si on saisit '03:50', cela veut dire 3h et 50 min.</span>
+            <span
+              >Note : Pour enregistrer 7h et 50 min il faut saisir '07:50'. Donc
+              si on saisit '03:50', cela veut dire 3h et 50 min.</span
+            >
           </v-tooltip>
         </v-text-field>
-            
+
         <v-select
           attach
           :items="selectItems"
@@ -111,232 +114,226 @@
   </v-dialog>
 </template>
 <script>
-  import { mapState, mapActions, mapMutations } from 'vuex'
-  import On from '../../const/on'
-  import Do from '../../const/do'
-  import timeTypes from '../../data/shifts.json'
-  export default {
-    name: 'shiftdialog',
-    props: ['shift'],
-    data() {
-      return {
-        showTooltip: false,
-        aDate: null,
-        timeVisible: true,
-        selectedType: null,
-        myTimeTypes: timeTypes,
-        valid: false,
-        shiftVisible: true,
-        currentShift: {
-          date: null,
-          datetime: '',
-          conges: '',
-          comment: ''
+import { mapState, mapActions, mapMutations } from 'vuex'
+import On from '../../const/on'
+import Do from '../../const/do'
+import timeTypes from '../../data/shifts.json'
+export default {
+  name: 'shiftdialog',
+  props: ['shift'],
+  data() {
+    return {
+      showTooltip: false,
+      aDate: null,
+      timeVisible: true,
+      selectedType: null,
+      myTimeTypes: timeTypes,
+      valid: false,
+      shiftVisible: true,
+      currentShift: {
+        date: null,
+        datetime: '',
+        conges: '',
+        comment: ''
+      },
+      dateFormatted: null,
+      menu: false,
+      datetimeFormatted: null,
+      menu2: false,
+      customFilter(item, queryText, itemText) {
+        const hasValue = (val) => (val != null ? val : '')
+        const text = hasValue(item.name)
+        const query = hasValue(queryText)
+        return (
+          text
+            .toString()
+            .toLowerCase()
+            .indexOf(query.toString().toLowerCase()) > -1
+        )
+      },
+      dateRules: [
+        (v) => {
+          return !!v || 'La date est requise'
+        }
+      ],
+      timeRules: [
+        (v) => {
+          return !!v || v == null || `Un nombre d'heures est requis`
         },
-        dateFormatted: null,
-        menu: false,
-        datetimeFormatted: null,
-        menu2: false,
-        customFilter(item, queryText, itemText) {
-          const hasValue = val => (val != null ? val : '')
-          const text = hasValue(item.name)
-          const query = hasValue(queryText)
+        (v) => {
+          let regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
           return (
-            text
-              .toString()
-              .toLowerCase()
-              .indexOf(query.toString().toLowerCase()) > -1
+            regex.test(v) ||
+            `Le temps saisi doit réspecter le format HH:MM (Exemple : 07:00)`
           )
         },
-        dateRules: [
-          v => {
-            return !!v || 'La date est requise'
-          }
-        ],
-        timeRules: [
-          v => {
-            return !!v || v == null || `Un nombre d'heures est requis`
-          },
-          v => {
-            let regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
-            return (
-              regex.test(v) ||
-              `Le temps saisi doit réspecter le format HH:MM (Exemple : 07:00)`
-            )
-          },
-          v => {
-            let times = v.split(':')
-            let minutes = parseInt(times[0]) * 60 + parseInt(times[1])
-            return (
-              minutes <= 15 * 60 || `Le temps saisi ne doit pas dépasser 15h`
-            )
-          }
-        ],
-        typeRules: [v => !!v || `Une catégorie est requise`]
-      }
+        (v) => {
+          let times = v.split(':')
+          let minutes = parseInt(times[0]) * 60 + parseInt(times[1])
+          return minutes <= 15 * 60 || `Le temps saisi ne doit pas dépasser 15h`
+        }
+      ],
+      typeRules: [(v) => !!v || `Une catégorie est requise`]
+    }
+  },
+  methods: {
+    ...mapActions({
+      saveShift: On.SAVE_SHIFT
+    }),
+    ...mapMutations({
+      hideShiftDialog: Do.HIDE_SHIFT_DIALOG
+    }),
+    clear() {
+      this.currentShift.datetime = ''
+      this.dateFormatted = ''
+      this.selectedType = null
     },
-    methods: {
-      ...mapActions({
-        saveShift: On.SAVE_SHIFT
-      }),
-      ...mapMutations({
-        hideShiftDialog: Do.HIDE_SHIFT_DIALOG
-      }),
-      clear() {
+    doOnBlur() {
+      this.currentShift.date = this.parseDate(this.dateFormatted)
+    },
+    parseDate(date) {
+      if (!date) return null
+
+      const [day, month, year] = date.split('/')
+      let parsedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(
+        2,
+        '0'
+      )}`
+      return parsedDate
+    },
+    formatDate(date) {
+      if (!date) return null
+
+      const [year, month, day] = date.split('-')
+      return `${day}/${month}/${year}`
+    },
+    initDate(date) {
+      const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
+      const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(
+        date
+      )
+      const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
+      const r = `${da}/${mo}/${ye}`
+      this.currentShift.date = `${ye}-${mo}-${da}`
+      this.dateFormatted = r
+    },
+    allowedDates: (val) => {
+      let theDate = new Date(val)
+      return theDate.getDay() !== 0
+    },
+    submit() {
+      /* Appel d'API */
+      let shift = {
+        date: this.parseDate(this.dateFormatted).replace(/\u200E/g, ''),
+        datetime: this.currentShift.datetime,
+        comment: this.currentShift.comment,
+        type: this.selectedType.id
+      }
+      let currentUser = this.shiftUser
+      let userId
+      if (currentUser == null) {
+        userId = localStorage.getItem('user-id')
+      } else {
+        userId = currentUser.userId
+      }
+      let user = {
+        userId: userId
+      }
+      this.saveShift({ user, shift }).then(() => {
+        // console.log('OUai')
+      })
+    }
+  },
+  watch: {
+    'currentShift.date'(val) {
+      // console.log('test')
+      this.dateFormatted = this.formatDate(this.currentShift.date)
+    },
+    aDate(val) {
+      this.currentShift.date = val
+    },
+    selectedType(val) {
+      // console.log(val.type)
+      if (val && val.type === 'conges') {
+        this.timeVisible = false
         this.currentShift.datetime = ''
-        this.dateFormatted = ''
-        this.selectedType = null
-      },
-      doOnBlur() {
-        this.currentShift.date = this.parseDate(this.dateFormatted)
-      },
-      parseDate(date) {
-        if (!date) return null
-
-        const [day, month, year] = date.split('/')
-        let parsedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(
-          2,
-          '0'
-        )}`
-        return parsedDate
-      },
-      formatDate(date) {
-        if (!date) return null
-
-        const [year, month, day] = date.split('-')
-        return `${day}/${month}/${year}`
-      },
-      initDate(date) {
-        const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(
-          date
-        )
-        const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(
-          date
-        )
-        const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(
-          date
-        )
-        const r = `${da}/${mo}/${ye}`
-        this.currentShift.date = `${ye}-${mo}-${da}`
-        this.dateFormatted = r
-      },
-      allowedDates: val => {
-        let theDate = new Date(val)
-        return theDate.getDay() !== 0
-      },
-      submit() {
-        /* Appel d'API */
-        let shift = {
-          date: this.parseDate(this.dateFormatted).replace(/\u200E/g, ''),
-          datetime: this.currentShift.datetime,
-          comment: this.currentShift.comment,
-          type: this.selectedType.id
-        }
-        let currentUser = this.shiftUser
-        let userId
-        if (currentUser == null) {
-          userId = localStorage.getItem('user-id')
-        } else {
-          userId = currentUser.userId
-        }
-        let user = {
-          userId: userId
-        }
-        this.saveShift({ user, shift }).then(() => {
-          // console.log('OUai')
-        })
-      }
-    },
-    watch: {
-      'currentShift.date'(val) {
-        // console.log('test')
-        this.dateFormatted = this.formatDate(this.currentShift.date)
-      },
-      aDate(val) {
-        this.currentShift.date = val
-      },
-      selectedType(val) {
-        // console.log(val.type)
-        if (val && val.type === 'conges') {
-          this.timeVisible = false
-          this.currentShift.datetime = ''
-        } else {
-          this.timeVisible = true
-        }
-      }
-    },
-    mounted: function() {
-      this.selectedType = this.selectItems[2]
-
-      /* Si pas de currentShift, je mets la date du jour par défaut */
-      if (!this.currentShift.date) {
-        this.initDate(new Date())
-      }
-    },
-    computed: {
-      visible: {
-        get: function() {
-          return this.$store.state.shift.showDialog
-        },
-        set: function(val) {
-          this.$store.state.shift.showDialog = val
-        }
-      },
-      shiftUser: {
-        get: function() {
-          return this.$store.state.shift.currentShiftUser
-        },
-        set: function(val) {
-          this.$store.state.shift.currentShiftUser = val
-        }
-      },
-      ...mapState({
-        computedDateFormatted() {
-          return this.formatDate(this.date)
-        }
-      }),
-      selectItems: () => {
-        /* Fonction de filtre qui permet de ne retourner que les types uniques dans notre tableau de référence. */
-        function onlyUnique(value, index, self) {
-          return (
-            self.findIndex(element => {
-              return element[1].type === value[1].type
-            }) === index
-          )
-        }
-        let types = timeTypes.time_types
-
-        /* Récupération des types uniques dans notre tableau de référence (Voir shifts.json) (Une sorte de select disctinct) */
-        let groups = Object.entries(types)
-          .filter(onlyUnique)
-          .map(element => element[1].type)
-        // console.log('groups', groups)
-
-        let newArray = Object.keys(types).map(item => {
-          // console.log(item, ' - ', types[item])
-          let jsonObject = {
-            id: types[item].id,
-            name: types[item].label,
-            group: types[item].type,
-            icon: types[item].icon,
-            type: types[item].type
-          }
-          return jsonObject
-        })
-
-        let finalArray = []
-        groups.forEach(group => {
-          // console.log(group)
-          let oneGroupArray = newArray.filter(item => {
-            return item.group === group
-          })
-          // console.log(oneGroupArray)
-          finalArray.push({ header: group })
-          finalArray = finalArray.concat(oneGroupArray)
-        })
-
-        return finalArray
+      } else {
+        this.timeVisible = true
       }
     }
+  },
+  mounted: function () {
+    this.selectedType = this.selectItems[2]
+
+    /* Si pas de currentShift, je mets la date du jour par défaut */
+    if (!this.currentShift.date) {
+      this.initDate(new Date())
+    }
+  },
+  computed: {
+    visible: {
+      get: function () {
+        return this.$store.state.shift.showDialog
+      },
+      set: function (val) {
+        this.$store.state.shift.showDialog = val
+      }
+    },
+    shiftUser: {
+      get: function () {
+        return this.$store.state.shift.currentShiftUser
+      },
+      set: function (val) {
+        this.$store.state.shift.currentShiftUser = val
+      }
+    },
+    ...mapState({
+      computedDateFormatted() {
+        return this.formatDate(this.date)
+      }
+    }),
+    selectItems: () => {
+      /* Fonction de filtre qui permet de ne retourner que les types uniques dans notre tableau de référence. */
+      function onlyUnique(value, index, self) {
+        return (
+          self.findIndex((element) => {
+            return element[1].type === value[1].type
+          }) === index
+        )
+      }
+      let types = timeTypes.time_types
+
+      /* Récupération des types uniques dans notre tableau de référence (Voir shifts.json) (Une sorte de select disctinct) */
+      let groups = Object.entries(types)
+        .filter(onlyUnique)
+        .map((element) => element[1].type)
+      // console.log('groups', groups)
+
+      let newArray = Object.keys(types).map((item) => {
+        // console.log(item, ' - ', types[item])
+        let jsonObject = {
+          id: types[item].id,
+          name: types[item].label,
+          group: types[item].type,
+          icon: types[item].icon,
+          type: types[item].type
+        }
+        return jsonObject
+      })
+
+      let finalArray = []
+      groups.forEach((group) => {
+        // console.log(group)
+        let oneGroupArray = newArray.filter((item) => {
+          return item.group === group
+        })
+        // console.log(oneGroupArray)
+        finalArray.push({ header: group })
+        finalArray = finalArray.concat(oneGroupArray)
+      })
+
+      return finalArray
+    }
   }
+}
 </script>

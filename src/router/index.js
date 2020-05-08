@@ -16,7 +16,7 @@ import Home from '../vue/pages/home'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -95,3 +95,21 @@ export default new Router({
     }
   }
 })
+
+router.beforeEach((to, from, next) => {
+  // TODO V4 - Protection des routes (ROLES)
+  /* store.dispatch('fetchAccessToken')
+  if (to.fullPath === '/users') {
+    if (!store.state.accessToken) {
+      next('/login')
+    }
+  }
+  if (to.fullPath === '/login') {
+    if (store.state.accessToken) {
+      next('/users')
+    }
+  } */
+  next()
+})
+
+export default router

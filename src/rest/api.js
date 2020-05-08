@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-const url = path => window.location.origin + '/' + path
+const url = (path) => window.location.origin + '/' + path
 const options = () => ({ emulateJSON: true })
 
 export default {
@@ -8,7 +8,7 @@ export default {
     Vue.http.headers.common['authorization'] = token
     Vue.http.headers.common['userid'] = userId
   },
-  deleteDefaultAuthorization: token => {
+  deleteDefaultAuthorization: (token) => {
     Vue.http.headers.common['authorization'] = null
     Vue.http.headers.common['userid'] = null
   },
@@ -16,25 +16,29 @@ export default {
     var obj = Vue.http.get(url(path), body, options())
     return obj
   },
-  getXlsx: path => {
+  getXlsx: (path) => {
     var obj = Vue.http.get(url(path), { responseType: 'arraybuffer' })
     return obj
   },
   post: (path, body, callbackSuccess, callbackError) =>
     Vue.http
       .post(url(path), body, options())
-      .then(response => {
+      .then((response) => {
         if (callbackSuccess) {
           callbackSuccess(response)
+        } else {
+          return response
         }
       })
-      .catch(error => {
+      .catch((error) => {
         if (callbackError) {
           callbackError(error)
+        } else {
+          throw error
         }
       }),
 
-  del: path => Vue.http.delete(url(path)),
+  del: (path) => Vue.http.delete(url(path)),
 
   put: (path, body) => Vue.http.put(url(path), body, options())
 }

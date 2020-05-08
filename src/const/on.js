@@ -28,5 +28,13 @@ export default {
   DELETE_DETAILS: 'deleteDetails',
   EXTRACT_ALL: 'extractAll',
   GET_CHILDREN: 'getChildren',
-  GET_CONTACT: 'getContact'
+  GET_CONTACT: 'getContact',
+  LOAD_ACCESS_ROLES: 'loadAccessRoles',
+  ADD_ACCESS_ROLE: 'addAccessRole',
+  DELETE_ACCESS_ROLE: 'deleteAccessRole',
+  EDIT_ACCESS_ROLE: 'editAccessRole',
+  LOAD_ACCESS_USERS_ROLES: 'loadAccessUsersRoles',
+  ADD_ACCESS_USERS_ROLE: 'addAccessUsersRole',
+  DELETE_ACCESS_USERS_ROLE: 'deleteAccessUsersRole',
+  EDIT_ACCESS_USERS_ROLE: 'editAccessUsersRole'
 }

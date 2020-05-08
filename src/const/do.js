@@ -38,5 +38,13 @@ export default {
   SHOW_SHIFT_ERROR: 'showShiftError',
   SET_CURRENT_SHIFT: 'setCurrentShift',
   SET_SHIFTS: 'setShifts',
-  SET_CHOSEN_USER: 'setChosenUser'
+  SET_CHOSEN_USER: 'setChosenUser',
+  SET_ACCESS_ROLES: 'setAccessRoles',
+  SHOW_GLOBAL_ERROR: 'showGlobalError',
+  SHOW_GLOBAL_SUCCESS: 'showGlobalSuccess',
+  SHOW_ROLE_DIALOG: 'showRoleDialog',
+  HIDE_ROLE_DIALOG: 'hideRoleDialog',
+  SET_ACCESS_USERS_ROLES: 'setAccessUsersRoles',
+  SHOW_USERS_ROLE_DIALOG: 'showUsersRoleDialog',
+  HIDE_USERS_ROLE_DIALOG: 'hideUsersRoleDialog'
 }

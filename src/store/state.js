@@ -1,4 +1,24 @@
 export default {
+  access: {
+    rolesList: [],
+    showDialog: false,
+    rolesUsersShowDialog: true,
+    newRole: {
+      _id: 'NON DEFINI',
+      color: 'black',
+      description: ''
+    },
+    currentRole: {
+      _id: 'NON DEFINI',
+      color: 'black',
+      description: ''
+    },
+    currentAssociationRole: {
+      _id: 'NON DEFINI',
+      color: 'black',
+      description: ''
+    }
+  },
   search: {
     visible: false
   },
@@ -105,5 +125,10 @@ export default {
   },
   meteo: {
     lastWeather: null
+  },
+  snackbar: {
+    visible: false,
+    color: '',
+    message: ''
   }
 }

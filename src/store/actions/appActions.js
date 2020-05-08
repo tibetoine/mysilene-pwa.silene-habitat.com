@@ -431,6 +431,135 @@ export default {
   },
   [On.LOGIN_STOP]: function ({ commit }) {
     commit(Do.LOGIN_STOP)
+  },
+  [On.LOAD_ACCESS_ROLES]: async function ({ commit, dispatch }) {
+    let response
+    try {
+      response = await rest.loadRoles()
+      // console.log('**********************')
+      // console.log(response.data)
+      /* commit la repose dans les roles */
+      commit(Do.SET_ACCESS_ROLES, response.data)
+    } catch (error) {
+      let errorMessage = `#ApiAccess001 - Erreur chargement des roles`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // commit(Do.SHOW_GLOBAL_SUCCESS, 'Chargement des roles réussi')
+    return response
+  },
+  [On.ADD_ACCESS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    console.log(role)
+    try {
+      response = await rest.addRole(role)
+    } catch (error) {
+      console.log('/////////////')
+      let errorMessage = `#ApiAccess002 - Erreur lors de l'ajout d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    dispatch(On.LOAD_ACCESS_ROLES)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle ajouté avec succès')
+    commit(Do.HIDE_ROLE_DIALOG)
+    return response
+  },
+  [On.DELETE_ACCESS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    try {
+      response = await rest.deleteRole(role._id)
+    } catch (error) {
+      let errorMessage = `#ApiAccess003 - Erreur lors de la suppression d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    dispatch(On.LOAD_ACCESS_ROLES)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle supprimé avec succès')
+    return response
+  },
+  [On.EDIT_ACCESS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    try {
+      response = await rest.editRole(role)
+    } catch (error) {
+      let errorMessage = `#ApiAccess004 - Erreur lors de la modification d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    dispatch(On.LOAD_ACCESS_ROLES)
+    commit(Do.HIDE_ROLE_DIALOG)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle modifié avec succès')
+    return response
+  },
+  [On.LOAD_ACCESS_USERS_ROLES]: async function ({ commit, state }) {
+    let response
+    try {
+      response = await rest.loadUsersRoles()
+      // console.log('**********************')
+      // console.log(response.data)
+      /* commit la repose dans les roles */
+      // let userRoles = response.data
+      commit(Do.SET_ACCESS_USERS_ROLES, response.data)
+    } catch (error) {
+      let errorMessage = `#ApiAccess011 - Erreur chargement des roles`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // commit(Do.SHOW_GLOBAL_SUCCESS, 'Chargement des roles réussi')
+    return response
+  },
+  [On.ADD_ACCESS_USERS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    console.log(role)
+    try {
+      response = await rest.addUsersRole(role)
+    } catch (error) {
+      console.log('/////////////')
+      let errorMessage = `#ApiAccess012 - Erreur lors de l'ajout d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    dispatch(On.LOAD_ACCESS_USERS_ROLES)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle ajouté avec succès')
+    commit(Do.HIDE_USERS_ROLE_DIALOG)
+    return response
+  },
+  [On.DELETE_ACCESS_USERS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    try {
+      response = await rest.deleteUsersRole(role._id)
+    } catch (error) {
+      let errorMessage = `#ApiAccess013 - Erreur lors de la suppression d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    dispatch(On.LOAD_ACCESS_USERS_ROLES)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle supprimé avec succès')
+    return response
+  },
+  [On.EDIT_ACCESS_USERS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    try {
+      response = await rest.editUsersRole(role)
+    } catch (error) {
+      let errorMessage = `#ApiAccess014 - Erreur lors de la modification d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    dispatch(On.LOAD_ACCESS_USERS_ROLES)
+    commit(Do.HIDE_USERS_ROLE_DIALOG)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle modifié avec succès')
+    return response
   }
 }
 
@@ -467,7 +596,7 @@ function calculateTimes(details) {
     if (!element.time) {
       continue
     }
-    console.log('element.type', element.type)
+    // console.log('element.type', element.type)
     let type = getShiftTypeById(element.type)
     totalTime += stringToMinutes(element.time)
     switch (type) {
@@ -519,3 +648,17 @@ const getAvatar = (contact) => {
     '.jpg'
   )
 }
+
+/* const getContactFromUserId = (userId, contacts) => {
+  let returnContact = {}
+  for (let index = 0; index < contacts.length; index++) {
+    const contact = contacts[index]
+    if (contact.sAMAccountName === userId) {
+      returnContact._id = userId
+      returnContact.prenom = contact.givenName
+      returnContact.nom = contact.sn
+    }
+    break
+  }
+  return returnContact
+} */
