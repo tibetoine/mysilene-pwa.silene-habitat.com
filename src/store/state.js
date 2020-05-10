@@ -1,8 +1,10 @@
 export default {
   access: {
     rolesList: [],
+    rolesUsersList: [],
     showDialog: false,
     rolesUsersShowDialog: true,
+    rolesUsersShowDialogAdd: false,
     newRole: {
       _id: 'NON DEFINI',
       color: 'black',
@@ -17,7 +19,9 @@ export default {
       _id: 'NON DEFINI',
       color: 'black',
       description: ''
-    }
+    },
+    currentAssociationRoleIsDirty: false,
+    recordCurrentAssociationRole: null
   },
   search: {
     visible: false

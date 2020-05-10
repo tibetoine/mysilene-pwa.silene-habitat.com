@@ -5,6 +5,8 @@
         <admin-roles></admin-roles>
         <v-spacer style="margin-top: 20px;"></v-spacer>
         <admin-roles-users></admin-roles-users>
+        <v-spacer style="margin-top: 20px;"></v-spacer>
+        <admin-roles-permissions></admin-roles-permissions>
       </v-flex>
     </v-layout>
   </v-container>
@@ -13,11 +15,12 @@
 import { mapActions, mapState } from 'vuex'
 import AdminRoles from './AdminRoles'
 import AdminRolesUsers from './AdminRolesUsers'
+import AdminRolesPermissions from './AdminRolesPermissions'
 import On from '../../../const/on'
 
 export default {
   name: 'adminAccessComponent',
-  components: { AdminRoles, AdminRolesUsers },
+  components: { AdminRoles, AdminRolesUsers, AdminRolesPermissions },
   computed: {
     ...mapState({
       users: (state) => state.users.usersList

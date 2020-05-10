@@ -6,11 +6,6 @@
   >
     <v-card tile>
       <v-toolbar>
-        <v-btn icon>
-          <v-icon>{{
-            currentAssociationRole.mode === 'edit' ? 'edit' : 'add'
-          }}</v-icon>
-        </v-btn>
         <v-toolbar-title>Association Rôles - Users - Groups</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon @click="visible = !visible">
@@ -21,20 +16,20 @@
       <!-- Choix du rôle -->
       <v-form style="padding: 5px;" v-model="valid">
         <v-select
-          :items="roles"
+          :items="usersRoles"
           v-model="currentAssociationRole"
           label="Rôle à modifier ou compléter"
           item-text="_id"
           item-value="_id"
           chips
           max-height="auto"
-          autocomplete
+          :return-object="true"
+          solo
         >
           <template slot="selection" slot-scope="data">
             <v-chip
               :selected="data.selected"
               :key="data.item._id"
-              class="chip--select-multi"
               @input="data.parent.selectItem(data.item)"
               :color="data.item.color"
               text-color="white"
@@ -53,54 +48,74 @@
         <v-card>
           <v-toolbar>
             <v-toolbar-side-icon></v-toolbar-side-icon>
-            <v-toolbar-title>Users</v-toolbar-title>
+            <v-toolbar-title v-if="!showSearchUser">Users</v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-text-field
+              v-if="showSearchUser"
+              append-icon="close"
+              :append-icon-cb="hideSearch"
+              v-model="searchUser"
+              solo
+              hide-details
+              single-line
+            ></v-text-field>
+            <v-btn icon v-else>
+              <v-icon @click="showSearchUser = true">search</v-icon>
+            </v-btn>
             <v-btn icon>
-              <v-icon>search</v-icon>
+              <v-icon @click="addUser()">add</v-icon>
             </v-btn>
           </v-toolbar>
-          <v-list two-line>
-            <template v-for="(item, index) in items">
-              <v-subheader v-if="item.header" :key="item.header">{{
-                item.header
-              }}</v-subheader>
-              <v-divider
-                v-else-if="item.divider"
-                :inset="item.inset"
-                :key="index"
-              ></v-divider>
-              <v-list-tile v-else :key="item.title" avatar @click="">
-                <v-list-tile-avatar>
-                  <img :src="item.avatar" />
-                </v-list-tile-avatar>
+          <v-list v-if="currentAssociationRole">
+            <template v-for="(user, index) in visiblePages">
+              <v-list-tile :key="user._id" avatar @click="">
+                <v-list-tile-action>
+                  <v-icon @click="deleteUser(user)">delete</v-icon>
+                </v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title v-html="item.title"></v-list-tile-title>
-                  <v-list-tile-sub-title
-                    v-html="item.subtitle"
-                  ></v-list-tile-sub-title>
+                  {{ user.prenom }} {{ user.nom }}
                 </v-list-tile-content>
               </v-list-tile>
             </template>
           </v-list>
+          <div class="text-xs-center">
+            <v-pagination
+              v-if="filteredUsers.length > 3"
+              v-model="page"
+              :length="Math.ceil(filteredUsers.length / perPage)"
+            ></v-pagination>
+          </div>
         </v-card>
 
         <!-- Groups associés au rôle -->
       </v-form>
     </v-card>
+    <AdminRolesUsersDialogAdd
+      :role="currentAssociationRole"
+    ></AdminRolesUsersDialogAdd>
   </v-dialog>
 </template>
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import On from '../../../const/on'
 import Do from '../../../const/do'
+import AdminRolesUsersDialogAdd from './AdminRolesUsersDialogAdd'
+import { removeAccent } from '../../../shared/helper'
 export default {
-  name: 'adminRoleDialog',
+  name: 'adminRoleUsersDialog',
   props: ['role'],
+  components: {
+    AdminRolesUsersDialogAdd
+  },
   data() {
     return {
       toggle_color: '',
       unknowRoleId: 'NON DEFINI',
       valid: false,
+      showSearchUser: false,
+      searchUser: '',
+      page: 1,
+      perPage: 3,
       idRules: [
         (v) => !!v || 'La nom de rôle est requis',
         (v) =>
@@ -120,35 +135,33 @@ export default {
       saveRole: On.ADD_ACCESS_ROLE
     }),
     ...mapMutations({
-      hideRoleDialog: Do.HIDE_ROLE_DIALOG
+      hideRoleDialog: Do.HIDE_ROLE_DIALOG,
+      showRoleUserAddDialog: Do.SHOW_USERS_ROLE_ADD_DIALOG
     }),
+    addUser() {
+      console.log('yop')
+      this.searchUser = ''
+      this.showRoleUserAddDialog()
+    },
+    deleteUser(user) {
+      let index = this.currentAssociationRole.users.indexOf(user)
+      if (index > -1) {
+        this.currentAssociationRole.users.splice(index, 1)
+      }
+    },
+    hideSearch() {
+      this.showSearchUser = false
+    },
     clear() {
       /* TODO */
-    },
-    submit() {
-      let role = {
-        _id: this.currentAssociationRole._id,
-        color: this.currentAssociationRole.color,
-        description: this.currentAssociationRole.description
-      }
-
-      try {
-        if (this.currentAssociationRole.mode === 'edit') {
-          this.editRole(role).then(() => {
-            console.log('edit ok')
-          })
-        } else {
-          this.saveRole(role).then(() => {
-            console.log('save ok')
-          })
-        }
-      } catch (err) {
-        console.error(err)
-      }
     }
   },
-  watch: {},
-  mounted: function () {},
+  watch: {
+    /* currentAssociationRole(n, o) {
+      console.log('currentAssociationRole ', o, n)
+    } */
+  },
+  updated: function () {},
   computed: {
     visible: {
       get: function () {
@@ -158,12 +171,59 @@ export default {
         this.$store.state.access.rolesUsersShowDialog = val
       }
     },
+    filteredUsers: {
+      get: function () {
+        let filteredUsers
+        if (
+          !this.$store.state.access.currentAssociationRole ||
+          !this.$store.state.access.currentAssociationRole.users ||
+          this.$store.state.access.currentAssociationRole.users.length <= 0
+        ) {
+          return []
+        }
+        console.log(this.$store.state.access.currentAssociationRole.users)
+        filteredUsers = this.$store.state.access.currentAssociationRole.users.filter(
+          (user) => {
+            let isFiltered = false
+            isFiltered =
+              isFiltered ||
+              removeAccent(user.prenom)
+                .toLowerCase()
+                .indexOf(this.searchUser.toLowerCase()) > -1
+            if (user.nom != null) {
+              isFiltered =
+                isFiltered ||
+                removeAccent(user.nom)
+                  .toLowerCase()
+                  .indexOf(this.searchUser.toLowerCase()) > -1
+            }
+            return isFiltered
+          }
+        )
+        return filteredUsers
+      },
+      set: function (val) {
+        // not to use
+      }
+    },
+    visiblePages() {
+      return this.filteredUsers.slice(
+        (this.page - 1) * this.perPage,
+        this.page * this.perPage
+      )
+    },
+    currentAssociationRole: {
+      get: function () {
+        return this.$store.state.access.currentAssociationRole
+      },
+      set: function (val) {
+        console.log('Ouaip ! ', val)
+        this.$store.state.access.currentAssociationRole = val
+      }
+    },
     ...mapState({
-      currentAssociationRole: (state) => state.access.currentAssociationRole,
-      ...mapState({
-        roles: (state) => state.access.rolesList,
-        contacts: (state) => state.contacts.fullList
-      })
+      contacts: (state) => state.contacts.fullList,
+      usersRoles: (state) => state.access.rolesUsersList
     })
   }
 }

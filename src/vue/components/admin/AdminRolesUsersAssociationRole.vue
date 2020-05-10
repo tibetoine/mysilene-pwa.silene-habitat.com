@@ -27,39 +27,41 @@
     <v-flex class="col4">
       <div>
         <v-btn small flat icon color="primary">
-          <v-icon>edit</v-icon>
+          <v-icon @click="editRole()">edit</v-icon>
         </v-btn>
       </div>
     </v-flex>
   </v-layout>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import Do from '../../../const/do'
 export default {
   name: 'adminRolesUsersAssociationRolesComponent',
   components: {},
   computed: {
     ...mapState({
-      roles: (state) => state.access.rolesList,
-      contacts: (state) => state.contacts.fullList
+      roles: (state) => state.access.rolesList
     }),
+    currentAssociationRole: {
+      get: function () {
+        return this.$store.state.access.currentAssociationRole
+      },
+      set: function (val) {
+        console.log('Ouaip ! ', val)
+        this.$store.state.access.currentAssociationRole = val
+      }
+    },
     role: {
       get: function () {
         let returnRole
         if (!this.roles || this.roles.length <= 0) {
           console.log('this.roles n est pas encore initialisé')
           return null
-        } else {
-          console.log('OK ! this.roles est init')
         }
         for (let index = 0; index < this.roles.length; index++) {
           const role = this.roles[index]
 
-          console.log(
-            'this.associationRole._id [%s] === element._id [%s] ',
-            this.associationRole._id,
-            role._id
-          )
           if (this.associationRole._id === role._id) {
             returnRole = role
             break
@@ -103,19 +105,15 @@ export default {
   },
   methods: {
     getContact(user) {
-      // console.log('mmmm', this.contacts)
-      // console.log('mmmm2', user)
-      let returnContact = `<span style="color:red;">${user}</span>`
-      for (let index = 0; index < this.contacts.length; index++) {
-        const element = this.contacts[index]
-        if (user === element.sAMAccountName) {
-          console.log('trouvé')
-          returnContact = `<span>${element.givenName} ${element.sn}</span>`
-          break
-        }
-      }
-
-      return returnContact
+      return `<span>${user.prenom} ${user.nom}</span>`
+    },
+    ...mapMutations({
+      showRoleUserDialog: Do.SHOW_USERS_ROLE_DIALOG
+    }),
+    editRole() {
+      console.log('this.associationRole : ', this.associationRole)
+      this.currentAssociationRole = this.associationRole
+      this.showRoleUserDialog()
     }
   },
   data() {

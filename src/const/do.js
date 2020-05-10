@@ -46,5 +46,7 @@ export default {
   HIDE_ROLE_DIALOG: 'hideRoleDialog',
   SET_ACCESS_USERS_ROLES: 'setAccessUsersRoles',
   SHOW_USERS_ROLE_DIALOG: 'showUsersRoleDialog',
-  HIDE_USERS_ROLE_DIALOG: 'hideUsersRoleDialog'
+  HIDE_USERS_ROLE_DIALOG: 'hideUsersRoleDialog',
+  SHOW_USERS_ROLE_ADD_DIALOG: 'showUsersRoleDialogAdd',
+  HIDE_USERS_ROLE_ADD_DIALOG: 'hideUsersRoleDialogAdd'
 }

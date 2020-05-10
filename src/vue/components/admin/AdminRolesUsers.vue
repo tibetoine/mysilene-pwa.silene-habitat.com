@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     ...mapState({
-      roles: (state) => state.access.rolesUsersList
+      associationRoles: (state) => state.access.rolesUsersList
     }),
     currentRole: {
       get: function () {
@@ -54,14 +54,21 @@ export default {
       set: function (val) {
         this.$store.state.access.currentRole = val
       }
+    },
+    currentAssociationRole: {
+      get: function () {
+        return this.$store.state.access.currentAssociationRole
+      },
+      set: function (val) {
+        this.$store.state.access.currentAssociationRole = val
+      }
     }
   },
   mounted: function () {
-    this.loadUserRoles()
+    /* Les données de référence sont chargés à partir de App.vue */
   },
   methods: {
     ...mapActions({
-      loadUserRoles: On.LOAD_ACCESS_USERS_ROLES,
       deleteRole: On.DELETE_ACCESS_ROLE
     }),
     ...mapMutations({
@@ -101,16 +108,6 @@ export default {
       visible: false,
       confirmText: '',
       btnDisabled: false,
-      associationRoles: [
-        { _id: 'ALL', groups: ['_Silène'], users: [] },
-        { _id: 'MANAGER', groups: [], users: ['coupeau', 'clouet'] },
-        { _id: 'ADMIN', groups: ['_Informatique'], users: [] },
-        {
-          _id: 'RH',
-          groups: ['_Ressources humaines'],
-          users: ['michelot', 'anonyme']
-        }
-      ],
       confirmRules: [
         (v) => !!v || 'Confirmation est requise',
         (v) => v === this.selectedUser || 'Veuillez confirmer'

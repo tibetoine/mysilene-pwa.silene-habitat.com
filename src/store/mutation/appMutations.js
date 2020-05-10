@@ -72,5 +72,11 @@ export default {
   },
   [Do.HIDE_USERS_ROLE_DIALOG]: (state) => {
     state.access.rolesUsersShowDialog = false
+  },
+  [Do.SHOW_USERS_ROLE_ADD_DIALOG]: (state) => {
+    state.access.rolesUsersShowDialogAdd = true
+  },
+  [Do.HIDE_USERS_ROLE_ADD_DIALOG]: (state) => {
+    state.access.rolesUsersShowDialogAdd = false
   }
 }

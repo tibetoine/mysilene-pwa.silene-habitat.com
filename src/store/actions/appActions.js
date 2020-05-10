@@ -422,7 +422,9 @@ export default {
     dispatch(On.GET_ROLES)
     dispatch(On.LOAD_PREFS)
     dispatch(On.LOAD_NEWS)
-    dispatch(On.LOAD_CONTACTS)
+    dispatch(On.LOAD_CONTACTS).then(() => {
+      dispatch(On.LOAD_ACCESS_USERS_ROLES)
+    })
     dispatch(On.LOAD_DOCS)
     dispatch(On.GET_CONTACT, user._id)
   },
@@ -455,7 +457,6 @@ export default {
     try {
       response = await rest.addRole(role)
     } catch (error) {
-      console.log('/////////////')
       let errorMessage = `#ApiAccess002 - Erreur lors de l'ajout d'un rôle`
       console.error(errorMessage, error)
       commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
@@ -500,18 +501,34 @@ export default {
     let response
     try {
       response = await rest.loadUsersRoles()
-      // console.log('**********************')
-      // console.log(response.data)
-      /* commit la repose dans les roles */
-      // let userRoles = response.data
-      commit(Do.SET_ACCESS_USERS_ROLES, response.data)
+      let userRoles = response.data
+      console.log(response.data)
+
+      let dataToSet = []
+      let contacts = state.contacts.fullList
+      userRoles.forEach((element) => {
+        let users = []
+        if (element.users && element.users.length > 0) {
+          element.users.forEach((userId) => {
+            users.push(getContactFromUserId(userId, contacts))
+          })
+        }
+        dataToSet.push({
+          _id: element._id,
+          color: element.color,
+          description: element.description,
+          users: users,
+          groups: element.groups
+        })
+      })
+      console.log('dataToSet : ', dataToSet)
+      commit(Do.SET_ACCESS_USERS_ROLES, dataToSet)
     } catch (error) {
       let errorMessage = `#ApiAccess011 - Erreur chargement des roles`
       console.error(errorMessage, error)
       commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
       return
     }
-    // commit(Do.SHOW_GLOBAL_SUCCESS, 'Chargement des roles réussi')
     return response
   },
   [On.ADD_ACCESS_USERS_ROLE]: async function ({ commit, dispatch }, role) {
@@ -520,7 +537,6 @@ export default {
     try {
       response = await rest.addUsersRole(role)
     } catch (error) {
-      console.log('/////////////')
       let errorMessage = `#ApiAccess012 - Erreur lors de l'ajout d'un rôle`
       console.error(errorMessage, error)
       commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
@@ -649,16 +665,30 @@ const getAvatar = (contact) => {
   )
 }
 
-/* const getContactFromUserId = (userId, contacts) => {
-  let returnContact = {}
+/**
+ * Retourne des informations de contact à partir d'un userId
+ * @param {*} userId
+ * @param {*} contacts
+ */
+const getContactFromUserId = (userId, contacts) => {
+  let returnContact
   for (let index = 0; index < contacts.length; index++) {
     const contact = contacts[index]
     if (contact.sAMAccountName === userId) {
-      returnContact._id = userId
-      returnContact.prenom = contact.givenName
-      returnContact.nom = contact.sn
+      returnContact = {
+        _id: userId,
+        prenom: contact.givenName,
+        nom: contact.sn
+      }
+      break
     }
-    break
+  }
+  if (!returnContact) {
+    returnContact = {
+      _id: userId,
+      prenom: 'John',
+      nom: 'DOE'
+    }
   }
   return returnContact
-} */
+}

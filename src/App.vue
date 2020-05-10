@@ -192,8 +192,6 @@ export default {
     }
   },
   beforeCreate() {
-    window.addEventListener('mysilene-do-load-data', (e) => this.loadData(e))
-
     /* Connexion auto si token dans le storage */
     const token = localStorage.getItem('user-token')
     const userId = localStorage.getItem('user-id')
@@ -202,8 +200,6 @@ export default {
       var user = { _id: userId, token: token }
       this.$store.dispatch(On.AUTO_LOGIN, user)
     }
-
-    // this.autoLogin(user)
   },
   mounted: function () {
     // Vérifie l'état du serveur d'API
@@ -211,12 +207,6 @@ export default {
     this.loadWeather()
   },
   methods: {
-    loadData(e) {
-      // console.log('Loading Data suite à event', e)
-      this.loadDocs()
-      this.loadNews()
-      this.loadContacts()
-    },
     detected(e) {
       if (e) {
         this.$store.state.offline.read = false
@@ -230,13 +220,8 @@ export default {
     },
     ...mapActions({
       healthcheck: On.HEALTHCHECK,
-      loadContacts: On.LOAD_CONTACTS,
-      loadDocs: On.LOAD_DOCS,
-      loadNews: On.LOAD_NEWS,
       loadWeather: On.LOAD_WEATHER,
-      loadBim: On.LOAD_BIM,
-      logout: On.LOGOUT,
-      autoLogin: On.AUTO_LOGIN
+      logout: On.LOGOUT
     }),
     ...mapState([]),
     ...mapMutations({
