@@ -3,6 +3,7 @@ export default {
   HEALTHCHECK: 'healthcheck',
   LOAD_DATA: 'loadData',
   LOAD_CONTACTS: 'loadContacts',
+  LOAD_GROUPS: 'loadGroups',
   LOAD_USERS: 'loadUsers',
   LOAD_DOCS: 'loadDocs',
   LOAD_NEWS: 'loadNews',

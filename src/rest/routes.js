@@ -2,6 +2,7 @@ import api from './api'
 
 export default {
   getContacts: () => api.get(`api/contacts`),
+  getGroups: () => api.get(`api/groups`),
   healthcheck: () => api.get(`healthcheck`),
   getDocs: () => api.get(`api-docs/docs`),
   getNews: () => api.get(`api/news`),

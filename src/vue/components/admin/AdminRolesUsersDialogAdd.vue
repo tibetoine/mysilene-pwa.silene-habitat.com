@@ -24,9 +24,9 @@
       ></v-text-field>
       <v-list v-if="currentAssociationRole">
         <template v-for="(contact, index) in visiblePages">
-          <v-list-tile :key="contact.sAMAccountName" avatar @click="">
+          <v-list-tile :key="contact.sAMAccountName">
             <v-list-tile-action>
-              <v-icon @click="addContact(contact)">add</v-icon>
+              <v-icon @click="addContact(contact)">person_add</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               {{ contact.givenName }} {{ contact.sn }} ({{

@@ -45,7 +45,7 @@
         </v-select>
 
         <!-- Users associés au rôle -->
-        <v-card>
+        <v-card v-if="currentAssociationRole && currentAssociationRole.users">
           <v-toolbar>
             <v-toolbar-side-icon></v-toolbar-side-icon>
             <v-toolbar-title v-if="!showSearchUser">Users</v-toolbar-title>
@@ -63,12 +63,12 @@
               <v-icon @click="showSearchUser = true">search</v-icon>
             </v-btn>
             <v-btn icon>
-              <v-icon @click="addUser()">add</v-icon>
+              <v-icon @click="addUser()">person_add</v-icon>
             </v-btn>
           </v-toolbar>
           <v-list v-if="currentAssociationRole">
             <template v-for="(user, index) in visiblePages">
-              <v-list-tile :key="user._id" avatar @click="">
+              <v-list-tile :key="user._id">
                 <v-list-tile-action>
                   <v-icon @click="deleteUser(user)">delete</v-icon>
                 </v-list-tile-action>
@@ -86,13 +86,61 @@
             ></v-pagination>
           </div>
         </v-card>
+        <v-alert v-else :value="true" type="error">
+          Aucun rôle choisi
+        </v-alert>
 
         <!-- Groups associés au rôle -->
+        <v-spacer style="margin-top: 20px;"></v-spacer>
+        <v-card v-if="currentAssociationRole && currentAssociationRole.users">
+          <v-toolbar>
+            <v-toolbar-side-icon></v-toolbar-side-icon>
+            <v-toolbar-title v-if="!showSearchGroup">Groups</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-if="showSearchGroup"
+              append-icon="close"
+              :append-icon-cb="hideSearchGroup"
+              v-model="searchGroup"
+              solo
+              hide-details
+              single-line
+            ></v-text-field>
+            <v-btn icon v-else>
+              <v-icon @click="showSearchGroup = true">search</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon @click="addGroup()">group_add</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-list v-if="currentAssociationRole">
+            <template v-for="(group, index) in visibleGroupsPages">
+              <v-list-tile :key="index">
+                <v-list-tile-action>
+                  <v-icon @click="deleteGroup(group)">delete</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  {{ group }}
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+          </v-list>
+          <div class="text-xs-center">
+            <v-pagination
+              v-if="filteredGroups.length > 3"
+              v-model="pageGroup"
+              :length="Math.ceil(filteredGroups.length / perPageGroup)"
+            ></v-pagination>
+          </div>
+        </v-card>
       </v-form>
     </v-card>
     <AdminRolesUsersDialogAdd
       :role="currentAssociationRole"
     ></AdminRolesUsersDialogAdd>
+    <AdminRolesGroupsDialogAdd
+      :role="currentAssociationRole"
+    ></AdminRolesGroupsDialogAdd>
   </v-dialog>
 </template>
 <script>
@@ -100,12 +148,14 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import On from '../../../const/on'
 import Do from '../../../const/do'
 import AdminRolesUsersDialogAdd from './AdminRolesUsersDialogAdd'
+import AdminRolesGroupsDialogAdd from './AdminRolesGroupsDialogAdd'
 import { removeAccent } from '../../../shared/helper'
 export default {
   name: 'adminRoleUsersDialog',
   props: ['role'],
   components: {
-    AdminRolesUsersDialogAdd
+    AdminRolesUsersDialogAdd,
+    AdminRolesGroupsDialogAdd
   },
   data() {
     return {
@@ -113,9 +163,13 @@ export default {
       unknowRoleId: 'NON DEFINI',
       valid: false,
       showSearchUser: false,
+      showSearchGroup: false,
       searchUser: '',
+      searchGroup: '',
       page: 1,
       perPage: 3,
+      pageGroup: 1,
+      perPageGroup: 3,
       idRules: [
         (v) => !!v || 'La nom de rôle est requis',
         (v) =>
@@ -136,7 +190,8 @@ export default {
     }),
     ...mapMutations({
       hideRoleDialog: Do.HIDE_ROLE_DIALOG,
-      showRoleUserAddDialog: Do.SHOW_USERS_ROLE_ADD_DIALOG
+      showRoleUserAddDialog: Do.SHOW_USERS_ROLE_ADD_DIALOG,
+      showRoleGroupAddDialog: Do.SHOW_GROUPS_ROLE_ADD_DIALOG
     }),
     addUser() {
       console.log('yop')
@@ -149,8 +204,22 @@ export default {
         this.currentAssociationRole.users.splice(index, 1)
       }
     },
+    addGroup() {
+      console.log('yop group')
+      this.searchGroup = ''
+      this.showRoleGroupAddDialog()
+    },
+    deleteGroup(group) {
+      let index = this.currentAssociationRole.groups.indexOf(group)
+      if (index > -1) {
+        this.currentAssociationRole.groups.splice(index, 1)
+      }
+    },
     hideSearch() {
       this.showSearchUser = false
+    },
+    hideSearchGroup() {
+      this.showSearchGroup = false
     },
     clear() {
       /* TODO */
@@ -210,6 +279,38 @@ export default {
       return this.filteredUsers.slice(
         (this.page - 1) * this.perPage,
         this.page * this.perPage
+      )
+    },
+    filteredGroups: {
+      get: function () {
+        let filteredGroups
+        if (
+          !this.$store.state.access.currentAssociationRole ||
+          !this.$store.state.access.currentAssociationRole.groups ||
+          this.$store.state.access.currentAssociationRole.groups.length <= 0
+        ) {
+          return []
+        }
+        console.log(this.$store.state.access.currentAssociationRole.groups)
+        filteredGroups = this.$store.state.access.currentAssociationRole.groups.filter(
+          (group) => {
+            return (
+              removeAccent(group)
+                .toLowerCase()
+                .indexOf(this.searchGroup.toLowerCase()) > -1
+            )
+          }
+        )
+        return filteredGroups
+      },
+      set: function (val) {
+        // not to use
+      }
+    },
+    visibleGroupsPages() {
+      return this.filteredGroups.slice(
+        (this.pageGroup - 1) * this.perPageGroup,
+        this.pageGroup * this.perPageGroup
       )
     },
     currentAssociationRole: {

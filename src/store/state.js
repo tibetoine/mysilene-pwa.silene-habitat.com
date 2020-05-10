@@ -5,6 +5,7 @@ export default {
     showDialog: false,
     rolesUsersShowDialog: true,
     rolesUsersShowDialogAdd: false,
+    rolesGroupsShowDialogAdd: false,
     newRole: {
       _id: 'NON DEFINI',
       color: 'black',
@@ -84,6 +85,7 @@ export default {
     text: 'Indisponible pour ce contact',
     groupedContacts: []
   },
+  groups: [],
   users: {
     search: '',
     usersList: [],

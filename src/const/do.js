@@ -3,6 +3,7 @@ export default {
   SET_DOWN: 'setDown',
   SET_UP: 'setUp',
   SET_CONTACTS: 'setContacts',
+  SET_GROUPS: 'setGroups',
   SET_DOCS: 'setDocs',
   SET_CONTACTS_SEARCH: 'setContactsSearch',
   SET_NEWS: 'setNews',
@@ -48,5 +49,7 @@ export default {
   SHOW_USERS_ROLE_DIALOG: 'showUsersRoleDialog',
   HIDE_USERS_ROLE_DIALOG: 'hideUsersRoleDialog',
   SHOW_USERS_ROLE_ADD_DIALOG: 'showUsersRoleDialogAdd',
-  HIDE_USERS_ROLE_ADD_DIALOG: 'hideUsersRoleDialogAdd'
+  HIDE_USERS_ROLE_ADD_DIALOG: 'hideUsersRoleDialogAdd',
+  SHOW_GROUPS_ROLE_ADD_DIALOG: 'showGroupsRoleDialogAdd',
+  HIDE_GROUPS_ROLE_ADD_DIALOG: 'hideGroupsRoleDialogAdd'
 }

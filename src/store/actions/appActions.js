@@ -24,6 +24,24 @@ export default {
       }
     }
   },
+  [On.LOAD_GROUPS]: async function ({ commit }) {
+    try {
+      const response = await rest.getGroups()
+      if (response.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      } else {
+        const groups = response.body
+        /* 2/ Enregistrement dans le store */
+        commit(Do.SET_GROUPS, groups)
+      }
+    } catch (error) {
+      if (error && error.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      }
+    }
+  },
   [On.LOAD_USERS]: async function ({ commit }) {
     /* 1/ Appel REST à l'API  */
     try {
@@ -402,7 +420,10 @@ export default {
       dispatch(On.GET_ROLES)
       dispatch(On.LOAD_PREFS)
       dispatch(On.LOAD_NEWS)
-      dispatch(On.LOAD_CONTACTS)
+      dispatch(On.LOAD_CONTACTS).then(() => {
+        dispatch(On.LOAD_ACCESS_USERS_ROLES)
+      })
+      dispatch(On.LOAD_GROUPS)
       dispatch(On.LOAD_DOCS)
       dispatch(On.GET_CONTACT, userId)
     }
@@ -425,6 +446,7 @@ export default {
     dispatch(On.LOAD_CONTACTS).then(() => {
       dispatch(On.LOAD_ACCESS_USERS_ROLES)
     })
+    dispatch(On.LOAD_GROUPS)
     dispatch(On.LOAD_DOCS)
     dispatch(On.GET_CONTACT, user._id)
   },
