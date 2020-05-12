@@ -76,7 +76,7 @@ export default {
       this.visible = true
     },
     deleteRole() {
-      console.log('deleteRole')
+      console.log('deleteRole not implemented')
     }
   },
   data() {

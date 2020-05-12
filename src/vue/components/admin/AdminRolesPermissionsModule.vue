@@ -57,7 +57,6 @@ export default {
       showRolePermissionsDialog: Do.SHOW_PERMISSIONS_ROLE_DIALOG
     }),
     editPermission(permission) {
-      console.log('TODO', permission)
       this.currentPermission = permission
       this.showRolePermissionsDialog()
     }

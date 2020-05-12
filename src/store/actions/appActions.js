@@ -166,21 +166,6 @@ export default {
       }
     }
   },
-  [On.IS_ADMIN]: async function ({ commit, state }) {
-    var userId = localStorage.getItem('user-id')
-    try {
-      const response = await rest.isAdmin(userId)
-      if (response.status === 204) {
-        state.login.isAdmin = true
-      } else {
-        state.login.isAdmin = false
-      }
-    } catch (error) {
-      // Je ne sais pas quoi faire si y'a une erreur à ce stade
-      state.login.isAdmin = false
-      console.error('error dans le isAdmin', error)
-    }
-  },
   [On.GET_ROLES]: async function ({ commit, state }) {
     var userId = localStorage.getItem('user-id')
     try {
@@ -416,13 +401,12 @@ export default {
       commit(Do.LOGIN_SUCCESS, response.body)
       commit(Do.LOGIN_STOP)
       /* Dispatch Action */
-      dispatch(On.IS_ADMIN)
       dispatch(On.GET_ROLES)
+      dispatch(On.LOAD_CONTACTS).then(() => {
+        dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+      })
       dispatch(On.LOAD_PREFS)
       dispatch(On.LOAD_NEWS)
-      dispatch(On.LOAD_CONTACTS).then(() => {
-        dispatch(On.LOAD_ACCESS_USERS_ROLES)
-      })
       dispatch(On.LOAD_GROUPS)
       dispatch(On.LOAD_DOCS)
       dispatch(On.GET_CONTACT, userId)
@@ -439,13 +423,12 @@ export default {
     commit(Do.LOGIN_SUCCESS, user)
 
     /* Dispatch Action */
-    dispatch(On.IS_ADMIN)
     dispatch(On.GET_ROLES)
+    dispatch(On.LOAD_CONTACTS).then(() => {
+      dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    })
     dispatch(On.LOAD_PREFS)
     dispatch(On.LOAD_NEWS)
-    dispatch(On.LOAD_CONTACTS).then(() => {
-      dispatch(On.LOAD_ACCESS_USERS_ROLES)
-    })
     dispatch(On.LOAD_GROUPS)
     dispatch(On.LOAD_DOCS)
     dispatch(On.GET_CONTACT, user._id)
@@ -456,10 +439,7 @@ export default {
   [On.LOGIN_STOP]: function ({ commit }) {
     commit(Do.LOGIN_STOP)
   },
-  [On.LOAD_ACCESS_ROLES_AND_PERMISSIONS]: async function ({
-    commit,
-    dispatch
-  }) {
+  [On.LOAD_ACCESS_ROLES_AND_PERMISSIONS]: async function ({ commit, state }) {
     let response
     let response2
     try {
@@ -483,7 +463,26 @@ export default {
         }
         permission.roles = newRoles
       })
-      commit(Do.SET_ACCESS_ROLES, roles)
+
+      /* Chargement des informations de contacts  */
+      let contacts = state.contacts.fullList
+      let dataToSet = []
+      roles.forEach((element) => {
+        let users = []
+        if (element.users && element.users.length > 0) {
+          element.users.forEach((userId) => {
+            users.push(getContactFromUserId(userId, contacts))
+          })
+        }
+        dataToSet.push({
+          _id: element._id,
+          color: element.color,
+          description: element.description,
+          users: users,
+          groups: element.groups
+        })
+      })
+      commit(Do.SET_ACCESS_USERS_ROLES, dataToSet)
       commit(Do.SET_ACCESS_PERMISSIONS, permissions)
     } catch (error) {
       let errorMessage = `#ApiAccess001 - Erreur chargement des roles et permissions`
@@ -496,7 +495,6 @@ export default {
   },
   [On.ADD_ACCESS_ROLE]: async function ({ commit, dispatch }, role) {
     let response
-    console.log(role)
     try {
       response = await rest.addRole(role)
     } catch (error) {
@@ -514,10 +512,6 @@ export default {
   [On.SAVE_ACCESS_USERS_ROLE]: async function ({ state, commit, dispatch }) {
     let response
     let rolesUsers = state.access.rolesUsersList
-    console.log(
-      'On.SAVE_ACCESS_USERS_ROLE --> rest.saveUsersRole : ',
-      rolesUsers
-    )
     try {
       response = await rest.saveUsersRole(rolesUsers)
     } catch (error) {
@@ -579,43 +573,8 @@ export default {
     commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle modifié avec succès')
     return response
   },
-  [On.LOAD_ACCESS_USERS_ROLES]: async function ({ commit, state }) {
-    let response
-    try {
-      response = await rest.loadUsersRoles()
-      let userRoles = response.data
-      console.log('Yata : ', response.data)
-
-      let dataToSet = []
-      let contacts = state.contacts.fullList
-      userRoles.forEach((element) => {
-        let users = []
-        if (element.users && element.users.length > 0) {
-          element.users.forEach((userId) => {
-            users.push(getContactFromUserId(userId, contacts))
-          })
-        }
-        dataToSet.push({
-          _id: element._id,
-          color: element.color,
-          description: element.description,
-          users: users,
-          groups: element.groups
-        })
-      })
-      console.log('dataToSet : ', dataToSet)
-      commit(Do.SET_ACCESS_USERS_ROLES, dataToSet)
-    } catch (error) {
-      let errorMessage = `#ApiAccess011 - Erreur chargement des roles`
-      console.error(errorMessage, error)
-      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
-      return
-    }
-    return response
-  },
   [On.ADD_ACCESS_USERS_ROLE]: async function ({ commit, dispatch }, role) {
     let response
-    console.log(role)
     try {
       response = await rest.addUsersRole(role)
     } catch (error) {
@@ -625,7 +584,7 @@ export default {
       return
     }
     // console.log(response)
-    dispatch(On.LOAD_ACCESS_USERS_ROLES)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
     commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle ajouté avec succès')
     commit(Do.HIDE_USERS_ROLE_DIALOG)
     return response
@@ -640,7 +599,7 @@ export default {
       commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
       return
     }
-    dispatch(On.LOAD_ACCESS_USERS_ROLES)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
     commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle supprimé avec succès')
     return response
   },
@@ -654,7 +613,7 @@ export default {
       commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
       return
     }
-    dispatch(On.LOAD_ACCESS_USERS_ROLES)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
     commit(Do.HIDE_USERS_ROLE_DIALOG)
     commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle modifié avec succès')
     return response

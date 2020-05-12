@@ -1,6 +1,5 @@
 export default {
   access: {
-    rolesList: [],
     permissionsList: [],
     rolesUsersList: [],
     permissionsListInBase: [],

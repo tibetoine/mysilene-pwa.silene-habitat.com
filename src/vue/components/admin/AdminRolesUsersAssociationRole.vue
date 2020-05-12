@@ -41,14 +41,13 @@ export default {
   components: {},
   computed: {
     ...mapState({
-      roles: (state) => state.access.rolesList
+      roles: (state) => state.access.rolesUsersList
     }),
     currentAssociationRole: {
       get: function () {
         return this.$store.state.access.currentAssociationRole
       },
       set: function (val) {
-        console.log('Ouaip ! ', val)
         this.$store.state.access.currentAssociationRole = val
       }
     },
@@ -67,13 +66,6 @@ export default {
             break
           }
         }
-        if (!returnRole) {
-          console.log(
-            'damnZ , returning nothing for : ',
-            this.associationRole,
-            returnRole
-          )
-        }
         return returnRole
       },
       set: function (val) {
@@ -88,13 +80,10 @@ export default {
             returnRole = element
           }
         })
-        if (!returnRole) {
-          console.log('damn2 , returning nothing for : ', this.associationRole)
-        }
         return returnRole
       },
       set: function (val) {
-        console.log('not user')
+        console.log('not used')
       }
     }
   },
@@ -111,7 +100,6 @@ export default {
       showRoleUserDialog: Do.SHOW_USERS_ROLE_DIALOG
     }),
     editRole() {
-      console.log('this.associationRole : ', this.associationRole)
       this.currentAssociationRole = this.associationRole
       this.showRoleUserDialog()
     }

@@ -41,7 +41,7 @@ export default {
   components: { AdminRolesDialog, Confirm },
   computed: {
     ...mapState({
-      roles: (state) => state.access.rolesList
+      roles: (state) => state.access.rolesUsersList
     }),
     currentRole: {
       get: function () {
@@ -78,14 +78,11 @@ export default {
             this.deleteRole(role)
           }
         })
-      console.log('deleteRole')
     },
     editRole(role) {
       role.mode = 'edit'
       this.currentRole = role
       this.showRoleDialog()
-      console.log('edit', role)
-      console.log('editRole')
     },
     addRole() {
       this.currentRole = this.$store.state.access.newRole

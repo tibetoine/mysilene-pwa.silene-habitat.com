@@ -40,7 +40,6 @@ export default {
   SET_CURRENT_SHIFT: 'setCurrentShift',
   SET_SHIFTS: 'setShifts',
   SET_CHOSEN_USER: 'setChosenUser',
-  SET_ACCESS_ROLES: 'setAccessRoles',
   SHOW_GLOBAL_ERROR: 'showGlobalError',
   SHOW_GLOBAL_SUCCESS: 'showGlobalSuccess',
   SHOW_ROLE_DIALOG: 'showRoleDialog',

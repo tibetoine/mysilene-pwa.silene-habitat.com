@@ -105,7 +105,6 @@ export default {
         return this.$store.state.access.currentAssociationRole
       },
       set: function (val) {
-        console.log('Ouaip ! ', val)
         this.$store.state.access.currentAssociationRole = val
       }
     },

@@ -194,7 +194,6 @@ export default {
       showRoleGroupAddDialog: Do.SHOW_GROUPS_ROLE_ADD_DIALOG
     }),
     addUser() {
-      console.log('yop')
       this.searchUser = ''
       this.showRoleUserAddDialog()
     },
@@ -205,7 +204,6 @@ export default {
       }
     },
     addGroup() {
-      console.log('yop group')
       this.searchGroup = ''
       this.showRoleGroupAddDialog()
     },
@@ -225,11 +223,7 @@ export default {
       /* TODO */
     }
   },
-  watch: {
-    /* currentAssociationRole(n, o) {
-      console.log('currentAssociationRole ', o, n)
-    } */
-  },
+  watch: {},
   updated: function () {},
   computed: {
     visible: {
@@ -250,7 +244,6 @@ export default {
         ) {
           return []
         }
-        console.log(this.$store.state.access.currentAssociationRole.users)
         filteredUsers = this.$store.state.access.currentAssociationRole.users.filter(
           (user) => {
             let isFiltered = false
@@ -291,7 +284,6 @@ export default {
         ) {
           return []
         }
-        console.log(this.$store.state.access.currentAssociationRole.groups)
         filteredGroups = this.$store.state.access.currentAssociationRole.groups.filter(
           (group) => {
             return (
@@ -318,7 +310,6 @@ export default {
         return this.$store.state.access.currentAssociationRole
       },
       set: function (val) {
-        console.log('Ouaip ! ', val)
         this.$store.state.access.currentAssociationRole = val
       }
     },

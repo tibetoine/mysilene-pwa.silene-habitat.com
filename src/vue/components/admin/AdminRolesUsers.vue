@@ -89,14 +89,11 @@ export default {
             this.deleteRole(role)
           }
         })
-      console.log('deleteRole')
     },
     editRole(role) {
       role.mode = 'edit'
       this.currentRole = role
       this.showRoleUserDialog()
-      console.log('edit', role)
-      console.log('editRole')
     },
     addRole() {
       this.currentRole = this.$store.state.access.newRole

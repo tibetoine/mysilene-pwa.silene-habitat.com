@@ -89,7 +89,6 @@ export default {
       showRoleGroupAddDialog: Do.SHOW_GROUPS_ROLE_ADD_DIALOG
     }),
     addRole(role) {
-      console.log('yop add Role')
       this.currentPermission.roles.push(role)
     },
     removeRole(role) {
@@ -122,13 +121,12 @@ export default {
         return this.$store.state.access.currentPermission
       },
       set: function (val) {
-        console.log('Ouaip ! ', val)
         this.$store.state.access.currentPermission = val
       }
     },
     otherRoles: {
       get: function () {
-        let allRoles = this.$store.state.access.rolesList
+        let allRoles = this.$store.state.access.rolesUsersList
         let returnRoles = []
         if (
           !this.currentPermission.roles ||

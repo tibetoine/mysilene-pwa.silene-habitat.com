@@ -141,46 +141,9 @@ export default {
       get: function () {
         return this.$store.state.login.Authenticate
       }
-    },
-    roles: {
-      get: function () {
-        if (
-          this.$store.state.login.roles &&
-          this.$store.state.login.roles.length > 0
-        ) {
-          let gtaManager = {
-            icon: 'verified_user',
-            text: 'GTA - Manager ',
-            path: '/gta_manager'
-          }
-          let gtaRH = {
-            icon: 'verified_user',
-            text: 'GTA - RH ',
-            path: '/gta_rh'
-          }
-          if (this.$store.state.login.roles.includes('admin')) {
-            this.items.push({
-              icon: 'build',
-              text: 'Administration',
-              path: '/admin'
-            })
-          }
-
-          if (this.$store.state.login.roles.includes('rh')) {
-            this.items.push(gtaRH)
-          }
-
-          if (this.$store.state.login.roles.includes('manager')) {
-            this.items.push(gtaManager)
-          }
-        }
-      }
     }
   },
   watch: {
-    roles(newValue, oldValue) {
-      // console.log(` Roles : Updating from ${oldValue} to ${newValue}`)
-    },
     isAuthenticate(newValue, oldValue) {
       // console.log(` isAuthenticate : Updating from ${oldValue} to ${newValue}`)
       if (newValue === false) {
@@ -205,8 +168,43 @@ export default {
     // Vérifie l'état du serveur d'API
     this.healthcheck()
     this.loadWeather()
+    this.$store.watch(
+      () => this.$store.getters.isAccessDataLoaded,
+      (isAccessDataLoaded) => {
+        console.log('watched: ', isAccessDataLoaded)
+        this.loadMenu()
+      }
+    )
   },
   methods: {
+    loadMenu() {
+      this.items = []
+      this.$store.state.access.permissionsListInBase.forEach((permission) => {
+        let hasRight = false
+        permission.roles.forEach((roleAttendu) => {
+          // console.log('roleAttendu', roleAttendu._id)
+          if (this.$store.state.login.roles.includes(roleAttendu._id)) {
+            /* console.log(
+              'Utilisateur autorisé pour la menu [%s] avec le role [%s]',
+              permission._id,
+              roleAttendu._id
+            ) */
+            hasRight = true
+          }
+        })
+        if (hasRight) {
+          console.log(permission)
+          let itemMenu = {
+            icon: permission.icon,
+            text: permission.text,
+            path: permission.path
+          }
+          // console.log('itemMenu', itemMenu)
+          this.items.push(itemMenu)
+        }
+      })
+      console.log(this.items)
+    },
     detected(e) {
       if (e) {
         this.$store.state.offline.read = false
@@ -239,15 +237,7 @@ export default {
     fab: false,
     drawer: null,
     offlineStatus: null,
-    items: [
-      { icon: 'art_track', text: 'Actualités', path: '/news' },
-      { icon: 'contacts', text: 'Contacts', path: '/contacts' },
-      { icon: 'cloud', text: 'Météo', path: '/meteo' },
-      /* { icon: 'location_city', text: 'BIM', path: '/bim' }, */
-      { icon: 'today', text: 'Gestion de temps', path: '/shifts' },
-      { icon: 'help', text: 'Aide', path: '/help' }
-      /* { icon: 'library_books', text: 'Docs', path: '/docs' } */
-    ]
+    items: [{ icon: 'home', text: 'Home', path: '/home' }]
   }),
 
   props: {

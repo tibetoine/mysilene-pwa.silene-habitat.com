@@ -7,7 +7,6 @@ export default {
       JSON.stringify(state.access.permissionsListInBase) !==
       JSON.stringify(state.access.permissionsList)
     ) {
-      console.log(' !!!!!!!!!!!!!!!! im here2')
       return true
     }
     return false
@@ -17,13 +16,15 @@ export default {
       JSON.stringify(state.access.rolesUsersListInBase) !==
       JSON.stringify(state.access.rolesUsersList)
     ) {
-      console.log(' !!!!!!!!!!!!!!!! im here3')
       return true
     }
     return false
   },
   lastWeather: (state) => {
     return state.meteo.lastWeather
+  },
+  isAccessDataLoaded: (state) => {
+    return state.access.permissionsListInBase
   },
   isAuthenticate: (state) => {
     return state.login.Authenticate
