@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      loadRoles: On.LOAD_ACCESS_ROLES,
+      loadRoles: On.LOAD_ACCESS_ROLES_AND_PERMISSIONS,
       deleteRole: On.DELETE_ACCESS_ROLE
     }),
     ...mapMutations({

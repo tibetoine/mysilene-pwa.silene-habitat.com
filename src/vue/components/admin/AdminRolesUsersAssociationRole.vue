@@ -4,27 +4,27 @@
     row
     style="border-bottom: 1px solid #999;"
   >
-    <v-flex class="col1"
+    <v-flex class="associationCol1"
       ><div>
         <v-chip small :color="role.color" text-color="white"
           >{{ role._id }}
         </v-chip>
       </div></v-flex
     >
-    <v-flex class="col2"
+    <v-flex class="associationCol2"
       ><div>
         <ul>
           <li v-for="group in associationRole.groups">{{ group }}</li>
         </ul>
       </div></v-flex
     >
-    <v-flex class="col3"
+    <v-flex class="associationCol3"
       ><div>
         <ul>
           <li v-for="user in associationRole.users" v-html="getContact(user)" />
         </ul></div
     ></v-flex>
-    <v-flex class="col4">
+    <v-flex class="associationCol4">
       <div>
         <v-btn small flat icon color="primary">
           <v-icon @click="editRole()">edit</v-icon>
@@ -122,16 +122,16 @@ export default {
 }
 </script>
 <style>
-.col1 {
+.associationCol1 {
   width: 30%;
 }
-.col2 {
+.associationCol2 {
   width: 32%;
 }
-.col3 {
+.associationCol3 {
   width: 32%;
 }
-.col4 {
+.associationCol4 {
   width: 5%;
 }
 </style>

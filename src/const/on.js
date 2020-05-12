@@ -30,12 +30,14 @@ export default {
   EXTRACT_ALL: 'extractAll',
   GET_CHILDREN: 'getChildren',
   GET_CONTACT: 'getContact',
-  LOAD_ACCESS_ROLES: 'loadAccessRoles',
+  LOAD_ACCESS_ROLES_AND_PERMISSIONS: 'loadAccessRoles',
   ADD_ACCESS_ROLE: 'addAccessRole',
   DELETE_ACCESS_ROLE: 'deleteAccessRole',
   EDIT_ACCESS_ROLE: 'editAccessRole',
   LOAD_ACCESS_USERS_ROLES: 'loadAccessUsersRoles',
   ADD_ACCESS_USERS_ROLE: 'addAccessUsersRole',
   DELETE_ACCESS_USERS_ROLE: 'deleteAccessUsersRole',
-  EDIT_ACCESS_USERS_ROLE: 'editAccessUsersRole'
+  EDIT_ACCESS_USERS_ROLE: 'editAccessUsersRole',
+  SAVE_ACCESS_USERS_ROLE: 'saveAccessUsersRole',
+  SAVE_PERMISSIONS_ROLE: 'savePermissionsRole'
 }

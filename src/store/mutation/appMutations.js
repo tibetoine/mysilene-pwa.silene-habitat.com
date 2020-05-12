@@ -84,5 +84,11 @@ export default {
   },
   [Do.HIDE_GROUPS_ROLE_ADD_DIALOG]: (state) => {
     state.access.rolesGroupsShowDialogAdd = false
+  },
+  [Do.SHOW_PERMISSIONS_ROLE_DIALOG]: (state) => {
+    state.access.rolesPermissionsShowDialog = true
+  },
+  [Do.HIDE_PERMISSIONS_ROLE_DIALOG]: (state) => {
+    state.access.rolesPermissionsShowDialog = false
   }
 }

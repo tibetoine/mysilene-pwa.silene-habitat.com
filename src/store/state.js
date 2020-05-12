@@ -1,9 +1,13 @@
 export default {
   access: {
     rolesList: [],
+    permissionsList: [],
     rolesUsersList: [],
+    permissionsListInBase: [],
+    rolesUsersListInBase: [],
     showDialog: false,
-    rolesUsersShowDialog: true,
+    rolesUsersShowDialog: false,
+    rolesPermissionsShowDialog: false,
     rolesUsersShowDialogAdd: false,
     rolesGroupsShowDialogAdd: false,
     newRole: {
@@ -21,6 +25,7 @@ export default {
       color: 'black',
       description: ''
     },
+    currentPermission: null,
     currentAssociationRoleIsDirty: false,
     recordCurrentAssociationRole: null
   },

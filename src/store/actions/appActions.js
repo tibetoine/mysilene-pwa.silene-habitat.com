@@ -456,16 +456,37 @@ export default {
   [On.LOGIN_STOP]: function ({ commit }) {
     commit(Do.LOGIN_STOP)
   },
-  [On.LOAD_ACCESS_ROLES]: async function ({ commit, dispatch }) {
+  [On.LOAD_ACCESS_ROLES_AND_PERMISSIONS]: async function ({
+    commit,
+    dispatch
+  }) {
     let response
+    let response2
     try {
       response = await rest.loadRoles()
-      // console.log('**********************')
-      // console.log(response.data)
-      /* commit la repose dans les roles */
-      commit(Do.SET_ACCESS_ROLES, response.data)
+      response2 = await rest.loadPermissions()
+      let roles = response.data
+      let permissions = response2.data
+      // console.log(roles)
+      // console.log(permissions)
+
+      permissions.forEach((permission) => {
+        let newRoles = []
+        if (permission.roles && permission.roles.length > 0) {
+          permission.roles.forEach((permissionRole) => {
+            roles.forEach((role) => {
+              if (role._id === permissionRole) {
+                newRoles.push(role)
+              }
+            })
+          })
+        }
+        permission.roles = newRoles
+      })
+      commit(Do.SET_ACCESS_ROLES, roles)
+      commit(Do.SET_ACCESS_PERMISSIONS, permissions)
     } catch (error) {
-      let errorMessage = `#ApiAccess001 - Erreur chargement des roles`
+      let errorMessage = `#ApiAccess001 - Erreur chargement des roles et permissions`
       console.error(errorMessage, error)
       commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
       return
@@ -485,9 +506,48 @@ export default {
       return
     }
     // console.log(response)
-    dispatch(On.LOAD_ACCESS_ROLES)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
     commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle ajouté avec succès')
     commit(Do.HIDE_ROLE_DIALOG)
+    return response
+  },
+  [On.SAVE_ACCESS_USERS_ROLE]: async function ({ state, commit, dispatch }) {
+    let response
+    let rolesUsers = state.access.rolesUsersList
+    console.log(
+      'On.SAVE_ACCESS_USERS_ROLE --> rest.saveUsersRole : ',
+      rolesUsers
+    )
+    try {
+      response = await rest.saveUsersRole(rolesUsers)
+    } catch (error) {
+      let errorMessage = `#ApiAccess005 - Erreur lors de la sauvegarde des rôles`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(
+      Do.SHOW_GLOBAL_SUCCESS,
+      'Association des rôles sauvegardée avec succès'
+    )
+    return response
+  },
+  [On.SAVE_PERMISSIONS_ROLE]: async function ({ state, commit, dispatch }) {
+    let response
+    let permissions = state.access.permissionsList
+    try {
+      response = await rest.savePermissions(permissions)
+    } catch (error) {
+      let errorMessage = `#ApiAccess006 - Erreur lors de la sauvegarde des permissions`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Permissions sauvegardées avec succès')
     return response
   },
   [On.DELETE_ACCESS_ROLE]: async function ({ commit, dispatch }, role) {
@@ -500,7 +560,7 @@ export default {
       commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
       return
     }
-    dispatch(On.LOAD_ACCESS_ROLES)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
     commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle supprimé avec succès')
     return response
   },
@@ -514,7 +574,7 @@ export default {
       commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
       return
     }
-    dispatch(On.LOAD_ACCESS_ROLES)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
     commit(Do.HIDE_ROLE_DIALOG)
     commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle modifié avec succès')
     return response
@@ -524,7 +584,7 @@ export default {
     try {
       response = await rest.loadUsersRoles()
       let userRoles = response.data
-      console.log(response.data)
+      console.log('Yata : ', response.data)
 
       let dataToSet = []
       let contacts = state.contacts.fullList

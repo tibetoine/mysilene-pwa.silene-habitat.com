@@ -48,8 +48,13 @@ export default {
   SET_ACCESS_USERS_ROLES: 'setAccessUsersRoles',
   SHOW_USERS_ROLE_DIALOG: 'showUsersRoleDialog',
   HIDE_USERS_ROLE_DIALOG: 'hideUsersRoleDialog',
+  SHOW_PERMISSIONS_ROLE_DIALOG: 'showPermissionsRoleDialog',
+  HIDE_PERMISSIONS_ROLE_DIALOG: 'hidePermissionsRoleDialog',
   SHOW_USERS_ROLE_ADD_DIALOG: 'showUsersRoleDialogAdd',
   HIDE_USERS_ROLE_ADD_DIALOG: 'hideUsersRoleDialogAdd',
   SHOW_GROUPS_ROLE_ADD_DIALOG: 'showGroupsRoleDialogAdd',
-  HIDE_GROUPS_ROLE_ADD_DIALOG: 'hideGroupsRoleDialogAdd'
+  HIDE_GROUPS_ROLE_ADD_DIALOG: 'hideGroupsRoleDialogAdd',
+  SET_ACCESS_PERMISSIONS: 'setAccessPermissions',
+  RESET_ACCESS_PERMISSIONS: 'resetAccessPermissions',
+  RESET_ACCESS_USERS_ROLES: 'resetAccessUsersRoles'
 }

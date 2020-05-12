@@ -39,5 +39,10 @@ export default {
   deleteRole: (roleId) => api.del(`api-access/roles/${roleId}`),
   addRole: (role) => api.post(`api-access/roles`, role),
   loadRoles: () => api.get(`api-access/roles`),
-  loadUsersRoles: () => api.get(`api-access/roles`)
+  loadPermissions: () => api.get(`api-access/permissions`),
+  loadUsersRoles: () => api.get(`api-access/roles`),
+  saveUsersRole: (usersRole) =>
+    api.put(`api-access/roles/usersAndGroups`, JSON.stringify(usersRole)),
+  savePermissions: (permissions) =>
+    api.put(`api-access/permissions`, JSON.stringify(permissions))
 }
