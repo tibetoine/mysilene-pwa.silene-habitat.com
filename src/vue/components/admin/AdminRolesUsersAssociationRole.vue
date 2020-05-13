@@ -11,24 +11,32 @@
         </v-chip>
       </div></v-flex
     >
-    <v-flex class="associationCol2"
+    <v-flex v-if="role._id !== 'MANAGER'" class="associationCol2"
       ><div>
         <ul>
           <li v-for="group in associationRole.groups">{{ group }}</li>
         </ul>
       </div></v-flex
     >
-    <v-flex class="associationCol3"
+    <v-flex v-if="role._id !== 'MANAGER'" class="associationCol3"
       ><div>
         <ul>
           <li v-for="user in associationRole.users" v-html="getContact(user)" />
         </ul></div
     ></v-flex>
-    <v-flex class="associationCol4">
+    <v-flex v-if="role._id !== 'MANAGER'" class="associationCol4">
       <div>
         <v-btn small flat icon color="primary">
           <v-icon @click="editRole()">edit</v-icon>
         </v-btn>
+      </div>
+    </v-flex>
+    <v-flex v-if="role._id === 'MANAGER'" class="associationColManager">
+      <div>
+        <v-alert :value="true" type="warning" outline color="info"
+          >Le ROLE manager est automatiquement attribué aux managers dans
+          l'API</v-alert
+        >
       </div>
     </v-flex>
   </v-layout>
@@ -121,5 +129,8 @@ export default {
 }
 .associationCol4 {
   width: 5%;
+}
+.associationColManager {
+  width: 69%;
 }
 </style>

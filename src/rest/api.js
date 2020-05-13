@@ -40,5 +40,11 @@ export default {
 
   del: (path) => Vue.http.delete(url(path)),
 
-  put: (path, body) => Vue.http.put(url(path), body, options())
+  put: (path, body) => Vue.http.put(url(path), body, options()),
+
+  upload: (path, file) => {
+    let data = new FormData()
+    data.append('file', file)
+    Vue.http.post(url(path), data, options())
+  }
 }

@@ -11,6 +11,7 @@ import Forbidden from '../vue/pages/forbidden'
 import Shifts from '../vue/pages/shifts'
 import ShiftsManager from '../vue/pages/shiftsManager'
 import ShiftsRH from '../vue/pages/shiftsRH'
+import Interessement from '../vue/pages/interessement'
 import Home from '../vue/pages/home'
 import store from '../store/store'
 
@@ -89,7 +90,12 @@ const router = new Router({
     {
       path: '/gta_rh',
       component: ShiftsRH,
-      name: 'shiftsRH',
+      name: 'shiftsRH'
+    },
+    {
+      path: '/interessement',
+      component: Interessement,
+      name: 'interessement',
       beforeEnter: checkAuthAndRights
     }
   ],
@@ -109,7 +115,6 @@ const router = new Router({
  * @param {*} next
  */
 function checkAuthAndRights(to, from, next) {
-  console.log('i m here ', to, from, next)
   /**
    * Determines where we should send the user.
    */
@@ -140,31 +145,24 @@ function checkAuthAndRights(to, from, next) {
    */
   function checkRights() {
     /* Vérifie les droits */
-    console.log('Vérification des droits pour ', to.name)
 
     if (!to.name) {
       console.error(
         'Attention erreur dans la configuration, il faut un nom pour la route'
       )
     }
-    console.log(
-      'store.state.access.permissionsListInBase',
-      store.state.access.permissionsListInBase
-    )
-    console.log('store.state.login.roles', store.state.login.roles)
 
+    console.log('checking rights for ', to.name)
     let hasRight = false
     store.state.access.permissionsListInBase.forEach((permission) => {
       if (permission._id === to.name) {
-        console.log(permission)
         permission.roles.forEach((roleAttendu) => {
-          console.log('roleAttendu', roleAttendu._id)
           if (store.state.login.roles.includes(roleAttendu._id)) {
-            console.log(
+            /* console.log(
               'Utilisateur autorisé pour la page [%s] avec le role [%s]',
               to.name,
               roleAttendu._id
-            )
+            ) */
             hasRight = true
           }
         })

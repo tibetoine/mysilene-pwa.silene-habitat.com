@@ -43,6 +43,8 @@ export default {
       state.news.visibleList,
       (aNews) => state.news.selectedTypes.indexOf(aNews.type) > -1
     ),
+  travailleursDuSamedi: (state) =>
+    filter(state.contacts.fullList, (contact) => contact.saturday === true),
   selectShiftManagerChildren: (state) => {
     let selectArray = []
 

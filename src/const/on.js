@@ -37,5 +37,8 @@ export default {
   DELETE_ACCESS_USERS_ROLE: 'deleteAccessUsersRole',
   EDIT_ACCESS_USERS_ROLE: 'editAccessUsersRole',
   SAVE_ACCESS_USERS_ROLE: 'saveAccessUsersRole',
-  SAVE_PERMISSIONS_ROLE: 'savePermissionsRole'
+  SAVE_PERMISSIONS_ROLE: 'savePermissionsRole',
+  UPLOAD_FILE: 'uploadFile',
+  DELETE_CONTACT_SATURDAY: 'deleteContactSaturday',
+  ADD_CONTACT_SATURDAY: 'addContactSaturday'
 }

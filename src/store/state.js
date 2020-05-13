@@ -65,7 +65,8 @@ export default {
     snackbarMessage: 'Message à setter',
     currentShift: null,
     allShifts: [],
-    managerChildren: []
+    managerChildren: [],
+    shiftSaturdayShowDialogAdd: false
   },
   selectedContact: null,
   selectedNew: null,

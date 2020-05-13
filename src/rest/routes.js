@@ -44,5 +44,10 @@ export default {
   saveUsersRole: (usersRole) =>
     api.put(`api-access/roles/usersAndGroups`, JSON.stringify(usersRole)),
   savePermissions: (permissions) =>
-    api.put(`api-access/permissions`, JSON.stringify(permissions))
+    api.put(`api-access/permissions`, JSON.stringify(permissions)),
+  upload: (file) => api.upload(`api-itt/upload`, file),
+  addContactSaturday: (username) =>
+    api.post(`api/contacts/${username}/saturday`),
+  deleteContactSaturday: (username) =>
+    api.delete(`api/contacts/${username}/saturday`)
 }

@@ -171,7 +171,6 @@ export default {
     this.$store.watch(
       () => this.$store.getters.isAccessDataLoaded,
       (isAccessDataLoaded) => {
-        console.log('watched: ', isAccessDataLoaded)
         this.loadMenu()
       }
     )
@@ -193,7 +192,6 @@ export default {
           }
         })
         if (hasRight) {
-          console.log(permission)
           let itemMenu = {
             icon: permission.icon,
             text: permission.text,
@@ -203,7 +201,6 @@ export default {
           this.items.push(itemMenu)
         }
       })
-      console.log(this.items)
     },
     detected(e) {
       if (e) {

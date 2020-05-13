@@ -16,57 +16,56 @@
       <v-btn color="primary darken-1" text @click="extractAll()"
         >Extraire Tout</v-btn
       >
-      <v-btn color="grey" text>Futur</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 <script>
-  import { mapActions, mapMutations } from 'vuex'
-  import On from '../../const/on'
-  import Do from '../../const/do'
-  import { forceFileDownload } from '../../shared/helper'
-  import Confirm from './Confirm'
-  export default {
-    name: 'shiftrecord',
-    components: { Confirm },
-    props: ['shift'],
-    data() {
-      return {}
-    },
-    mounted: function() {},
-    computed: {
-      visible: {
-        get: function() {
-          return this.$store.state.shift.showDialog
-        },
-        set: function(val) {
-          this.$store.state.shift.showDialog = val
-        }
-      }
-    },
-    methods: {
-      ...mapActions({
-        deleteShift: On.DELETE_SHIFT
-      }),
-      ...mapMutations({
-        showShiftError: Do.SHOW_SHIFT_ERROR
-      }),
-      extractAll() {
-        // alert('TODO Extract from component')
-        this.downloadFile()
+import { mapActions, mapMutations } from 'vuex'
+import On from '../../const/on'
+import Do from '../../const/do'
+import { forceFileDownload } from '../../shared/helper'
+import Confirm from './Confirm'
+export default {
+  name: 'shiftrecord',
+  components: { Confirm },
+  props: ['shift'],
+  data() {
+    return {}
+  },
+  mounted: function () {},
+  computed: {
+    visible: {
+      get: function () {
+        return this.$store.state.shift.showDialog
       },
-      downloadFile() {
-        // console.log("downloadFile ; ", urlDiagDoc)
-        this.$store
-          .dispatch(On.EXTRACT_ALL)
-          .then(downloadedFile => {
-            /* Récupère le nom du fichier */
-            var filename = 'data.xlsx'
-
-            forceFileDownload(downloadedFile, filename)
-          })
-          .catch(e => console.error(e))
+      set: function (val) {
+        this.$store.state.shift.showDialog = val
       }
     }
+  },
+  methods: {
+    ...mapActions({
+      deleteShift: On.DELETE_SHIFT
+    }),
+    ...mapMutations({
+      showShiftError: Do.SHOW_SHIFT_ERROR
+    }),
+    extractAll() {
+      // alert('TODO Extract from component')
+      this.downloadFile()
+    },
+    downloadFile() {
+      // console.log("downloadFile ; ", urlDiagDoc)
+      this.$store
+        .dispatch(On.EXTRACT_ALL)
+        .then((downloadedFile) => {
+          /* Récupère le nom du fichier */
+          var filename = 'data.xlsx'
+
+          forceFileDownload(downloadedFile, filename)
+        })
+        .catch((e) => console.error(e))
+    }
   }
+}
 </script>

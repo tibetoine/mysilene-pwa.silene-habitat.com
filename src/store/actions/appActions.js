@@ -171,7 +171,12 @@ export default {
     try {
       const response = await rest.getRoles(userId)
       if (response.status === 200) {
-        state.login.roles = response.data
+        let roles = response.data
+        /* On ajoute le role MANAGER si l'utilisateur est manager */
+        if (state.login.isManager) {
+          roles.push('MANAGER')
+        }
+        state.login.roles = roles
       }
     } catch (error) {
       // Je ne sais pas quoi faire si y'a une erreur à ce stade
@@ -528,6 +533,22 @@ export default {
     )
     return response
   },
+  [On.UPLOAD_FILE]: async function ({ commit, dispatch }, file) {
+    let response
+    console.log(file)
+    try {
+      response = await rest.upload(file)
+    } catch (error) {
+      let errorMessage = `#Upload001 - Erreur lors de l'upload`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    // dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Upload success')
+    return response
+  },
   [On.SAVE_PERMISSIONS_ROLE]: async function ({ state, commit, dispatch }) {
     let response
     let permissions = state.access.permissionsList
@@ -616,6 +637,60 @@ export default {
     dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
     commit(Do.HIDE_USERS_ROLE_DIALOG)
     commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle modifié avec succès')
+    return response
+  },
+  [On.SAVE_PERMISSIONS_ROLE]: async function ({ state, commit, dispatch }) {
+    let response
+    let permissions = state.access.permissionsList
+    try {
+      response = await rest.savePermissions(permissions)
+    } catch (error) {
+      let errorMessage = `#ApiAccess006 - Erreur lors de la sauvegarde des permissions`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Permissions sauvegardées avec succès')
+    return response
+  },
+  [On.ADD_CONTACT_SATURDAY]: async function ({ commit, dispatch }, userId) {
+    let response
+    try {
+      response = await rest.addContactSaturday(userId)
+    } catch (error) {
+      let errorMessage =
+        `#ApiGTA - Erreur lors de la mise à jour du contact [` + userId + `]`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    /* On recharge les contacts ? */
+    dispatch(On.LOAD_CONTACTS)
+    commit(
+      Do.SHOW_GLOBAL_SUCCESS,
+      `Contact [` + userId + `] mise à jour avec succès`
+    )
+    return response
+  },
+  [On.DELETE_CONTACT_SATURDAY]: async function ({ commit, dispatch }, userId) {
+    let response
+    try {
+      response = await rest.deleteContactSaturday(userId)
+    } catch (error) {
+      let errorMessage =
+        `#ApiGTA - Erreur lors de la mise à jour du contact [` + userId + `]`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    /* On recharge les contacts ? */
+    dispatch(On.LOAD_CONTACTS)
+    commit(
+      Do.SHOW_GLOBAL_SUCCESS,
+      `Contact [` + userId + `] mise à jour avec succès`
+    )
     return response
   }
 }
