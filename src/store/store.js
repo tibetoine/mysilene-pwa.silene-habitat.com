@@ -13,6 +13,7 @@ import docsMutations from './mutation/docsMutations'
 import appMutations from './mutation/appMutations'
 import shiftMutations from './mutation/shiftMutations'
 import accessMutations from './mutation/accessMutations'
+import interessementMutations from './mutation/interessementMutations'
 
 Vue.use(Vuex)
 
@@ -29,7 +30,8 @@ const store = new Vuex.Store({
     ...usersMutations,
     ...appMutations,
     ...shiftMutations,
-    ...accessMutations
+    ...accessMutations,
+    ...interessementMutations
   },
   actions: {
     ...appActions

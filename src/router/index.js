@@ -12,6 +12,8 @@ import Shifts from '../vue/pages/shifts'
 import ShiftsManager from '../vue/pages/shiftsManager'
 import ShiftsRH from '../vue/pages/shiftsRH'
 import Interessement from '../vue/pages/interessement'
+import InteressementAdmin from '../vue/pages/interessementAdmin'
+import InteressementRh from '../vue/pages/interessementRh'
 import Home from '../vue/pages/home'
 import store from '../store/store'
 
@@ -95,7 +97,18 @@ const router = new Router({
     {
       path: '/interessement',
       component: Interessement,
-      name: 'interessement',
+      name: 'interessement'
+    },
+    {
+      path: '/interessement_rh',
+      component: InteressementRh,
+      name: 'interessement_rh',
+      beforeEnter: checkAuthAndRights
+    },
+    {
+      path: '/interessement_admin',
+      component: InteressementAdmin,
+      name: 'interessement_admin',
       beforeEnter: checkAuthAndRights
     }
   ],

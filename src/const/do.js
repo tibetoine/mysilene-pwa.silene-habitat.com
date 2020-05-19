@@ -55,5 +55,9 @@ export default {
   HIDE_GROUPS_ROLE_ADD_DIALOG: 'hideGroupsRoleDialogAdd',
   SET_ACCESS_PERMISSIONS: 'setAccessPermissions',
   RESET_ACCESS_PERMISSIONS: 'resetAccessPermissions',
-  RESET_ACCESS_USERS_ROLES: 'resetAccessUsersRoles'
+  RESET_ACCESS_USERS_ROLES: 'resetAccessUsersRoles',
+  SET_INTERESSEMENT_CONFIG: 'setInteressementConfig',
+  SET_INTERESSEMENT_USER: 'setInteressementUser',
+  UPDATE_INTERESSEMENT_USER_FONDS: 'updateInteressementUserFonds',
+  RESET_INTERESSEMENT_USER_FONDS: 'resetInteressementUserFonds'
 }

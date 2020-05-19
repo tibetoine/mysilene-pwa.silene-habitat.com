@@ -66,7 +66,7 @@ export default {
     },
     addGroup(group) {
       /* Vérifie si n'existe pas déjà  */
-      console.log('this.currentAssociationRole :', this.currentAssociationRole)
+      // console.log('this.currentAssociationRole :', this.currentAssociationRole)
       if (!this.currentAssociationRole.groups) {
         this.currentAssociationRole.groups = []
       }

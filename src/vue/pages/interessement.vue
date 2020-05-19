@@ -1,113 +1,77 @@
 <template>
   <v-container style="margin-top: 50px;">
-    <div id="app">
-      <v-app>
-        <v-toolbar dark color="primary">
-          <v-toolbar-side-icon></v-toolbar-side-icon>
-          <v-toolbar-title class="white--text">{{ title }}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn icon @click="dialog = !dialog">
-            <v-icon>link</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <v-content>
-          <v-container fluid>
-            <v-flex
-              xs12
-              class="text-xs-center text-sm-center text-md-center text-lg-center"
-            >
-              <v-text-field
-                label="Fichier à uploader"
-                @click="pickFile"
-                v-model="fileName"
-                prepend-icon="attach_file"
-              ></v-text-field>
-              <input
-                type="file"
-                style="display: none;"
-                ref="file"
-                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                @change="onFilePicked"
-              />
-              <v-btn color="success" @click.stop="localUploadFile()"
-                >Uploader</v-btn
-              >
-            </v-flex>
-            <v-dialog v-model="dialog" max-width="290">
-              <v-card>
-                <v-card-title class="headline">Import Excel</v-card-title>
-                <v-card-text>Importer fichier Excel </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="green darken-1"
-                    flat="flat"
-                    @click.native="dialog = false"
-                    >Close</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-container>
-        </v-content>
-      </v-app>
-    </div>
+    <h2 class="title text-xs-center">
+      Comprendre l’accord d’intéressement Silène
+    </h2>
+    <v-stepper v-model="e1" style="margin-top: 20px;">
+      <v-stepper-header>
+        <v-stepper-step editable :complete="e1 > 1" step="1"
+          >Etape 1</v-stepper-step
+        >
+        <v-divider></v-divider>
+        <v-stepper-step editable :complete="e1 > 2" step="2"
+          >Etape 2</v-stepper-step
+        >
+        <v-divider></v-divider>
+        <v-stepper-step editable :complete="e1 > 3" step="3"
+          >Etape 3</v-stepper-step
+        >
+        <v-divider></v-divider>
+        <v-stepper-step editable step="4">Etape 4</v-stepper-step>
+      </v-stepper-header>
+      <v-stepper-items>
+        <v-stepper-content step="1">
+          <interessement-step1></interessement-step1>
+          <v-btn color="primary" @click.native="e1 = 2">J'ai compris</v-btn>
+          <v-btn color="error">Cancel</v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="2">
+          <interessement-step2></interessement-step2>
+          <v-btn color="primary" @click.native="e1 = 3">J'ai compris</v-btn>
+          <v-btn color="error">Cancel</v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="3">
+          <interessement-step3></interessement-step3>
+          <v-btn color="primary" @click.native="e1 = 4">J'ai compris</v-btn>
+          <v-btn color="error">Cancel</v-btn>
+        </v-stepper-content>
+        <v-stepper-content step="4">
+          <interessement-step4></interessement-step4>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
   </v-container>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import On from '../../const/on'
+import { mapActions, mapState } from 'vuex'
+import InteressementStep1 from '../components/interessement/interessementStep1'
+import InteressementStep2 from '../components/interessement/interessementStep2'
+import InteressementStep3 from '../components/interessement/interessementStep3'
+import InteressementStep4 from '../components/interessement/interessementStep4'
+// import On from '../../const/on'
 export default {
-  name: 'forbidden',
-  components: {},
+  name: 'interessement',
+  components: {
+    InteressementStep1,
+    InteressementStep2,
+    InteressementStep3,
+    InteressementStep4
+  },
   methods: {
     ...mapActions({
-      uploadFile: On.UPLOAD_FILE
-    }),
-    pickFile() {
-      this.$refs.file.click()
-    },
-
-    onFilePicked(e) {
-      const files = e.target.files || e.dataTransfer.files
-      /* if (files.length > 0) {
-        for (var i = 0; i < files.length; i++) {
-          self.formData.append('file', files[i], files[i].name)
-        }
-      } */
-      if (files[0] !== undefined) {
-        this.fileName = files[0].name
-        if (this.fileName.lastIndexOf('.') <= 0) {
-          return
-        }
-        const fr = new FileReader()
-        fr.readAsDataURL(files[0])
-        fr.addEventListener('load', () => {
-          this.fileUrl = fr.result
-          this.file = files[0]
-        })
-      } else {
-        this.fileName = ''
-        this.file = ''
-        this.fileUrl = ''
-      }
-    },
-    localUploadFile() {
-      // var self = this
-      console.log('localUploadFile')
-      console.log(this.file)
-      this.uploadFile(this.file)
-    }
+      // uploadFile: On.UPLOAD_FILE
+    })
+  },
+  computed: {
+    ...mapState({
+      configInteressement: (state) => state.interessement.configInteressement
+    })
   },
   data() {
     return {
-      formData: new FormData(),
-      title: 'Image Upload',
-      dialog: false,
-      fileName: '',
-      fileUrl: '',
-      file: ''
+      e1: 4,
+      test: 'testt'
     }
   }
 }

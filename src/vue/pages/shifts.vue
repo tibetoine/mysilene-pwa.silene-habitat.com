@@ -128,8 +128,8 @@ export default {
     isRhOrManager: {
       get: function () {
         if (
-          this.$store.state.login.roles.includes('manager') ||
-          this.$store.state.login.roles.includes('rh')
+          this.$store.state.login.roles.includes('MANAGER') ||
+          this.$store.state.login.roles.includes('RH')
         ) {
           return true
         }

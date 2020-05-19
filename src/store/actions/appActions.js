@@ -363,6 +363,12 @@ export default {
     return response
   },
 
+  [On.UPDATE_INTERESSEMENT_USER_FONDS]: function ({ commit }, data) {
+    commit(Do.UPDATE_INTERESSEMENT_USER_FONDS, data)
+  },
+  [On.RESET_INTERESSEMENT_USER_FONDS]: function ({ commit }) {
+    commit(Do.RESET_INTERESSEMENT_USER_FONDS)
+  },
   [On.UPDATE_FILTERED_CONTACTS]: function ({ commit }) {
     commit(Do.UPDATE_FILTERED_CONTACTS)
     commit(Do.SHOW_MORE_CONTACTS)
@@ -413,6 +419,12 @@ export default {
       dispatch(On.LOAD_PREFS)
       dispatch(On.LOAD_NEWS)
       dispatch(On.LOAD_GROUPS)
+      /* Récupère l'année courante */
+      dispatch(On.LOAD_INTERESSEMENT_CONFIG).then(() => {
+        /* Current Year */
+        let year = new Date().getFullYear()
+        dispatch(On.LOAD_INTERESSEMENT_USER, { userId: userId, year: year })
+      })
       dispatch(On.LOAD_DOCS)
       dispatch(On.GET_CONTACT, userId)
     }
@@ -435,8 +447,14 @@ export default {
     dispatch(On.LOAD_PREFS)
     dispatch(On.LOAD_NEWS)
     dispatch(On.LOAD_GROUPS)
+    const userId = user._id.trim().toLowerCase()
+    dispatch(On.LOAD_INTERESSEMENT_CONFIG).then(() => {
+      /* Current Year */
+      let year = new Date().getFullYear()
+      dispatch(On.LOAD_INTERESSEMENT_USER, { userId: userId, year: year })
+    })
     dispatch(On.LOAD_DOCS)
-    dispatch(On.GET_CONTACT, user._id)
+    dispatch(On.GET_CONTACT, userId)
   },
   [On.LOGIN_WAITING]: function ({ commit }) {
     commit(Do.LOGIN_WAITING)
@@ -535,7 +553,7 @@ export default {
   },
   [On.UPLOAD_FILE]: async function ({ commit, dispatch }, file) {
     let response
-    console.log(file)
+    // console.log(file)
     try {
       response = await rest.upload(file)
     } catch (error) {
@@ -692,6 +710,58 @@ export default {
       `Contact [` + userId + `] mise à jour avec succès`
     )
     return response
+  },
+  [On.LOAD_INTERESSEMENT_CONFIG]: async function ({ commit }, year) {
+    /* 1/ Appel REST à l'API  */
+    try {
+      const response = await rest.loadInteressementConfig(year)
+
+      const interessementConfig = response.data
+      /* 2/ Enregistrement dans le store */
+      commit(Do.SET_INTERESSEMENT_CONFIG, interessementConfig)
+    } catch (error) {
+      let errorMessage =
+        `#ApiInteressement001 - Erreur lors du chargement de la configuration Interessement pour l'année : ` +
+        year +
+        ` consulter la documentation MySilene`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
+  },
+  [On.LOAD_INTERESSEMENT_USER]: async function ({ commit, state }, data) {
+    /* 1/ Appel REST à l'API  */
+    let userId = data.userId
+    let year = data.year
+    try {
+      const response = await rest.loadInteressementUser(userId, year)
+      const interessementUser = response.data
+
+      let defaultChoix = {
+        bulletin_de_salaire: 100,
+        pee: {
+          repartition: 0,
+          fonds: state.interessement.configInteressement.pee
+        }
+      }
+
+      if (!interessementUser.choix) {
+        defaultChoix.pee.fonds.forEach((fond) => {
+          fond.percent = 15
+        })
+        interessementUser.choix = defaultChoix
+      }
+      /* 2/ Enregistrement dans le store */
+      commit(Do.SET_INTERESSEMENT_USER, interessementUser)
+    } catch (error) {
+      let errorMessage =
+        `#ApiInteressement002 - Erreur lors du chargement des données d'interessement pour l'année : ` +
+        year +
+        ` avec le user ` +
+        userId +
+        ` consulter la documentation MySilene`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
   }
 }
 

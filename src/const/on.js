@@ -40,5 +40,9 @@ export default {
   SAVE_PERMISSIONS_ROLE: 'savePermissionsRole',
   UPLOAD_FILE: 'uploadFile',
   DELETE_CONTACT_SATURDAY: 'deleteContactSaturday',
-  ADD_CONTACT_SATURDAY: 'addContactSaturday'
+  ADD_CONTACT_SATURDAY: 'addContactSaturday',
+  LOAD_INTERESSEMENT_CONFIG: 'loadInteressementConfig',
+  LOAD_INTERESSEMENT_USER: 'loadInteressementUser',
+  UPDATE_INTERESSEMENT_USER_FONDS: 'updateInteressementUserFonds',
+  RESET_INTERESSEMENT_USER_FONDS: 'resetInteressementUserFonds'
 }

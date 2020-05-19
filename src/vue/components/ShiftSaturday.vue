@@ -66,7 +66,7 @@ export default {
     }),
     filteredContacts: {
       get: function () {
-        console.log(this.travailleursDuSamedi)
+        // console.log(this.travailleursDuSamedi)
         let filteredContacts = this.travailleursDuSamedi.filter((contact) => {
           let isFiltered = false
           isFiltered =
