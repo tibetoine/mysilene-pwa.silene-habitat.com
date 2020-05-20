@@ -56,7 +56,7 @@
                     // available; please refresh." message in the page's interface.
                     
                     // Ajouté le 08/04/2020 par Antoine. Pour etre sûr que l'app se reload sur IPhone (pas pu tester par contre)
-                    window.location.reload();
+                    // window.location.reload();
                     break
 
                   case 'redundant':
