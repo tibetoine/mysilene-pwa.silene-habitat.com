@@ -29,7 +29,7 @@
                 @change="onFilePicked"
               />
               <v-btn color="success" @click.stop="localUploadFile()"
-                >Uploader</v-btn
+                >Charger</v-btn
               >
             </v-flex>
             <v-dialog v-model="dialog" max-width="290">

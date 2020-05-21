@@ -2,9 +2,9 @@
   <v-card>
     <v-toolbar color="primary" dark>
       <v-toolbar-title class="white--text"
-        >Etape 2 : Enveloppe définitive
+        >Etape 2
         <div class="subheading">
-          Détermination de l'enveloppe définitive grâce aux critères
+          Analyse des objectifs
         </div>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -13,11 +13,11 @@
     <v-container grid-list-xl>
       <v-layout column>
         <v-flex>
-          <v-layout v-bind="binding">
+          <v-layout v-bind="binding" full-width>
             <v-flex
               v-for="(crit, index) in configInteressement.critères"
               :key="index"
-              class="rounded-card interessementDiv2"
+              class="rounded-card interessementDiv2 lg5-custom"
               :style="'border-left:15px solid ' + colors[index]"
             >
               <h3>{{ crit.titre }}</h3>
@@ -31,8 +31,18 @@
                   <td>{{ crit.Réalisé }}</td>
                 </tr>
                 <tr>
-                  <td class="leftTd">Critère atteignant</td>
-                  <td>{{ crit.resultat }}</td>
+                  <td class="leftTd">Critère atteint</td>
+                  <td>
+                    <v-icon :color="getIconColor(crit.resultat)">{{
+                      getIcon(crit.resultat)
+                    }}</v-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="leftTd">&nbsp;</td>
+                  <td :class="getResultClass(crit.resultat)">
+                    {{ crit.resultat }}
+                  </td>
                 </tr>
               </table>
             </v-flex>
@@ -45,12 +55,8 @@
                 <v-icon color="primary" large>beenhere</v-icon>
               </v-flex>
               <v-flex xs10 sm11 md11>
-                <p>
-                  Les 5 critères sont donc validés pour 2019, plafonné à
-                  l'enveloppe globale
-                  <br />La prime globale d'intéressement à répartir est de
-                </p>
                 <p class="primary--text text-xs-center headline">
+                  La prime globale d'intéressement à répartir est de
                   {{ getMontantTotal }}
                 </p>
               </v-flex>
@@ -68,12 +74,36 @@ export default {
   name: 'interessementStep2',
   components: {},
   methods: {
-    ...mapActions({})
+    ...mapActions({}),
+    getIcon(resultat) {
+      let icon = 'done'
+      if (resultat === 0) {
+        icon = 'clear'
+      }
+      return icon
+    },
+    getIconColor(resultat) {
+      let color = 'primary'
+      if (resultat === 0) {
+        color = 'red'
+      }
+      return color
+    },
+    getResultClass(resultat) {
+      let cssclass = 'primary--text'
+      if (resultat === 0) {
+        cssclass = 'error--text'
+      }
+      return cssclass
+    }
   },
   computed: {
     ...mapState({
       configInteressement: (state) => state.interessement.configInteressement
     }),
+    getRep() {
+      return '2'
+    },
     binding() {
       const binding = {}
       if (this.$vuetify.breakpoint.xs) binding.column = true
@@ -125,5 +155,12 @@ export default {
 
 .leftTd {
   font-weight: bold;
+}
+@media (min-width: 960px) {
+  .lg5-custom {
+    width: 20%;
+    max-width: 20%;
+    flex-basis: 20%;
+  }
 }
 </style>

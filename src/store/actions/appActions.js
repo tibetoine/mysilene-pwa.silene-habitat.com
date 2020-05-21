@@ -425,7 +425,7 @@ export default {
         let year = new Date().getFullYear()
         dispatch(On.LOAD_INTERESSEMENT_USER, { userId: userId, year: year })
       })
-      dispatch(On.LOAD_DOCS)
+      // dispatch(On.LOAD_DOCS)
       dispatch(On.GET_CONTACT, userId)
     }
 
@@ -453,7 +453,7 @@ export default {
       let year = new Date().getFullYear()
       dispatch(On.LOAD_INTERESSEMENT_USER, { userId: userId, year: year })
     })
-    dispatch(On.LOAD_DOCS)
+    // dispatch(On.LOAD_DOCS)
     dispatch(On.GET_CONTACT, userId)
   },
   [On.LOGIN_WAITING]: function ({ commit }) {
@@ -737,7 +737,9 @@ export default {
       const interessementUser = response.data
 
       let defaultChoix = {
-        bulletin_de_salaire: 100,
+        bulletin_de_salaire:
+          state.interessement.configInteressement
+            .repartition_defaut_sur_bulletin_de_salaire,
         pee: {
           repartition: 0,
           fonds: state.interessement.configInteressement.pee
@@ -745,9 +747,6 @@ export default {
       }
 
       if (!interessementUser.choix) {
-        defaultChoix.pee.fonds.forEach((fond) => {
-          fond.percent = 15
-        })
         interessementUser.choix = defaultChoix
       }
       /* 2/ Enregistrement dans le store */

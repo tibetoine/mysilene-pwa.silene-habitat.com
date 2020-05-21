@@ -2,9 +2,9 @@
   <v-card>
     <v-toolbar color="primary" dark>
       <v-toolbar-title class="white--text"
-        >Etape 3 : Calcul de la prime globale
+        >Etape 3
         <div class="subheading">
-          Calcul de la prime globale {{ configInteressement._id - 1 }}
+          Calcul de la prime individuelle {{ configInteressement._id - 1 }}
         </div>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -32,7 +32,7 @@
                 </p>
                 <em
                   >*base temps plein sur l'année
-                  {{ configInteressement._id - 1 }}, sans absense</em
+                  {{ configInteressement._id - 1 }}, sans absence</em
                 >
               </v-flex>
             </v-layout>

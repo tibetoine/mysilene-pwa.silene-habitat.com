@@ -1,23 +1,69 @@
 <template>
   <v-form ref="form" v-model="valid">
-    <v-card>
+    <v-card v-if="choix">
       <v-toolbar color="primary" dark>
         <v-toolbar-title class="white--text"
-          >Etape 4 : Choix de l'employé
+          >Etape 4
+          <div class="title">
+            Choix du collaborateur
+          </div>
         </v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
       <!-- Contenu -->
       <v-card-text>
-        Bonjour
-        <span class="primary--text text-xs-center headline">Antoine ROBERT</span
-        >, le montant de votre intéressement (quote part net) est de
+        <span v-if="contact" class="primary--text text-xs-center headline"
+          >Bonjour {{ contact.givenName }} {{ contact.sn }}</span
+        >,<br />
+        Le montant de votre intéressement est de
         <span class="primary--text text-xs-center headline">
           {{ Math.round(interessementUser.quote_part_net * 100) / 100 }} €
-        </span></v-card-text
-      >
+        </span>
+        (net).
+        <br />
+        <em>
+          Vous pouvez choisir de percevoir l'intéressement ou de le placer sur
+          le Plan d'Epargne Entreprise (PEE)
+        </em>
+      </v-card-text>
       <v-container>
+        <h2 class="primary--text title" style="margin-bottom: 10px;"></h2>
         <v-layout row>
+          <v-flex class="peeCol1"
+            ><p class="primary--text title" style="vertical-align: middle;">
+              Versement sur le bulletin de salaire
+            </p></v-flex
+          >
+          <v-flex class="peeCol2"
+            ><v-text-field
+              v-model="choix.bulletin_de_salaire"
+              label="Pourcent"
+              suffix="%"
+              solo
+              :rules="ruleBdSPercent"
+            >
+            </v-text-field
+          ></v-flex>
+          <v-spacer style="margin-left: 10px;"></v-spacer>
+          <v-flex class="peeCol3"
+            ><v-text-field
+              :value="
+                Math.round(montant_quote_part_net * choix.bulletin_de_salaire) /
+                100
+              "
+              label="Montant"
+              suffix="€"
+              solo
+              readonly
+            >
+            </v-text-field
+          ></v-flex>
+        </v-layout>
+        <v-spacer
+          v-if="choix.bulletin_de_salaire < 100"
+          style="border-bottom: 1px solid #777;"
+        ></v-spacer>
+        <!-- <v-layout row>
           <v-flex xs2 class="text-xs-center">
             <p>
               Bulletin de salaire
@@ -45,8 +91,15 @@
           <p v-if="(1 === 2)">
             {{ interessementUser }}
           </p>
-        </v-layout>
-        <v-layout row v-if="percent > 0">
+        </v-layout> -->
+        <h2
+          v-if="choix.bulletin_de_salaire < 100"
+          class="primary--text title"
+          style="margin-top: 20px; margin-bottom: 10px;"
+        >
+          Placement sur PEE
+        </h2>
+        <v-layout row v-if="choix.bulletin_de_salaire < 100">
           <v-flex v-if="choix">
             <template v-for="(fond, index) in fonds">
               <v-layout :key="index" row align-center>
@@ -66,13 +119,16 @@
                   >
                   </v-text-field>
                 </v-flex>
+                <v-spacer style="margin-left: 10px;"></v-spacer>
                 <v-flex class="peeCol3">
                   <v-text-field
                     :value="
                       fond.percent
                         ? Math.round(
                             fond.percent *
-                              ((montant_quote_part_net * percent) / 100)
+                              ((montant_quote_part_net *
+                                (100 - choix.bulletin_de_salaire)) /
+                                100)
                           ) / 100
                         : 0
                     "
@@ -87,21 +143,15 @@
             <v-layout row align-center>
               <v-flex class="peeCol1 secondary--text text-xs-center title"
                 ><p style="vertical-align: middle;">
-                  TOTAL
+                  TOTAL versement sur PEE
                 </p></v-flex
               >
               <v-flex :class="totalEurosFondsClass">
                 <p>{{ totalPercentFonds }} %</p>
               </v-flex>
+              <v-spacer style="margin-left: 10px;"></v-spacer>
               <v-flex class="peeCol3 secondary--text text-xs-center">
                 <p class="title">{{ totalEurosFonds }} €</p>
-                <div
-                  v-if="!contact.estFonctionnaire"
-                  style="border: 0; margin: 0; padding: 0;"
-                >
-                  <p>+ {{ abondement }} % abondement</p>
-                  <p>= {{ totalAvecAbondement }} €</p>
-                </div>
               </v-flex>
             </v-layout>
           </v-flex>
@@ -123,7 +173,7 @@
 import { mapActions, mapState } from 'vuex'
 import On from '../../../const/on'
 export default {
-  name: 'interessementStep3',
+  name: 'interessementStep4',
   components: {},
   methods: {
     ...mapActions({}),
@@ -137,6 +187,7 @@ export default {
       })
     },
     submit() {
+      // TODO
       console.log('this.$parent.e1 : ', this.$parent.e1)
       console.log('this.$parent["e1"] : ', this.$parent['e1'])
       console.log('this.$parent : ', this.$parent)
@@ -146,7 +197,7 @@ export default {
       console.log(this.$refs.form.validate())
 
       /* Est ce que le pourcentage PEE est à 100 % */
-      if (this.percent !== 0) {
+      if (this.choix.bulletin_de_salaire < 100) {
         if (this.totalPercentFonds !== 100) {
           this.snackbModel = true
           return
@@ -189,7 +240,11 @@ export default {
             // console.log('blop  ', fond.percent, quotePartPee)
             let perc = fond.percent ? fond.percent : 0
             total +=
-              (perc * this.montant_quote_part_net * this.percent) / 100 / 100
+              (perc *
+                this.montant_quote_part_net *
+                (100 - this.choix.bulletin_de_salaire)) /
+              100 /
+              100
           }
         )
         return Math.round(total * 100) / 100
@@ -235,9 +290,19 @@ export default {
     return {
       snackbModel: false,
       snackbTimeout: 6000,
-      percent: 10,
       test: 12,
       valid: false,
+      ruleBdSPercent: [
+        (v) => {
+          return (
+            (parseFloat(v) === parseInt(v) && !isNaN(v)) ||
+            'Doit être un nombre sans virgule'
+          )
+        },
+        (v) => {
+          return (v >= 0 && v <= 100) || 'Doit être un nombre entre 0 et 100'
+        }
+      ],
       rulePercent: [
         (v) => {
           // console.log('totalPercentFonds : ', this.totalPercentFonds)
@@ -249,7 +314,7 @@ export default {
         (v) => {
           return (
             (parseFloat(v) === parseInt(v) && !isNaN(v)) ||
-            'Doit être un nombre sans virgul'
+            'Doit être un nombre sans virgule'
           )
         },
         (v) => {
@@ -293,12 +358,12 @@ export default {
 }
 
 .peeCol1 {
-  width: 40%;
+  width: 30%;
 }
 .peeCol2 {
-  width: 29%;
+  width: 34%;
 }
 .peeCol3 {
-  width: 29%;
+  width: 34%;
 }
 </style>

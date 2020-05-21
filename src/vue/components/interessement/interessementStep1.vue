@@ -2,10 +2,9 @@
   <v-card>
     <v-toolbar color="primary" dark>
       <v-toolbar-title class="white--text"
-        >Etape 1 : Conditions financières
-        <div class="subheading">
-          Valider les conditions financières pour définir l'enveloppe globale
-          possible
+        >Etape 1
+        <div class="title">
+          Intéressement global
         </div>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -13,6 +12,13 @@
     <!-- Contenu -->
     <v-container grid-list-xl>
       <v-layout column>
+        <v-flex class="text-xs-center rounded-card interessementDiv3">
+          <p>
+            Cette enveloppe est calculée en fonction du
+            <b>résultat d’exploitation</b> et peut être majorée en fonction du
+            <b>taux d’autofinancement</b>.
+          </p>
+        </v-flex>
         <v-flex>
           <v-layout v-bind="binding">
             <v-flex class="text-xs-center rounded-card interessementDiv">
@@ -72,26 +78,38 @@
         <v-flex class="rounded-card" style="background: #eee; color: #333;">
           <div>
             <v-layout row>
-              <v-flex d-flex xs2 sm1 md1>
-                <v-icon color="primary" large>beenhere</v-icon>
-              </v-flex>
               <v-flex xs10 sm11 md11>
                 <p>
-                  Pour 2019 l'Autofinancement est de
-                  <span class="primary--text headline">{{
-                    configInteressement.autofinancement
-                  }}</span>
-                  <br />
-                  L’intéressement cette année se calcule sur
-                  <span class="primary--text headline"
-                    >{{
-                      configInteressement.pourcentage_masse_salariale
-                    }}%</span
+                  <span class="primary--text title"
+                    >Pour l'année {{ configInteressement._id - 1 }}</span
                   >
-                  de la masse salariale soit
+                  <br />
+                  <b>1.</b> le résultat d’exploitation est de
+                  <span class="primary--text title"
+                    >{{ configInteressement.resultat_exploitation }}%</span
+                  >
+                  <br />
+                  <v-icon>arrow_right</v-icon> l’intéressement se calcule donc
+                  sur la base de <span class="primary--text title">4%</span> de
+                  la masse salariale <br /><br />
+                  <b>2.</b> l'autofinancement est de
+                  <span class="primary--text title"
+                    >{{ configInteressement.autofinancement }}%</span
+                  >
+                  <br />
+                  <v-icon>arrow_right</v-icon> l’enveloppe d'intéressement est
+                  majorée de
+                  <span class="primary--text title">{{
+                    configInteressement.majoration_autofinancement
+                  }}</span>
+                  %
                 </p>
-                <p class="primary--text text-xs-center headline">
-                  {{ getMontantTotal }}
+
+                <p class="text-xs-center">
+                  Silène distribuera un intéressement de
+                  <span class="primary--text headline"
+                    >{{ getMontantTotal }}
+                  </span>
                 </p>
               </v-flex>
             </v-layout>
@@ -145,5 +163,11 @@ export default {
   padding: 5px;
   background-color: #1e88e5;
   color: white;
+}
+.interessementDiv3 {
+  padding: 5px;
+  background: #eee;
+  color: #333;
+  color: #444;
 }
 </style>
