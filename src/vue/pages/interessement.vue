@@ -1,7 +1,7 @@
 <template>
   <v-container style="margin: 0; margin-top: 50px;">
     <v-layout>
-      <v-flex xs12 sm12 md12 offset-sm2>
+      <v-flex xs12 offset-lg3 offset-xl2>
         <v-stepper v-model="e1" style="margin-top: 20px;">
           <v-stepper-header>
             <v-stepper-step editable :complete="e1 > 1" step="1"
@@ -76,11 +76,15 @@ export default {
   computed: {
     ...mapState({
       configInteressement: (state) => state.interessement.configInteressement
-    })
+    }),
+    breakpoint() {
+      console.log(this.$vuetify.breakpoint)
+      return true
+    }
   },
   data() {
     return {
-      e1: 2,
+      e1: 4,
       test: 'testt'
     }
   }

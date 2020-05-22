@@ -1,0 +1,5 @@
+
+En ce qui concerne l’abondement, je t’ai mis sur le premier onglet notre fichier RH .
+En effet, en prenant la ligne 24 ( simulation) tu comprendras le mécanisme :
+L’abondement se calcul sur la prime nette mais est lui-même soumis à CSG :CRDS .
+L’investissement au PEE sur les différents fonds se fait donc en net (prime net + abondement net) 

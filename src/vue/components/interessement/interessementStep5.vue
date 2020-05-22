@@ -19,14 +19,14 @@
         <h2 class="primary--text title" style="margin-bottom: 10px;">
           Choix de placement
         </h2>
-        <v-flex offset-md2 :style="'width:' + specificWidth + ';'">
-          <v-layout row>
-            <v-flex class="syntheseCol1"
+        <v-flex offset-md2 :style="'padding:0;width:' + specificWidth + ';'">
+          <v-layout row style="padding: 0;" align-center>
+            <v-flex xs8
               ><p style="vertical-align: middle;">
                 Versement bulletin de salaire
               </p></v-flex
             >
-            <v-flex class="syntheseCol2"
+            <v-flex xs4
               ><v-text-field
                 v-model="choix.bulletin_de_salaire"
                 label="Pourcent"
@@ -38,14 +38,14 @@
             ></v-flex>
           </v-layout>
         </v-flex>
-        <v-flex offset-md2 :style="'width:' + specificWidth + ';'">
-          <v-layout v-if="choix" row>
-            <v-flex class="syntheseCol1"
+        <v-flex offset-md2 :style="'padding:0;width:' + specificWidth + ';'">
+          <v-layout v-if="choix" row style="padding: 0;" align-center>
+            <v-flex xs8
               ><p style="vertical-align: middle;">
                 PEE
               </p></v-flex
             >
-            <v-flex class="syntheseCol2"
+            <v-flex xs4
               ><v-text-field
                 v-model="100 - choix.bulletin_de_salaire"
                 label="Pourcent"
@@ -63,18 +63,14 @@
         class="primary--text title"
         style="margin-bottom: 10px;"
       >
-        Abondement net par Silène
+        Abondement Net par Silène
       </h2>
-      <p class="primary--text title">(50 % du placement net sur le PEE)</p>
+      <p class="primary--text subtitle-1">
+        ({{ configInteressement.abondement }}% du placement net sur le PEE -
+        CSG-CRDS)
+      </p>
       <p v-if="choix" class="secondary--text text-xs-center title">
-        {{
-          Math.round(
-            (interessementUser.quote_part_net *
-              (100 - choix.bulletin_de_salaire) *
-              abondement) /
-              100
-          ) / 100
-        }}
+        {{ calculAbondement }}
         €
       </p>
       <h2
@@ -84,17 +80,10 @@
       >
         Montant total
       </h2>
-      <p>(intéressement + abondement)</p>
+      <p class="primary--text subtitle-1">(intéressement + abondement)</p>
       <p v-if="choix" class="secondary--text text-xs-center title">
         {{ Math.round(interessementUser.quote_part_net * 100) / 100 }} +
-        {{
-          Math.round(
-            (interessementUser.quote_part_net *
-              (100 - choix.bulletin_de_salaire) *
-              abondement) /
-              100
-          ) / 100
-        }}
+        {{ calculAbondement }}
         = {{ totalAvecAbondement }} €
       </p>
     </v-container>
@@ -119,6 +108,21 @@ export default {
       fonds: (state) => {
         // console.log('mapState : fonds')
         return state.interessement.interessementUser.choix.pee.fonds
+      },
+      calculAbondement: (state) => {
+        let quotePartNet = state.interessement.interessementUser.quote_part_net
+        let repartitionTotalePEE =
+          100 - state.interessement.interessementUser.choix.bulletin_de_salaire
+        let tauxAbondement = state.interessement.configInteressement.abondement
+        let tauxCsgCrds = parseFloat(
+          state.interessement.configInteressement.taux_csg_crds
+        )
+        let montantAbondementAvantCsg =
+          (((quotePartNet * repartitionTotalePEE) / 100) * tauxAbondement) / 100
+        let montantAbondementApresCsg =
+          montantAbondementAvantCsg -
+          (montantAbondementAvantCsg * tauxCsgCrds) / 100
+        return Math.round(montantAbondementApresCsg * 100) / 100
       },
       totalPercentFonds: (state) => {
         if (!state.interessement.interessementUser.choix) return 0
@@ -146,11 +150,7 @@ export default {
       },
       totalAvecAbondement(state) {
         let total =
-          (((this.interessementUser.quote_part_net *
-            (100 - this.choix.bulletin_de_salaire)) /
-            100) *
-            this.abondement) /
-            100 +
+          this.calculAbondement +
           parseFloat(this.interessementUser.quote_part_net)
 
         // console.log(total)

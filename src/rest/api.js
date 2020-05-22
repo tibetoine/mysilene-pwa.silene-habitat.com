@@ -45,6 +45,6 @@ export default {
   upload: (path, file) => {
     let data = new FormData()
     data.append('file', file)
-    Vue.http.post(url(path), data, options())
+    return Vue.http.post(url(path), data, options())
   }
 }

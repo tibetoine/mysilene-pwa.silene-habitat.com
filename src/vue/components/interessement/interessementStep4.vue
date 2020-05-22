@@ -21,20 +21,21 @@
         </span>
         (net).
         <br />
+        <br />
         <em>
           Vous pouvez choisir de percevoir l'intéressement ou de le placer sur
           le Plan d'Epargne Entreprise (PEE)
         </em>
       </v-card-text>
-      <v-container>
+      <v-container style="margin-top: 0; padding-top: 0;">
         <h2 class="primary--text title" style="margin-bottom: 10px;"></h2>
-        <v-layout row>
-          <v-flex class="peeCol1"
+        <v-layout row align-center>
+          <v-flex xs5 md4
             ><p class="primary--text title" style="vertical-align: middle;">
               Versement sur le bulletin de salaire
             </p></v-flex
           >
-          <v-flex class="peeCol2"
+          <v-flex xs3 md4
             ><v-text-field
               v-model="choix.bulletin_de_salaire"
               label="Pourcent"
@@ -45,7 +46,7 @@
             </v-text-field
           ></v-flex>
           <v-spacer style="margin-left: 10px;"></v-spacer>
-          <v-flex class="peeCol3"
+          <v-flex xs3 md4
             ><v-text-field
               :value="
                 Math.round(montant_quote_part_net * choix.bulletin_de_salaire) /
@@ -58,40 +59,14 @@
             >
             </v-text-field
           ></v-flex>
+          <v-flex xs1 hidden-md-and-up>
+            &nbsp;
+          </v-flex>
         </v-layout>
         <v-spacer
           v-if="choix.bulletin_de_salaire < 100"
           style="border-bottom: 1px solid #777;"
         ></v-spacer>
-        <!-- <v-layout row>
-          <v-flex xs2 class="text-xs-center">
-            <p>
-              Bulletin de salaire
-              <br />
-              {{ 100 - percent }} %
-              <br />
-              {{ Math.round(montant_quote_part_net * (100 - percent)) / 100 }}
-              €
-            </p>
-          </v-flex>
-          <v-flex xs8>
-            <v-slider max="100" v-model="percent"></v-slider>
-          </v-flex>
-
-          <v-flex xs2 class="text-xs-center"
-            ><p>
-              Placement PEE
-              <br />
-              {{ percent }} %
-              <br />
-              {{ Math.round(montant_quote_part_net * percent) / 100 }}
-              €
-            </p>
-          </v-flex>
-          <p v-if="(1 === 2)">
-            {{ interessementUser }}
-          </p>
-        </v-layout> -->
         <h2
           v-if="choix.bulletin_de_salaire < 100"
           class="primary--text title"
@@ -103,12 +78,19 @@
           <v-flex v-if="choix">
             <template v-for="(fond, index) in fonds">
               <v-layout :key="index" row align-center>
-                <v-flex class="peeCol1"
-                  ><p style="vertical-align: middle;">
+                <v-flex xs5 md4
+                  ><p style="vertical-align: middle; margin: 0; padding: 0;">
                     {{ fond.nom_du_fond }}
-                  </p></v-flex
+                  </p>
+                  <v-icon class="hidden-sm-and-down">link</v-icon>
+                  <a
+                    class="hidden-sm-and-down"
+                    :href="fond.lien_notice_d_information"
+                    target="_blank"
+                    >Notice {{ fond.nom_du_fond }}
+                  </a></v-flex
                 >
-                <v-flex class="peeCol2">
+                <v-flex xs3 md4>
                   <v-text-field
                     v-model="fond.percent"
                     @keyup.stop="updateFond($event, index)"
@@ -119,8 +101,9 @@
                   >
                   </v-text-field>
                 </v-flex>
+
                 <v-spacer style="margin-left: 10px;"></v-spacer>
-                <v-flex class="peeCol3">
+                <v-flex xs3 md4>
                   <v-text-field
                     :value="
                       fond.percent
@@ -138,19 +121,28 @@
                   >
                   </v-text-field>
                 </v-flex>
+                <v-flex xs1 hidden-md-and-up>
+                  <v-btn
+                    icon
+                    :href="fond.lien_notice_d_information"
+                    target="_blank"
+                  >
+                    <v-icon>info</v-icon>
+                  </v-btn>
+                </v-flex>
               </v-layout>
             </template>
             <v-layout row align-center>
-              <v-flex class="peeCol1 secondary--text text-xs-center title"
+              <v-flex xs5 md4 class="secondary--text text-xs-center title"
                 ><p style="vertical-align: middle;">
                   TOTAL versement sur PEE
                 </p></v-flex
               >
-              <v-flex :class="totalEurosFondsClass">
+              <v-flex xs3 md4 :class="totalEurosFondsClass">
                 <p>{{ totalPercentFonds }} %</p>
               </v-flex>
               <v-spacer style="margin-left: 10px;"></v-spacer>
-              <v-flex class="peeCol3 secondary--text text-xs-center">
+              <v-flex xs3 md4 class="secondary--text text-xs-center">
                 <p class="title">{{ totalEurosFonds }} €</p>
               </v-flex>
             </v-layout>
@@ -254,6 +246,13 @@ export default {
         let totalAbondement =
           this.totalEurosFonds + (this.totalEurosFonds * this.abondement) / 100
         return Math.round(totalAbondement * 100) / 100
+      },
+      binding() {
+        const binding = {}
+        console.log(this.$vuetify.breakpoint)
+        if (this.$vuetify.breakpoint.xs) binding.column = true
+
+        return true
       }
     }),
     totalEurosFondsClass: {

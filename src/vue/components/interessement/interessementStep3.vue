@@ -10,7 +10,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <!-- Contenu -->
-    <v-container grid-list-xl>
+    <v-container v-if="interessementUser && configInteressement" grid-list-xl>
       <v-layout column>
         <v-flex>
           <v-layout v-bind="binding">
@@ -18,25 +18,116 @@
           </v-layout>
         </v-flex>
         <v-flex class="rounded-card" style="background: #eee; color: #333;">
-          <div>
-            <v-layout row>
-              <v-flex d-flex xs2 sm1 md1>
-                <v-icon color="primary" large>beenhere</v-icon>
-              </v-flex>
-              <v-flex xs10 sm11 md11>
-                <p>
-                  Estimation montant individuel brut :
-                </p>
-                <p class="primary--text text-xs-center headline">
-                  {{ getMontantIndividuel }}*
-                </p>
-                <em
-                  >*base temps plein sur l'année
-                  {{ configInteressement._id - 1 }}, sans absence</em
+          <h2 class="primary--text">
+            Estimation montant individuel brut :
+          </h2>
+          <p class="secondary--text headline text-xs-center">
+            {{ getMontantIndividuel }}*
+          </p>
+          <em
+            >*base temps plein sur l'année {{ configInteressement._id - 1 }},
+            sans absence</em
+          >
+        </v-flex>
+        <v-flex class="rounded-card" style="background: #eee; color: #333;">
+          <h2 class="primary--text">
+            Nombre de jours théorique
+          </h2>
+          <p
+            class="secondary--text headline text-xs-center"
+            style="margin-bottom: 0;"
+          >
+            {{ interessementUser.base_annuelle }} jours
+          </p>
+        </v-flex>
+        <v-flex class="rounded-card" style="background: #eee; color: #333;">
+          <h2 class="primary--text">
+            Absences
+          </h2>
+          <table>
+            <tr>
+              <td>Nb jours maladie</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>{{ interessementUser.nb_jrs_maladie }}</td>
+            </tr>
+            <tr>
+              <td>Nb jours enfant malade</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>{{ interessementUser.nb_jrs_enfants_malade }}</td>
+            </tr>
+            <tr>
+              <td>Nb de jours Service non fait</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>{{ interessementUser.nb_jrs_service_non_fait }}</td>
+            </tr>
+            <tr>
+              <td>Nb de jours de congés sans solde</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>{{ interessementUser.nb_jrs_conges_sans_solde }}</td>
+            </tr>
+            <tr>
+              <td>Nb de jours de CIF</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>{{ interessementUser.nb_jrs_cif }}</td>
+            </tr>
+            <tr>
+              <td>Nb de jours d'Autres absences</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>{{ interessementUser.nb_jrs_autres_absences }}</td>
+            </tr>
+            <tr>
+              <td class="secondary--text headline text-xs-center">
+                TOTAL Absences
+              </td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td class="secondary--text headline text-xs-center">
+                {{ totalJoursAbsence }}
+              </td>
+            </tr>
+          </table>
+        </v-flex>
+        <v-flex class="rounded-card" style="background: #eee; color: #333;">
+          <h2 class="primary--text">Montant intéressement</h2>
+          <table>
+            <tr>
+              <td>Brut</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>
+                {{ Math.round(interessementUser.montant_brut * 100) / 100 }} €
+              </td>
+            </tr>
+            <tr>
+              <td>CSG</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>
+                {{ Math.round(interessementUser.csg_crds * 100) / 100 }} €
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="secondary--text headline text-xs-center">Net</span>
+              </td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>
+                <span class="secondary--text headline text-xs-center"
+                  >{{
+                    Math.round(interessementUser.quote_part_net * 100) / 100
+                  }}
+                  €</span
                 >
-              </v-flex>
-            </v-layout>
-          </div>
+              </td>
+            </tr>
+          </table>
         </v-flex>
       </v-layout>
     </v-container>
@@ -53,7 +144,28 @@ export default {
   },
   computed: {
     ...mapState({
-      configInteressement: (state) => state.interessement.configInteressement
+      configInteressement: (state) => state.interessement.configInteressement,
+      interessementUser: (state) => state.interessement.interessementUser,
+      totalJoursAbsence: (state) => {
+        let total = 0
+        total += parseFloat(
+          state.interessement.interessementUser.nb_jrs_maladie
+        )
+        total += parseFloat(
+          state.interessement.interessementUser.nb_jrs_enfants_malade
+        )
+        total += parseFloat(
+          state.interessement.interessementUser.nb_jrs_service_non_fait
+        )
+        total += parseFloat(
+          state.interessement.interessementUser.nb_jrs_conges_sans_solde
+        )
+        total += parseFloat(state.interessement.interessementUser.nb_jrs_cif)
+        total += parseFloat(
+          state.interessement.interessementUser.nb_jrs_autres_absences
+        )
+        return total
+      }
     }),
     binding() {
       const binding = {}
