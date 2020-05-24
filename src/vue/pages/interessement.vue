@@ -3,7 +3,7 @@
     <v-layout>
       <v-flex xs12 offset-lg3 offset-xl2>
         <v-stepper
-          v-if="configInteressement"
+          v-if="configInteressement && !configInteressement.closed"
           v-model="etape"
           style="margin-top: 20px;"
         >
@@ -56,10 +56,16 @@
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
-        <v-alert type="info" :value="true" v-else>
-          Attention! Aucune configuration chargée pour cette année. Consultez la
-          documentation sur MySilene pour charger les données.</v-alert
-        >
+        <div v-else>
+          <v-alert v-if="!configInteressement" type="info" :value="true">
+            Attention! Aucune configuration chargée pour cette année. Consultez
+            la documentation sur MySilene pour charger les données.</v-alert
+          >
+          <v-alert v-if="configInteressement.closed" type="info" :value="true">
+            Le module d'intéressement est fermé. Contactez le service RH pour
+            plus d'information.
+          </v-alert>
+        </div>
       </v-flex>
     </v-layout>
   </v-container>
