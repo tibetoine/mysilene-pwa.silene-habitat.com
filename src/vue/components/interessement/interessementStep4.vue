@@ -168,7 +168,9 @@ export default {
   name: 'interessementStep4',
   components: {},
   methods: {
-    ...mapActions({}),
+    ...mapActions({
+      saveInteressementUser: On.SAVE_INTERESSEMENT_USER
+    }),
     updateFond(e, index) {
       // console.log('updateFond')
       // console.log(this.totalEurosFondsClass)
@@ -179,22 +181,21 @@ export default {
       })
     },
     submit() {
-      // TODO
-      console.log('this.$parent.e1 : ', this.$parent.e1)
-      console.log('this.$parent["e1"] : ', this.$parent['e1'])
-      console.log('this.$parent : ', this.$parent)
-      console.log('this.$parent.test : ', this.$parent.test)
-      console.log('this.$parent["test"] : ', this.$parent['test'])
-      this.$parent.e1 = 1
       console.log(this.$refs.form.validate())
 
       /* Est ce que le pourcentage PEE est à 100 % */
       if (this.choix.bulletin_de_salaire < 100) {
         if (this.totalPercentFonds !== 100) {
+          /* On montre le message d'erreur et on sort de la fonction */
           this.snackbModel = true
           return
         }
       }
+      let userId = localStorage.getItem('user-id')
+      let year = new Date().getFullYear()
+      this.saveInteressementUser({ userId: userId, year: year })
+
+      this.etape = 5
       /* Enregistrer en base ! dispatch tout ça */
       console.log('TODO record en base')
     },
@@ -255,6 +256,14 @@ export default {
         return true
       }
     }),
+    etape: {
+      get() {
+        return this.$store.state.interessement.etape
+      },
+      set(val) {
+        this.$store.state.interessement.etape = val
+      }
+    },
     totalEurosFondsClass: {
       get() {
         if (!this.$store.state.interessement.interessementUser.choix) return 0

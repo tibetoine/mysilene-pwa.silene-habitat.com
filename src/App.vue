@@ -67,7 +67,7 @@
         open-on-hover
       >
         <v-btn slot="activator" fab hover v-model="fab" icon small>
-          <v-avatar size="40" style="margin-top: -20px;" color="grey lighten-4">
+          <v-avatar size="40" color="grey lighten-4">
             <img
               :src="findAvatar(userAuthenticated)"
               alt="UserAvatar"

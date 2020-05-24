@@ -53,5 +53,12 @@ export default {
   loadInteressementConfig: (year) =>
     api.get(`api-itt/interessement/config/${year}`),
   loadInteressementUser: (username, year) =>
-    api.get(`api-itt/interessement/${username}/${year}`)
+    api.get(`api-itt/interessement/${username}/${year}`),
+  saveInteressementUser: (username, year, interessementUser) =>
+    api.put(
+      `api-itt/interessement/${username}/${year}`,
+      JSON.stringify(interessementUser)
+    ),
+  exportInteressements: (year) =>
+    api.getXlsx(`api-itt/interessement/export/${year}`)
 }

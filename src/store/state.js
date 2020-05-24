@@ -1,7 +1,8 @@
 export default {
   interessement: {
-    configInteressement: {},
-    interessementUser: {}
+    configInteressement: null,
+    interessementUser: {},
+    etape: 1
   },
   access: {
     permissionsList: [],

@@ -7,6 +7,9 @@ export default {
   [Do.SET_INTERESSEMENT_USER]: (state, interessementUser) => {
     state.interessement.interessementUser = interessementUser
   },
+  [Do.SET_INTERESSEMENT_ETAPE]: (state, etapeNumber) => {
+    state.interessement.etape = etapeNumber
+  },
   [Do.UPDATE_INTERESSEMENT_USER_FONDS]: (state, data) => {
     let index = data.index
     let fondValue = data.value

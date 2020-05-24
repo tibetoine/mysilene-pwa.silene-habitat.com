@@ -13,79 +13,68 @@
         <h2 class="primary--text title" style="margin-bottom: 10px;">
           Montant de votre intéressement
         </h2>
-        <p class="secondary--text text-xs-center title">
-          {{ Math.round(interessementUser.quote_part_net * 100) / 100 }} €
+        <p class="secondary--text title">
+          <v-icon>arrow_right</v-icon
+          >{{ Math.round(interessementUser.quote_part_net * 100) / 100 }} €
         </p>
         <h2 class="primary--text title" style="margin-bottom: 10px;">
           Choix de placement
         </h2>
-        <v-flex offset-md2 :style="'padding:0;width:' + specificWidth + ';'">
+        <v-flex offset-md1 :style="'padding:0;width:' + specificWidth + ';'">
           <v-layout row style="padding: 0;" align-center>
-            <v-flex xs8
+            <v-flex xs7
               ><p style="vertical-align: middle;">
                 Versement bulletin de salaire
               </p></v-flex
             >
-            <v-flex xs4
-              ><v-text-field
-                v-model="choix.bulletin_de_salaire"
-                label="Pourcent"
-                suffix="%"
-                solo
-                readonly
-              >
-              </v-text-field
-            ></v-flex>
+            <v-flex xs5>
+              <p class="secondary--text title">{{ partBulletinDeSalaire }} €</p>
+            </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex offset-md2 :style="'padding:0;width:' + specificWidth + ';'">
+        <v-flex offset-md1 :style="'padding:0;width:' + specificWidth + ';'">
           <v-layout v-if="choix" row style="padding: 0;" align-center>
-            <v-flex xs8
+            <v-flex xs7
               ><p style="vertical-align: middle;">
                 PEE
               </p></v-flex
             >
-            <v-flex xs4
-              ><v-text-field
-                v-model="100 - choix.bulletin_de_salaire"
-                label="Pourcent"
-                suffix="%"
-                solo
-                readonly
-              >
-              </v-text-field
-            ></v-flex>
+
+            <v-flex xs5
+              ><p class="secondary--text title">{{ partPee }} €</p>
+            </v-flex>
           </v-layout>
         </v-flex>
+        <h2
+          v-if="!contact.estFonctionnaire"
+          class="primary--text title"
+          style="margin-bottom: 10px;"
+        >
+          Abondement Net par Silène
+        </h2>
+        <p class="primary--text subtitle-1">
+          ({{ configInteressement.abondement }}% du placement net sur le PEE -
+          CSG-CRDS)
+        </p>
+        <p v-if="choix" class="secondary--text title">
+          <v-icon>arrow_right</v-icon> {{ calculAbondement }}
+          €
+        </p>
+        <h2
+          v-if="!contact.estFonctionnaire"
+          class="primary--text title"
+          style="margin-bottom: 10px;"
+        >
+          Montant total
+        </h2>
+        <p class="primary--text subtitle-1">(intéressement + abondement)</p>
+        <p v-if="choix" class="secondary--text title">
+          <v-icon>arrow_right</v-icon
+          >{{ Math.round(interessementUser.quote_part_net * 100) / 100 }} +
+          {{ calculAbondement }}
+          = {{ totalAvecAbondement }} €
+        </p>
       </v-layout>
-      <h2
-        v-if="!contact.estFonctionnaire"
-        class="primary--text title"
-        style="margin-bottom: 10px;"
-      >
-        Abondement Net par Silène
-      </h2>
-      <p class="primary--text subtitle-1">
-        ({{ configInteressement.abondement }}% du placement net sur le PEE -
-        CSG-CRDS)
-      </p>
-      <p v-if="choix" class="secondary--text text-xs-center title">
-        {{ calculAbondement }}
-        €
-      </p>
-      <h2
-        v-if="!contact.estFonctionnaire"
-        class="primary--text title"
-        style="margin-bottom: 10px;"
-      >
-        Montant total
-      </h2>
-      <p class="primary--text subtitle-1">(intéressement + abondement)</p>
-      <p v-if="choix" class="secondary--text text-xs-center title">
-        {{ Math.round(interessementUser.quote_part_net * 100) / 100 }} +
-        {{ calculAbondement }}
-        = {{ totalAvecAbondement }} €
-      </p>
     </v-container>
   </v-card>
 </template>
@@ -108,6 +97,23 @@ export default {
       fonds: (state) => {
         // console.log('mapState : fonds')
         return state.interessement.interessementUser.choix.pee.fonds
+      },
+      partBulletinDeSalaire: (state) => {
+        return (
+          Math.round(
+            state.interessement.interessementUser.choix.bulletin_de_salaire *
+              state.interessement.interessementUser.quote_part_net
+          ) / 100
+        )
+      },
+      partPee: (state) => {
+        return (
+          Math.round(
+            (100 -
+              state.interessement.interessementUser.choix.bulletin_de_salaire) *
+              state.interessement.interessementUser.quote_part_net
+          ) / 100
+        )
       },
       calculAbondement: (state) => {
         let quotePartNet = state.interessement.interessementUser.quote_part_net
@@ -181,7 +187,7 @@ export default {
           }
         )
         let subClass = total === 100 ? 'secondary--text' : 'red--text'
-        let theClass = 'peeCol2 ' + subClass + ' text-xs-center title'
+        let theClass = 'peeCol2 ' + subClass + ' title'
         return theClass
       }
     },

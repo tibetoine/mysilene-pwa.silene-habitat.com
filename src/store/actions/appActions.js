@@ -716,6 +716,7 @@ export default {
     try {
       const response = await rest.loadInteressementConfig(year)
 
+      console.log(response.data)
       const interessementConfig = response.data
       /* 2/ Enregistrement dans le store */
       commit(Do.SET_INTERESSEMENT_CONFIG, interessementConfig)
@@ -746,11 +747,17 @@ export default {
         }
       }
 
+      let choixFait = false
       if (!interessementUser.choix) {
         interessementUser.choix = defaultChoix
+      } else {
+        choixFait = true
       }
       /* 2/ Enregistrement dans le store */
       commit(Do.SET_INTERESSEMENT_USER, interessementUser)
+      if (choixFait) {
+        commit(Do.SET_INTERESSEMENT_ETAPE, 5)
+      }
     } catch (error) {
       let errorMessage =
         `#ApiInteressement002 - Erreur lors du chargement des données d'interessement pour l'année : ` +
@@ -758,6 +765,48 @@ export default {
         ` avec le user ` +
         userId +
         ` consulter la documentation MySilene`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
+  },
+  [On.SAVE_INTERESSEMENT_USER]: async function ({ commit, state }, data) {
+    console.log('SAVE_INTERESSEMENT_USER ', data)
+    /* 1/ Appel REST à l'API  */
+    let userId = data.userId
+    let year = data.year
+    let interessementUser = state.interessement.interessementUser
+    try {
+      const response = await rest.saveInteressementUser(
+        userId,
+        year,
+        interessementUser
+      )
+
+      console.log(response)
+      commit(Do.SHOW_GLOBAL_SUCCESS, 'Votre choix a été enregistré.')
+    } catch (error) {
+      let errorMessage =
+        `#ApiInteressement003 - Erreur lors de l'entregistrement de l'intéressement pour l'année : ` +
+        year +
+        ` et pour le user ` +
+        userId +
+        ` -> consulter la documentation MySilene`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
+  },
+  [On.EXPORT_INTERESSEMENTS]: async function ({ commit }, year) {
+    console.log('year', year)
+    try {
+      const response = await rest.exportInteressements(year)
+
+      console.log(response)
+      // commit(Do.SHOW_GLOBAL_SUCCESS, 'Votre choix a été enregistré.')
+      return response
+    } catch (error) {
+      let errorMessage =
+        `#ApiInteressement004 - Erreur lors de l'export des données : ` + year
+
       console.error(errorMessage, error)
       commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
     }
