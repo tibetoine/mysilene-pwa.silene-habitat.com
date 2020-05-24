@@ -49,7 +49,7 @@ export default {
   addContactSaturday: (username) =>
     api.post(`api/contacts/${username}/saturday`),
   deleteContactSaturday: (username) =>
-    api.delete(`api/contacts/${username}/saturday`),
+    api.del(`api/contacts/${username}/saturday`),
   loadInteressementConfig: (year) =>
     api.get(`api-itt/interessement/config/${year}`),
   loadInteressementUser: (username, year) =>

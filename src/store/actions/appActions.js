@@ -420,7 +420,8 @@ export default {
       dispatch(On.LOAD_NEWS)
       dispatch(On.LOAD_GROUPS)
       /* Récupère l'année courante */
-      dispatch(On.LOAD_INTERESSEMENT_CONFIG).then(() => {
+      dispatch(On.LOAD_INTERESSEMENT_CONFIG).then((res) => {
+        console.log(res)
         /* Current Year */
         let year = new Date().getFullYear()
         dispatch(On.LOAD_INTERESSEMENT_USER, { userId: userId, year: year })
@@ -448,7 +449,8 @@ export default {
     dispatch(On.LOAD_NEWS)
     dispatch(On.LOAD_GROUPS)
     const userId = user._id.trim().toLowerCase()
-    dispatch(On.LOAD_INTERESSEMENT_CONFIG).then(() => {
+    dispatch(On.LOAD_INTERESSEMENT_CONFIG).then((res) => {
+      console.log(res)
       /* Current Year */
       let year = new Date().getFullYear()
       dispatch(On.LOAD_INTERESSEMENT_USER, { userId: userId, year: year })
@@ -766,7 +768,7 @@ export default {
         userId +
         ` consulter la documentation MySilene`
       console.error(errorMessage, error)
-      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      // commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
     }
   },
   [On.SAVE_INTERESSEMENT_USER]: async function ({ commit, state }, data) {

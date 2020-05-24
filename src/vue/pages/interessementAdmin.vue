@@ -1,7 +1,7 @@
 <template>
   <v-container style="margin-top: 50px;">
     <v-layout>
-      <v-flex xs12 offset-lg3 offset-xl2
+      <v-flex v-if="configInteressement" xs12 offset-lg3 offset-xl2
         ><v-card>
           <v-toolbar dark color="primary">
             <v-toolbar-title class="white--text">{{ title }}</v-toolbar-title>
@@ -78,6 +78,12 @@
           </v-container>
         </v-card>
       </v-flex>
+      <v-flex v-else>
+        <v-alert type="info" outline :value="true">
+          Aucune configuration chargée en base pour cette année. Consultez la
+          documentation MySilene pour charger la configuration pour cette année.
+        </v-alert>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -126,7 +132,7 @@ export default {
   },
   computed: {
     ...mapState({
-      // closed: (state) => state.interessement.configInteressement.closed
+      configInteressement: (state) => state.interessement.configInteressement
     }),
     closed: {
       get() {
