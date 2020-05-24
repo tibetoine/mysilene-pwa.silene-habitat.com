@@ -56,6 +56,8 @@
                     // available; please refresh." message in the page's interface.
                     
                     // Ajouté le 08/04/2020 par Antoine. Pour etre sûr que l'app se reload sur IPhone (pas pu tester par contre)
+
+                    // Enlevé par ANtoine le 20/05 car l'application se rechargeait toutes les 5 secondes pour uen raison inconnue (peut etre à cose de OneSignal)
                     // window.location.reload();
                     break
 
