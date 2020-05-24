@@ -46,5 +46,6 @@ export default {
   SAVE_INTERESSEMENT_USER: 'saveInteressementUser',
   UPDATE_INTERESSEMENT_USER_FONDS: 'updateInteressementUserFonds',
   RESET_INTERESSEMENT_USER_FONDS: 'resetInteressementUserFonds',
-  EXPORT_INTERESSEMENTS: 'exportInteressements'
+  EXPORT_INTERESSEMENTS: 'exportInteressements',
+  CLOSE_INTERESSEMENTS: 'closeInteressements'
 }

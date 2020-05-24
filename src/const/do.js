@@ -60,5 +60,6 @@ export default {
   SET_INTERESSEMENT_USER: 'setInteressementUser',
   SET_INTERESSEMENT_ETAPE: 'setInteressementEtape',
   UPDATE_INTERESSEMENT_USER_FONDS: 'updateInteressementUserFonds',
-  RESET_INTERESSEMENT_USER_FONDS: 'resetInteressementUserFonds'
+  RESET_INTERESSEMENT_USER_FONDS: 'resetInteressementUserFonds',
+  CLOSE_INTERESSEMENTS: 'closeInteressements'
 }

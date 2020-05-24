@@ -59,7 +59,6 @@ export default {
   data() {
     return {
       formData: new FormData(),
-      title: 'Import fichier Excel',
       dialog: false,
       fileName: '',
       fileUrl: '',

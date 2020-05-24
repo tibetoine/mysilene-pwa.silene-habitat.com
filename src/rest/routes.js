@@ -59,6 +59,8 @@ export default {
       `api-itt/interessement/${username}/${year}`,
       JSON.stringify(interessementUser)
     ),
+  closeInteressement: (closed, year) =>
+    api.put(`api-itt/interessement/closed/${year}`, { closed: closed }),
   exportInteressements: (year) =>
     api.getXlsx(`api-itt/interessement/export/${year}`)
 }

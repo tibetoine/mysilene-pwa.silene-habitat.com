@@ -795,6 +795,32 @@ export default {
       commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
     }
   },
+  [On.CLOSE_INTERESSEMENTS]: async function ({ commit, state }, data) {
+    console.log('CLOSE_INTERESSEMENTS ')
+    /* 1/ Appel REST à l'API  */
+    let year = data.year
+    let closed = data.closed
+
+    console.log('closed:', closed)
+    console.log('year:', year)
+    try {
+      const response = await rest.closeInteressement(closed, year)
+
+      console.log(response)
+      let successMessage
+      if (closed) {
+        successMessage = "Le module d'intéressement à été fermé"
+      } else {
+        successMessage = "Le module d'intéressement à été ouvert"
+      }
+      commit(Do.CLOSE_INTERESSEMENTS, closed)
+      commit(Do.SHOW_GLOBAL_SUCCESS, successMessage)
+    } catch (error) {
+      let errorMessage = `#ApiInteressement005 - Erreur lors de la fermeture de l'intéressement`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
+  },
   [On.EXPORT_INTERESSEMENTS]: async function ({ commit }, year) {
     console.log('year', year)
     try {

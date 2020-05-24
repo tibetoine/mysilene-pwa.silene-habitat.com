@@ -10,6 +10,9 @@ export default {
   [Do.SET_INTERESSEMENT_ETAPE]: (state, etapeNumber) => {
     state.interessement.etape = etapeNumber
   },
+  [Do.CLOSE_INTERESSEMENTS]: (state, closed) => {
+    state.interessement.configInteressement.closed = closed
+  },
   [Do.UPDATE_INTERESSEMENT_USER_FONDS]: (state, data) => {
     let index = data.index
     let fondValue = data.value
