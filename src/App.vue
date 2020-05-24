@@ -46,6 +46,7 @@
       <!--<v-btn icon>
         <v-icon>notifications</v-icon>
       </v-btn>-->
+      4.1.0
       <v-btn v-if="error" @click.stop="showErrorDialog" icon>
         <v-icon>warning</v-icon>
       </v-btn>
@@ -95,7 +96,9 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
+
 import On from './const/on'
+// import Vue from 'vue'
 import Do from './const/do'
 import DownDialog from './vue/dialogs/DownDialog'
 import LoginDialog from './vue/dialogs/LoginDialog'
