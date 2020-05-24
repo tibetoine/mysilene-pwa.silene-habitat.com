@@ -136,6 +136,9 @@ export default {
     }),
     closed: {
       get() {
+        if (!this.$store.state.interessement.configInteressement) {
+          return false
+        }
         console.log(
           'blop',
           this.$store.state.interessement.configInteressement.closed
