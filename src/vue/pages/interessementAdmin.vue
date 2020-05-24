@@ -48,7 +48,7 @@
             </v-layout>
           </v-container>
         </v-card>
-        <v-spacer></v-spacer>
+        <v-spacer style="margin-top: 10px;"></v-spacer>
         <v-card>
           <v-toolbar dark color="primary">
             <v-toolbar-title class="white--text"

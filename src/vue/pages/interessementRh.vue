@@ -3,18 +3,15 @@
     <v-layout>
       <v-flex xs12 offset-lg3 offset-xl2>
         <v-card>
-          <v-toolbar dense>
+          <v-toolbar dark color="primary">
             <v-btn icon>
               <v-icon>get_app</v-icon>
             </v-btn>
-            <v-toolbar-title>Extraction</v-toolbar-title>
+            <v-toolbar-title class="white--text">Extraction</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon>
-              <v-icon>filter_list</v-icon>
-            </v-btn>
           </v-toolbar>
-          <v-card-text class="pa-4"
-            >Export des données au format Excel</v-card-text
+          <v-card-text class="title"
+            >Export des données d'intéressements au format Excel</v-card-text
           >
           <v-card-actions class="pt-0">
             <v-spacer></v-spacer>
