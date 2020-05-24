@@ -2,27 +2,50 @@ import { filter } from 'lodash'
 import { removeAccent } from '../shared/helper'
 
 export default {
-  lastWeather: state => {
+  isPermissionsDirty: (state) => {
+    if (
+      JSON.stringify(state.access.permissionsListInBase) !==
+      JSON.stringify(state.access.permissionsList)
+    ) {
+      return true
+    }
+    return false
+  },
+  isRolesUsersDirty: (state) => {
+    if (
+      JSON.stringify(state.access.rolesUsersListInBase) !==
+      JSON.stringify(state.access.rolesUsersList)
+    ) {
+      return true
+    }
+    return false
+  },
+  lastWeather: (state) => {
     return state.meteo.lastWeather
   },
-  isAuthenticate: state => {
+  isAccessDataLoaded: (state) => {
+    return state.access.permissionsListInBase
+  },
+  isAuthenticate: (state) => {
     return state.login.Authenticate
   },
-  isAdmin: state => {
+  isAdmin: (state) => {
     return state.login.isAdmin
   },
-  isRH: state => {
+  isRH: (state) => {
     return state.login.isRH
   },
-  isManager: state => {
+  isManager: (state) => {
     return state.login.isManager
   },
-  filteredNews: state =>
+  filteredNews: (state) =>
     filter(
       state.news.visibleList,
-      aNews => state.news.selectedTypes.indexOf(aNews.type) > -1
+      (aNews) => state.news.selectedTypes.indexOf(aNews.type) > -1
     ),
-  selectShiftManagerChildren: state => {
+  travailleursDuSamedi: (state) =>
+    filter(state.contacts.fullList, (contact) => contact.saturday === true),
+  selectShiftManagerChildren: (state) => {
     let selectArray = []
 
     /* Ajout de l'utilisateur courant */
@@ -78,7 +101,7 @@ export default {
     }
     return selectArray
   },
-  searchContact: state => author => {
+  searchContact: (state) => (author) => {
     var nomDeFamille = null
     var prenom = null
     if (author == null || author === '') {
@@ -122,7 +145,7 @@ export default {
     nomDeFamille = nomDeFamille.toLowerCase()
 
     // console.log('Recherche de contact ');
-    return state.contacts.fullList.find(function(contact) {
+    return state.contacts.fullList.find(function (contact) {
       // console.log('Recherche de contact avec prenom ' + prenom + ' et nom ' + nomDeFamille)
       if (contact.givenName == null || contact.givenName.length === 0) {
         return false
@@ -151,7 +174,7 @@ export default {
   }
 }
 
-const getAvatar = contact => {
+const getAvatar = (contact) => {
   if (!contact) return '/static/img/default.jpg'
   return (
     '/static/img/' +

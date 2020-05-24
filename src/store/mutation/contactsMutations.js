@@ -9,9 +9,12 @@ export default {
     // console.log('Je groupe Michel ! ')
     state.contacts.groupedContacts = groupBy(
       contacts,
-      contact => contact.department
+      (contact) => contact.department
     )
     // console.log('Taille :' , state.contacts.groupedContacts)
+  },
+  [Do.SET_GROUPS]: (state, groups) => {
+    state.groups = groups
   },
   [Do.SET_CONTACTS_SEARCH]: (state, search) => {
     state.contacts.search = search
@@ -21,10 +24,10 @@ export default {
     state.contacts.filterSst = filterSst
   },
 
-  [Do.UPDATE_FILTERED_CONTACTS]: state => {
+  [Do.UPDATE_FILTERED_CONTACTS]: (state) => {
     // const s = Date.now()
 
-    const r = state.contacts.fullList.filter(contact => {
+    const r = state.contacts.fullList.filter((contact) => {
       var isFiltered = false
       if (
         (state.contacts.search === '' || state.contacts.search == null) &&
@@ -65,11 +68,11 @@ export default {
     // console.log('filtered', r.length, 'contacts in', Date.now() - s, 'ms')
   },
 
-  [Do.SHOW_MORE_CONTACTS]: state => {
+  [Do.SHOW_MORE_CONTACTS]: (state) => {
     addContacts(state)
   },
 
-  [Do.SHOW_CONTACTS_DIALOG]: state => {
+  [Do.SHOW_CONTACTS_DIALOG]: (state) => {
     state.contacts.showDialog = true
   },
   [Do.SHOW_CONTACTS_SNACKBAR]: (state, text) => {
@@ -80,7 +83,7 @@ export default {
 
 const groupBy = (list, keyGetter) => {
   const map = new Map()
-  list.forEach(item => {
+  list.forEach((item) => {
     if (item == null) return
     var key = keyGetter(item)
     if (key === '' || key == null) {
@@ -100,7 +103,7 @@ const groupBy = (list, keyGetter) => {
   return mapAsc
 }
 
-const addContacts = state => {
+const addContacts = (state) => {
   const start = state.contacts.visibleList.length
   const max = Math.min(
     start + state.contacts.pageSize,

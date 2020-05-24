@@ -1,4 +1,38 @@
 export default {
+  interessement: {
+    configInteressement: null,
+    interessementUser: {},
+    etape: 1
+  },
+  access: {
+    permissionsList: [],
+    rolesUsersList: [],
+    permissionsListInBase: [],
+    rolesUsersListInBase: [],
+    showDialog: false,
+    rolesUsersShowDialog: false,
+    rolesPermissionsShowDialog: false,
+    rolesUsersShowDialogAdd: false,
+    rolesGroupsShowDialogAdd: false,
+    newRole: {
+      _id: 'NON DEFINI',
+      color: 'black',
+      description: ''
+    },
+    currentRole: {
+      _id: 'NON DEFINI',
+      color: 'black',
+      description: ''
+    },
+    currentAssociationRole: {
+      _id: 'NON DEFINI',
+      color: 'black',
+      description: ''
+    },
+    currentPermission: null,
+    currentAssociationRoleIsDirty: false,
+    recordCurrentAssociationRole: null
+  },
   search: {
     visible: false
   },
@@ -36,7 +70,8 @@ export default {
     snackbarMessage: 'Message à setter',
     currentShift: null,
     allShifts: [],
-    managerChildren: []
+    managerChildren: [],
+    shiftSaturdayShowDialogAdd: false
   },
   selectedContact: null,
   selectedNew: null,
@@ -60,6 +95,7 @@ export default {
     text: 'Indisponible pour ce contact',
     groupedContacts: []
   },
+  groups: [],
   users: {
     search: '',
     usersList: [],
@@ -105,5 +141,10 @@ export default {
   },
   meteo: {
     lastWeather: null
+  },
+  snackbar: {
+    visible: false,
+    color: '',
+    message: ''
   }
 }

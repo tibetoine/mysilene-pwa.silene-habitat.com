@@ -12,6 +12,8 @@ import loginMutations from './mutation/loginMutations'
 import docsMutations from './mutation/docsMutations'
 import appMutations from './mutation/appMutations'
 import shiftMutations from './mutation/shiftMutations'
+import accessMutations from './mutation/accessMutations'
+import interessementMutations from './mutation/interessementMutations'
 
 Vue.use(Vuex)
 
@@ -27,7 +29,9 @@ const store = new Vuex.Store({
     ...docsMutations,
     ...usersMutations,
     ...appMutations,
-    ...shiftMutations
+    ...shiftMutations,
+    ...accessMutations,
+    ...interessementMutations
   },
   actions: {
     ...appActions

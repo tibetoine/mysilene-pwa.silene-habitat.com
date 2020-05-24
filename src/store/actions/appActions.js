@@ -24,6 +24,24 @@ export default {
       }
     }
   },
+  [On.LOAD_GROUPS]: async function ({ commit }) {
+    try {
+      const response = await rest.getGroups()
+      if (response.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      } else {
+        const groups = response.body
+        /* 2/ Enregistrement dans le store */
+        commit(Do.SET_GROUPS, groups)
+      }
+    } catch (error) {
+      if (error && error.status === 401) {
+        localStorage.removeItem('user-token')
+        commit(Do.LOGOUT)
+      }
+    }
+  },
   [On.LOAD_USERS]: async function ({ commit }) {
     /* 1/ Appel REST à l'API  */
     try {
@@ -148,27 +166,17 @@ export default {
       }
     }
   },
-  [On.IS_ADMIN]: async function ({ commit, state }) {
-    var userId = localStorage.getItem('user-id')
-    try {
-      const response = await rest.isAdmin(userId)
-      if (response.status === 204) {
-        state.login.isAdmin = true
-      } else {
-        state.login.isAdmin = false
-      }
-    } catch (error) {
-      // Je ne sais pas quoi faire si y'a une erreur à ce stade
-      state.login.isAdmin = false
-      console.error('error dans le isAdmin', error)
-    }
-  },
   [On.GET_ROLES]: async function ({ commit, state }) {
     var userId = localStorage.getItem('user-id')
     try {
       const response = await rest.getRoles(userId)
       if (response.status === 200) {
-        state.login.roles = response.data
+        let roles = response.data
+        /* On ajoute le role MANAGER si l'utilisateur est manager */
+        if (state.login.isManager) {
+          roles.push('MANAGER')
+        }
+        state.login.roles = roles
       }
     } catch (error) {
       // Je ne sais pas quoi faire si y'a une erreur à ce stade
@@ -355,6 +363,12 @@ export default {
     return response
   },
 
+  [On.UPDATE_INTERESSEMENT_USER_FONDS]: function ({ commit }, data) {
+    commit(Do.UPDATE_INTERESSEMENT_USER_FONDS, data)
+  },
+  [On.RESET_INTERESSEMENT_USER_FONDS]: function ({ commit }) {
+    commit(Do.RESET_INTERESSEMENT_USER_FONDS)
+  },
   [On.UPDATE_FILTERED_CONTACTS]: function ({ commit }) {
     commit(Do.UPDATE_FILTERED_CONTACTS)
     commit(Do.SHOW_MORE_CONTACTS)
@@ -398,12 +412,20 @@ export default {
       commit(Do.LOGIN_SUCCESS, response.body)
       commit(Do.LOGIN_STOP)
       /* Dispatch Action */
-      dispatch(On.IS_ADMIN)
       dispatch(On.GET_ROLES)
+      dispatch(On.LOAD_CONTACTS).then(() => {
+        dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+      })
       dispatch(On.LOAD_PREFS)
       dispatch(On.LOAD_NEWS)
-      dispatch(On.LOAD_CONTACTS)
-      dispatch(On.LOAD_DOCS)
+      dispatch(On.LOAD_GROUPS)
+      /* Récupère l'année courante */
+      dispatch(On.LOAD_INTERESSEMENT_CONFIG).then(() => {
+        /* Current Year */
+        let year = new Date().getFullYear()
+        dispatch(On.LOAD_INTERESSEMENT_USER, { userId: userId, year: year })
+      })
+      // dispatch(On.LOAD_DOCS)
       dispatch(On.GET_CONTACT, userId)
     }
 
@@ -418,19 +440,402 @@ export default {
     commit(Do.LOGIN_SUCCESS, user)
 
     /* Dispatch Action */
-    dispatch(On.IS_ADMIN)
     dispatch(On.GET_ROLES)
+    dispatch(On.LOAD_CONTACTS).then(() => {
+      dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    })
     dispatch(On.LOAD_PREFS)
     dispatch(On.LOAD_NEWS)
-    dispatch(On.LOAD_CONTACTS)
-    dispatch(On.LOAD_DOCS)
-    dispatch(On.GET_CONTACT, user._id)
+    dispatch(On.LOAD_GROUPS)
+    const userId = user._id.trim().toLowerCase()
+    dispatch(On.LOAD_INTERESSEMENT_CONFIG).then(() => {
+      /* Current Year */
+      let year = new Date().getFullYear()
+      dispatch(On.LOAD_INTERESSEMENT_USER, { userId: userId, year: year })
+    })
+    // dispatch(On.LOAD_DOCS)
+    dispatch(On.GET_CONTACT, userId)
   },
   [On.LOGIN_WAITING]: function ({ commit }) {
     commit(Do.LOGIN_WAITING)
   },
   [On.LOGIN_STOP]: function ({ commit }) {
     commit(Do.LOGIN_STOP)
+  },
+  [On.LOAD_ACCESS_ROLES_AND_PERMISSIONS]: async function ({ commit, state }) {
+    let response
+    let response2
+    try {
+      response = await rest.loadRoles()
+      response2 = await rest.loadPermissions()
+      let roles = response.data
+      let permissions = response2.data
+      // console.log(roles)
+      // console.log(permissions)
+
+      permissions.forEach((permission) => {
+        let newRoles = []
+        if (permission.roles && permission.roles.length > 0) {
+          permission.roles.forEach((permissionRole) => {
+            roles.forEach((role) => {
+              if (role._id === permissionRole) {
+                newRoles.push(role)
+              }
+            })
+          })
+        }
+        permission.roles = newRoles
+      })
+
+      /* Chargement des informations de contacts  */
+      let contacts = state.contacts.fullList
+      let dataToSet = []
+      roles.forEach((element) => {
+        let users = []
+        if (element.users && element.users.length > 0) {
+          element.users.forEach((userId) => {
+            users.push(getContactFromUserId(userId, contacts))
+          })
+        }
+        dataToSet.push({
+          _id: element._id,
+          color: element.color,
+          description: element.description,
+          users: users,
+          groups: element.groups
+        })
+      })
+      commit(Do.SET_ACCESS_USERS_ROLES, dataToSet)
+      commit(Do.SET_ACCESS_PERMISSIONS, permissions)
+    } catch (error) {
+      let errorMessage = `#ApiAccess001 - Erreur chargement des roles et permissions`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // commit(Do.SHOW_GLOBAL_SUCCESS, 'Chargement des roles réussi')
+    return response
+  },
+  [On.ADD_ACCESS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    try {
+      response = await rest.addRole(role)
+    } catch (error) {
+      let errorMessage = `#ApiAccess002 - Erreur lors de l'ajout d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle ajouté avec succès')
+    commit(Do.HIDE_ROLE_DIALOG)
+    return response
+  },
+  [On.SAVE_ACCESS_USERS_ROLE]: async function ({ state, commit, dispatch }) {
+    let response
+    let rolesUsers = state.access.rolesUsersList
+    try {
+      response = await rest.saveUsersRole(rolesUsers)
+    } catch (error) {
+      let errorMessage = `#ApiAccess005 - Erreur lors de la sauvegarde des rôles`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(
+      Do.SHOW_GLOBAL_SUCCESS,
+      'Association des rôles sauvegardée avec succès'
+    )
+    return response
+  },
+  [On.UPLOAD_FILE]: async function ({ commit, dispatch }, file) {
+    let response
+    // console.log(file)
+    try {
+      response = await rest.upload(file)
+    } catch (error) {
+      let errorMessage = `#Upload001 - Erreur lors de l'upload`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    // dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Upload success')
+    return response
+  },
+  [On.SAVE_PERMISSIONS_ROLE]: async function ({ state, commit, dispatch }) {
+    let response
+    let permissions = state.access.permissionsList
+    try {
+      response = await rest.savePermissions(permissions)
+    } catch (error) {
+      let errorMessage = `#ApiAccess006 - Erreur lors de la sauvegarde des permissions`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Permissions sauvegardées avec succès')
+    return response
+  },
+  [On.DELETE_ACCESS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    try {
+      response = await rest.deleteRole(role._id)
+    } catch (error) {
+      let errorMessage = `#ApiAccess003 - Erreur lors de la suppression d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle supprimé avec succès')
+    return response
+  },
+  [On.EDIT_ACCESS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    try {
+      response = await rest.editRole(role)
+    } catch (error) {
+      let errorMessage = `#ApiAccess004 - Erreur lors de la modification d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.HIDE_ROLE_DIALOG)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle modifié avec succès')
+    return response
+  },
+  [On.ADD_ACCESS_USERS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    try {
+      response = await rest.addUsersRole(role)
+    } catch (error) {
+      let errorMessage = `#ApiAccess012 - Erreur lors de l'ajout d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle ajouté avec succès')
+    commit(Do.HIDE_USERS_ROLE_DIALOG)
+    return response
+  },
+  [On.DELETE_ACCESS_USERS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    try {
+      response = await rest.deleteUsersRole(role._id)
+    } catch (error) {
+      let errorMessage = `#ApiAccess013 - Erreur lors de la suppression d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle supprimé avec succès')
+    return response
+  },
+  [On.EDIT_ACCESS_USERS_ROLE]: async function ({ commit, dispatch }, role) {
+    let response
+    try {
+      response = await rest.editUsersRole(role)
+    } catch (error) {
+      let errorMessage = `#ApiAccess014 - Erreur lors de la modification d'un rôle`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.HIDE_USERS_ROLE_DIALOG)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Rôle modifié avec succès')
+    return response
+  },
+  [On.SAVE_PERMISSIONS_ROLE]: async function ({ state, commit, dispatch }) {
+    let response
+    let permissions = state.access.permissionsList
+    try {
+      response = await rest.savePermissions(permissions)
+    } catch (error) {
+      let errorMessage = `#ApiAccess006 - Erreur lors de la sauvegarde des permissions`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    // console.log(response)
+    dispatch(On.LOAD_ACCESS_ROLES_AND_PERMISSIONS)
+    commit(Do.SHOW_GLOBAL_SUCCESS, 'Permissions sauvegardées avec succès')
+    return response
+  },
+  [On.ADD_CONTACT_SATURDAY]: async function ({ commit, dispatch }, userId) {
+    let response
+    try {
+      response = await rest.addContactSaturday(userId)
+    } catch (error) {
+      let errorMessage =
+        `#ApiGTA - Erreur lors de la mise à jour du contact [` + userId + `]`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    /* On recharge les contacts ? */
+    dispatch(On.LOAD_CONTACTS)
+    commit(
+      Do.SHOW_GLOBAL_SUCCESS,
+      `Contact [` + userId + `] mise à jour avec succès`
+    )
+    return response
+  },
+  [On.DELETE_CONTACT_SATURDAY]: async function ({ commit, dispatch }, userId) {
+    let response
+    try {
+      response = await rest.deleteContactSaturday(userId)
+    } catch (error) {
+      let errorMessage =
+        `#ApiGTA - Erreur lors de la mise à jour du contact [` + userId + `]`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+      return
+    }
+    /* On recharge les contacts ? */
+    dispatch(On.LOAD_CONTACTS)
+    commit(
+      Do.SHOW_GLOBAL_SUCCESS,
+      `Contact [` + userId + `] mise à jour avec succès`
+    )
+    return response
+  },
+  [On.LOAD_INTERESSEMENT_CONFIG]: async function ({ commit }, year) {
+    /* 1/ Appel REST à l'API  */
+    try {
+      const response = await rest.loadInteressementConfig(year)
+
+      console.log(response.data)
+      const interessementConfig = response.data
+      /* 2/ Enregistrement dans le store */
+      commit(Do.SET_INTERESSEMENT_CONFIG, interessementConfig)
+    } catch (error) {
+      let errorMessage =
+        `#ApiInteressement001 - Erreur lors du chargement de la configuration Interessement pour l'année : ` +
+        year +
+        ` consulter la documentation MySilene`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
+  },
+  [On.LOAD_INTERESSEMENT_USER]: async function ({ commit, state }, data) {
+    /* 1/ Appel REST à l'API  */
+    let userId = data.userId
+    let year = data.year
+    try {
+      const response = await rest.loadInteressementUser(userId, year)
+      const interessementUser = response.data
+
+      let defaultChoix = {
+        bulletin_de_salaire:
+          state.interessement.configInteressement
+            .repartition_defaut_sur_bulletin_de_salaire,
+        pee: {
+          repartition: 0,
+          fonds: state.interessement.configInteressement.pee
+        }
+      }
+
+      let choixFait = false
+      if (!interessementUser.choix) {
+        interessementUser.choix = defaultChoix
+      } else {
+        choixFait = true
+      }
+      /* 2/ Enregistrement dans le store */
+      commit(Do.SET_INTERESSEMENT_USER, interessementUser)
+      if (choixFait) {
+        commit(Do.SET_INTERESSEMENT_ETAPE, 5)
+      }
+    } catch (error) {
+      let errorMessage =
+        `#ApiInteressement002 - Erreur lors du chargement des données d'interessement pour l'année : ` +
+        year +
+        ` avec le user ` +
+        userId +
+        ` consulter la documentation MySilene`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
+  },
+  [On.SAVE_INTERESSEMENT_USER]: async function ({ commit, state }, data) {
+    console.log('SAVE_INTERESSEMENT_USER ', data)
+    /* 1/ Appel REST à l'API  */
+    let userId = data.userId
+    let year = data.year
+    let interessementUser = state.interessement.interessementUser
+    try {
+      const response = await rest.saveInteressementUser(
+        userId,
+        year,
+        interessementUser
+      )
+
+      console.log(response)
+      commit(Do.SHOW_GLOBAL_SUCCESS, 'Votre choix a été enregistré.')
+    } catch (error) {
+      let errorMessage =
+        `#ApiInteressement003 - Erreur lors de l'entregistrement de l'intéressement pour l'année : ` +
+        year +
+        ` et pour le user ` +
+        userId +
+        ` -> consulter la documentation MySilene`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
+  },
+  [On.CLOSE_INTERESSEMENTS]: async function ({ commit, state }, data) {
+    console.log('CLOSE_INTERESSEMENTS ')
+    /* 1/ Appel REST à l'API  */
+    let year = data.year
+    let closed = data.closed
+
+    console.log('closed:', closed)
+    console.log('year:', year)
+    try {
+      const response = await rest.closeInteressement(closed, year)
+
+      console.log(response)
+      let successMessage
+      if (closed) {
+        successMessage = "Le module d'intéressement à été fermé"
+      } else {
+        successMessage = "Le module d'intéressement à été ouvert"
+      }
+      commit(Do.CLOSE_INTERESSEMENTS, closed)
+      commit(Do.SHOW_GLOBAL_SUCCESS, successMessage)
+    } catch (error) {
+      let errorMessage = `#ApiInteressement005 - Erreur lors de la fermeture de l'intéressement`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
+  },
+  [On.EXPORT_INTERESSEMENTS]: async function ({ commit }, year) {
+    console.log('year', year)
+    try {
+      const response = await rest.exportInteressements(year)
+
+      console.log(response)
+      // commit(Do.SHOW_GLOBAL_SUCCESS, 'Votre choix a été enregistré.')
+      return response
+    } catch (error) {
+      let errorMessage =
+        `#ApiInteressement004 - Erreur lors de l'export des données : ` + year
+
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
   }
 }
 
@@ -467,7 +872,7 @@ function calculateTimes(details) {
     if (!element.time) {
       continue
     }
-    console.log('element.type', element.type)
+    // console.log('element.type', element.type)
     let type = getShiftTypeById(element.type)
     totalTime += stringToMinutes(element.time)
     switch (type) {
@@ -518,4 +923,32 @@ const getAvatar = (contact) => {
       : 'default') +
     '.jpg'
   )
+}
+
+/**
+ * Retourne des informations de contact à partir d'un userId
+ * @param {*} userId
+ * @param {*} contacts
+ */
+const getContactFromUserId = (userId, contacts) => {
+  let returnContact
+  for (let index = 0; index < contacts.length; index++) {
+    const contact = contacts[index]
+    if (contact.sAMAccountName === userId) {
+      returnContact = {
+        _id: userId,
+        prenom: contact.givenName,
+        nom: contact.sn
+      }
+      break
+    }
+  }
+  if (!returnContact) {
+    returnContact = {
+      _id: userId,
+      prenom: 'John',
+      nom: 'DOE'
+    }
+  }
+  return returnContact
 }

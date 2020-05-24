@@ -1,5 +1,5 @@
 <template>
-  <v-container style="margin-top:50px;">
+  <v-container style="margin-top: 50px;">
     <div v-if="!auth">
       <v-alert :value="true" type="warning" icon="lock">
         Vous devez être connecté pour accéder à MySilène - Gestion des temps
@@ -18,7 +18,7 @@
           bottom
           right
           @click.stop="showShiftDialog"
-          style="bottom:50px;"
+          style="bottom: 50px;"
         >
           <v-icon>add</v-icon>
         </v-btn>
@@ -44,7 +44,9 @@
             </template>
             <template slot="no-data">
               <v-list-tile-content>
-                <v-list-tile-title>Aucun collaborateur trouvé</v-list-tile-title>
+                <v-list-tile-title
+                  >Aucun collaborateur trouvé</v-list-tile-title
+                >
               </v-list-tile-content>
             </template>
             <template slot="item" slot-scope="data">
@@ -55,7 +57,7 @@
                 <v-list-tile-action>
                   <v-avatar
                     size="40"
-                    style="margin-top:-20px;"
+                    style="margin-top: -20px;"
                     color="grey lighten-4"
                   >
                     <img
@@ -65,7 +67,9 @@
                     /> </v-avatar
                 ></v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+                  <v-list-tile-title
+                    v-html="data.item.name"
+                  ></v-list-tile-title>
                 </v-list-tile-content>
               </template>
             </template>
@@ -80,10 +84,12 @@
                 onerror="this.onerror=null;this.src='/static/img/default.jpg';"
               />
             </v-avatar>
-            <v-toolbar-title>Historique de {{ chosenUser.name }}</v-toolbar-title>
+            <v-toolbar-title
+              >Historique de {{ chosenUser.name }}</v-toolbar-title
+            >
           </v-toolbar>
         </v-flex>
-        <v-spacer style="margin-top:15px;"></v-spacer>
+        <v-spacer style="margin-top: 15px;"></v-spacer>
         <v-flex offset-sm3 v-if="chosenUser">
           <v-spacer></v-spacer>
           <shift-record
@@ -98,93 +104,93 @@
 </template>
 
 <script>
-  // import { mapState } from 'vuex'
-  // import FileLine from '../components/FileLine'
-  import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
-  import Do from '../../const/do'
-  import On from '../../const/on'
-  import ShiftRecord from '../components/ShiftRecord'
-  import ShiftDialog from '../components/ShiftDialog'
-  import SnackbarMessage from '../components/SnackbarMessage'
+// import { mapState } from 'vuex'
+// import FileLine from '../components/FileLine'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import Do from '../../const/do'
+import On from '../../const/on'
+import ShiftRecord from '../components/ShiftRecord'
+import ShiftDialog from '../components/ShiftDialog'
+import SnackbarMessage from '../components/SnackbarMessage'
 
-  export default {
-    name: 'shifts',
-    components: { ShiftRecord, ShiftDialog, SnackbarMessage },
-    computed: {
-      ...mapState({
-        allShifts: state => {
-          // console.log(state.shift.allShifts)
-          return state.shift.allShifts
-        },
-        auth: state => state.login.Authenticate
-      }),
-      ...mapGetters({ collaborateurs: 'selectShiftManagerChildren' }),
-      isRhOrManager: {
-        get: function() {
-          if (
-            this.$store.state.login.roles.includes('manager') ||
-            this.$store.state.login.roles.includes('rh')
-          ) {
-            return true
-          }
-
-          return false
-        }
+export default {
+  name: 'shifts',
+  components: { ShiftRecord, ShiftDialog, SnackbarMessage },
+  computed: {
+    ...mapState({
+      allShifts: (state) => {
+        // console.log(state.shift.allShifts)
+        return state.shift.allShifts
       },
-      chosenUser: {
-        get: function() {
-          return this.$store.state.shift.currentShiftUser
-        },
-        set: function(val) {
-          this.$store.state.shift.currentShiftUser = val
+      auth: (state) => state.login.Authenticate
+    }),
+    ...mapGetters({ collaborateurs: 'selectShiftManagerChildren' }),
+    isRhOrManager: {
+      get: function () {
+        if (
+          this.$store.state.login.roles.includes('MANAGER') ||
+          this.$store.state.login.roles.includes('RH')
+        ) {
+          return true
         }
+
+        return false
       }
     },
-    mounted: function() {
-      this.collaborateursLoading = 'primary'
+    chosenUser: {
+      get: function () {
+        return this.$store.state.shift.currentShiftUser
+      },
+      set: function (val) {
+        this.$store.state.shift.currentShiftUser = val
+      }
+    }
+  },
+  mounted: function () {
+    this.collaborateursLoading = 'primary'
+    this.loadShifts()
+    this.getChildren().then(() => {
+      this.collaborateursLoading = false
+      return null
+    })
+  },
+  methods: {
+    ...mapActions({
+      loadShifts: On.LOAD_SHIFTS,
+      getChildren: On.GET_CHILDREN
+    }),
+    ...mapMutations({
+      showShiftDialog: Do.SHOW_SHIFT_DIALOG
+    }),
+    changeUser() {
+      /* Je force le chargement des shifts du bon utilisateurs */
+      // console.log('Je recharge les shifts')
       this.loadShifts()
-      this.getChildren().then(() => {
-        this.collaborateursLoading = false
-        return null
-      })
-    },
-    methods: {
-      ...mapActions({
-        loadShifts: On.LOAD_SHIFTS,
-        getChildren: On.GET_CHILDREN
-      }),
-      ...mapMutations({
-        showShiftDialog: Do.SHOW_SHIFT_DIALOG
-      }),
-      changeUser() {
-        /* Je force le chargement des shifts du bon utilisateurs */
-        // console.log('Je recharge les shifts')
-        this.loadShifts()
+    }
+  },
+  watch: {
+    collaborateurs(newValue, oldValue) {
+      if (this.chosenUser == null) {
+        this.chosenUser = newValue[1]
       }
-    },
-    watch: {
-      collaborateurs(newValue, oldValue) {
-        if (this.chosenUser == null) {
-          this.chosenUser = newValue[1]
-        }
-      }
-    },
-    data() {
-      return {
-        collaborateursLoading: false,
-        shiftVisible: true,
-        historyVisible: true,
-        fab: false,
-        checkbox_rtt: null,
-        checkbox_rtt_matin: null,
-        checkbox_rtt_pm: null,
-        currentShift: {
-          date: null,
-          datetime: null,
-          conges: '',
-          comment: null
-        }
+    }
+  },
+  data() {
+    return {
+      collaborateursLoading: false,
+      shiftVisible: true,
+      historyVisible: true,
+      fab: false,
+      checkbox_rtt: null,
+      checkbox_rtt_matin: null,
+      checkbox_rtt_pm: null,
+      currentShift: {
+        date: null,
+        datetime: null,
+        conges: '',
+        comment: null
       }
     }
   }
+}
 </script>
