@@ -1,7 +1,7 @@
 <template>
-  <v-container style="margin: 0; margin-top: 50px;">
+  <v-container fluid style="margin: 0; margin-top: 50px;">
     <v-layout>
-      <v-flex xs12 offset-lg3 offset-xl2>
+      <v-flex xs12 lg12 offset-lg3 offset-xl2>
         <v-stepper
           v-if="configInteressement && !configInteressement.closed"
           v-model="etape"

@@ -74,6 +74,7 @@
         >
           Placement sur PEE
         </h2>
+        <p><em>Classement du moins risqué au plus risqué</em></p>
         <v-layout row v-if="choix.bulletin_de_salaire < 100">
           <v-flex v-if="choix">
             <template v-for="(fond, index) in fonds">

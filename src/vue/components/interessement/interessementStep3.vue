@@ -31,7 +31,7 @@
         </v-flex>
         <v-flex class="rounded-card" style="background: #eee; color: #333;">
           <h2 class="primary--text">
-            Nombre de jours théorique
+            Nombre de jours théorique à travailler
           </h2>
           <p
             class="secondary--text headline text-xs-center"
@@ -94,6 +94,17 @@
           </table>
         </v-flex>
         <v-flex class="rounded-card" style="background: #eee; color: #333;">
+          <h2 class="primary--text">
+            Total jours travaillés
+          </h2>
+          <p
+            class="secondary--text headline text-xs-center"
+            style="margin-bottom: 0;"
+          >
+            {{ interessementUser.base_annuelle - totalJoursAbsence }} jours
+          </p>
+        </v-flex>
+        <v-flex class="rounded-card" style="background: #eee; color: #333;">
           <h2 class="primary--text">Montant intéressement</h2>
           <table>
             <tr>
@@ -128,6 +139,17 @@
               </td>
             </tr>
           </table>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <v-container v-else grid-list-xl>
+      <v-layout column>
+        <v-flex>
+          <v-alert type="info" :value="true" outline>
+            Vous ne disposez pas de l'ancienneté suffisante pour être éligible à
+            l'intéressement au titre de l'année
+            {{ configInteressement._id - 1 }}
+          </v-alert>
         </v-flex>
       </v-layout>
     </v-container>

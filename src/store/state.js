@@ -1,7 +1,7 @@
 export default {
   interessement: {
     configInteressement: null,
-    interessementUser: {},
+    interessementUser: null,
     etape: 1
   },
   access: {
