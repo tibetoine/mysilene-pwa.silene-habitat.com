@@ -50,8 +50,7 @@ const router = new Router({
     {
       path: '/contacts/:id',
       component: ContactModal,
-      name: 'contactModal',
-      beforeEnter: checkAuthAndRights
+      name: 'contactModal'
     },
     {
       path: '/news/:id',
@@ -92,12 +91,14 @@ const router = new Router({
     {
       path: '/gta_rh',
       component: ShiftsRH,
-      name: 'shiftsRH'
+      name: 'shiftsRH',
+      beforeEnter: checkAuthAndRights
     },
     {
       path: '/interessement',
       component: Interessement,
-      name: 'interessement'
+      name: 'interessement',
+      beforeEnter: checkAuthAndRights
     },
     {
       path: '/interessement_rh',
