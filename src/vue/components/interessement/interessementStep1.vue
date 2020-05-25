@@ -21,7 +21,11 @@
         </v-flex>
         <v-flex>
           <v-layout v-bind="binding">
-            <v-flex class="text-xs-center rounded-card interessementDiv">
+            <v-flex
+              xs12
+              sm6
+              class="text-xs-center rounded-card interessementDiv"
+            >
               <h3>1. Résultat d'exploitation</h3>
               <v-container>
                 <v-layout row>
@@ -52,7 +56,11 @@
                 ></v-container
               >
             </v-flex>
-            <v-flex class="text-xs-center rounded-card interessementDiv">
+            <v-flex
+              xs12
+              sm6
+              class="text-xs-center rounded-card interessementDiv"
+            >
               <h3>2. L'autofinancement</h3>
               <p>
                 Epargne constituée dans l’année et dédiée aux investissements

@@ -135,15 +135,17 @@ function checkAuthAndRights(to, from, next) {
   function checkAuthenticateAndRights() {
     /* Si l'utilisateur est auth alors on regarde où on l'envoie */
     if (!store.getters.isAuthenticate) {
-      console.log(`l'utilisateur n'est pas authentifié`)
       next('/home')
     } else {
-      if (!store.getters.isAccessDataLoaded) {
+      if (
+        !store.getters.isAccessDataLoaded ||
+        store.getters.isAccessDataLoaded.length <= 0
+      ) {
         /* En attente que l'utilisateur soit authentifié */
         store.watch(
           () => store.getters.isAccessDataLoaded,
-          (isAccessDataLoaded) => {
-            console.log('watched: ', isAccessDataLoaded)
+          () => {
+            // console.log('watched isAccessDataLoaded: ', isAccessDataLoaded)
             checkRights()
           }
         )
@@ -166,7 +168,7 @@ function checkAuthAndRights(to, from, next) {
       )
     }
 
-    console.log('checking rights for ', to.name)
+    // console.log('checking rights for ', to.name)
     let hasRight = false
     store.state.access.permissionsListInBase.forEach((permission) => {
       if (permission._id === to.name) {
@@ -194,8 +196,8 @@ function checkAuthAndRights(to, from, next) {
     /* En attente que l'utilisateur soit authentifié */
     store.watch(
       () => store.getters.isAuthenticate,
-      (isAuthenticate) => {
-        console.log('watched: ', isAuthenticate)
+      () => {
+        // console.log('watched: ', isAuthenticate)
         checkAuthenticateAndRights()
       }
     )
