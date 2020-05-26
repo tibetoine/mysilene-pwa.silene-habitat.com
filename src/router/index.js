@@ -55,8 +55,7 @@ const router = new Router({
     {
       path: '/news/:id',
       component: NewsModal,
-      name: 'newsModal',
-      beforeEnter: checkAuthAndRights
+      name: 'newsModal'
     },
     {
       path: '/meteo',
