@@ -193,9 +193,9 @@ export default {
       /* Si Manager */
       var response
       // console.log('state.login.roles', state.login.roles)
-      if (state.login.roles.includes('rh')) {
+      if (state.login.roles.includes('RH')) {
         response = await rest.getAllChildren(userId)
-      } else if (state.login.roles.includes('manager')) {
+      } else if (state.login.roles.includes('MANAGER')) {
         response = await rest.getChildren(userId)
       }
       if (!response) {
