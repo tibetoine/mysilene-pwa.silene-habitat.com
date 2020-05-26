@@ -46,7 +46,7 @@
       <!--<v-btn icon>
         <v-icon>notifications</v-icon>
       </v-btn>-->
-      4.1.4
+      4.1.5
       <v-btn v-if="error" @click.stop="showErrorDialog" icon>
         <v-icon>warning</v-icon>
       </v-btn>
