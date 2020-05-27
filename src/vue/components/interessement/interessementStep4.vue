@@ -22,7 +22,7 @@
         (net).
         <br />
         <br />
-        <em>
+        <em v-if="!contact.estFonctionnaire">
           Vous pouvez choisir de percevoir l'intéressement ou de le placer sur
           le Plan d'Epargne Entreprise (PEE)
         </em>
@@ -64,18 +64,23 @@
           </v-flex>
         </v-layout>
         <v-spacer
-          v-if="choix.bulletin_de_salaire < 100"
+          v-if="choix.bulletin_de_salaire < 100 && !contact.estFonctionnaire"
           style="border-bottom: 1px solid #777;"
         ></v-spacer>
         <h2
-          v-if="choix.bulletin_de_salaire < 100"
+          v-if="choix.bulletin_de_salaire < 100 && !contact.estFonctionnaire"
           class="primary--text title"
           style="margin-top: 20px; margin-bottom: 10px;"
         >
           Placement sur PEE
         </h2>
-        <p><em>Classement du moins risqué au plus risqué</em></p>
-        <v-layout row v-if="choix.bulletin_de_salaire < 100">
+        <p v-if="!contact.estFonctionnaire">
+          <em>Classement du moins risqué au plus risqué</em>
+        </p>
+        <v-layout
+          row
+          v-if="choix.bulletin_de_salaire < 100 && !contact.estFonctionnaire"
+        >
           <v-flex v-if="choix">
             <template v-for="(fond, index) in fonds">
               <v-layout :key="index" row align-center>

@@ -738,11 +738,17 @@ export default {
     try {
       const response = await rest.loadInteressementUser(userId, year)
       const interessementUser = response.data
+      const contact = state.login.currentContact
 
+      let repartitionBdS =
+        state.interessement.configInteressement
+          .repartition_defaut_sur_bulletin_de_salaire
+
+      if (contact.estFonctionnaire) {
+        repartitionBdS = 100
+      }
       let defaultChoix = {
-        bulletin_de_salaire:
-          state.interessement.configInteressement
-            .repartition_defaut_sur_bulletin_de_salaire,
+        bulletin_de_salaire: repartitionBdS,
         pee: {
           repartition: 0,
           fonds: state.interessement.configInteressement.pee

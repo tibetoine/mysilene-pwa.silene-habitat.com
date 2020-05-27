@@ -17,10 +17,18 @@
           <v-icon>arrow_right</v-icon
           >{{ Math.round(interessementUser.quote_part_net * 100) / 100 }} €
         </p>
-        <h2 class="primary--text title" style="margin-bottom: 10px;">
+        <h2
+          v-if="!contact.estFonctionnaire"
+          class="primary--text title"
+          style="margin-bottom: 10px;"
+        >
           Choix de placement
         </h2>
-        <v-flex offset-md1 :style="'padding:0;width:' + specificWidth + ';'">
+        <v-flex
+          v-if="!contact.estFonctionnaire"
+          offset-md1
+          :style="'padding:0;width:' + specificWidth + ';'"
+        >
           <v-layout row style="padding: 0;" align-center>
             <v-flex xs7
               ><p style="vertical-align: middle;">
@@ -32,7 +40,11 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex offset-md1 :style="'padding:0;width:' + specificWidth + ';'">
+        <v-flex
+          v-if="!contact.estFonctionnaire"
+          offset-md1
+          :style="'padding:0;width:' + specificWidth + ';'"
+        >
           <v-layout v-if="choix" row style="padding: 0;" align-center>
             <v-flex xs7
               ><p style="vertical-align: middle;">
@@ -52,11 +64,14 @@
         >
           Abondement Net par Silène
         </h2>
-        <p class="primary--text subtitle-1">
+        <p v-if="!contact.estFonctionnaire" class="primary--text subtitle-1">
           ({{ configInteressement.abondement }}% du placement net sur le PEE -
           CSG-CRDS)
         </p>
-        <p v-if="choix" class="secondary--text title">
+        <p
+          v-if="choix && !contact.estFonctionnaire"
+          class="secondary--text title"
+        >
           <v-icon>arrow_right</v-icon> {{ calculAbondement }}
           €
         </p>
@@ -67,8 +82,14 @@
         >
           Montant total
         </h2>
-        <p class="primary--text subtitle-1">(intéressement + abondement)</p>
-        <p v-if="choix" class="secondary--text title">
+
+        <p v-if="!contact.estFonctionnaire" class="primary--text subtitle-1">
+          (intéressement + abondement)
+        </p>
+        <p
+          v-if="choix && !contact.estFonctionnaire"
+          class="secondary--text title"
+        >
           <v-icon>arrow_right</v-icon
           >{{ Math.round(interessementUser.quote_part_net * 100) / 100 }} +
           {{ calculAbondement }}
