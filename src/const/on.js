@@ -43,6 +43,7 @@ export default {
   ADD_CONTACT_SATURDAY: 'addContactSaturday',
   LOAD_INTERESSEMENT_CONFIG: 'loadInteressementConfig',
   LOAD_INTERESSEMENT_USER: 'loadInteressementUser',
+  LOAD_INTERESSEMENTS_ET_CONTACTS: 'loadInteressementsEtContacts',
   SAVE_INTERESSEMENT_USER: 'saveInteressementUser',
   UPDATE_INTERESSEMENT_USER_FONDS: 'updateInteressementUserFonds',
   RESET_INTERESSEMENT_USER_FONDS: 'resetInteressementUserFonds',

@@ -58,6 +58,7 @@ export default {
   RESET_ACCESS_USERS_ROLES: 'resetAccessUsersRoles',
   SET_INTERESSEMENT_CONFIG: 'setInteressementConfig',
   SET_INTERESSEMENT_USER: 'setInteressementUser',
+  SET_INTERESSEMENT_ET_CONTACTS: 'setInteressementsEtContacts',
   SET_INTERESSEMENT_ETAPE: 'setInteressementEtape',
   UPDATE_INTERESSEMENT_USER_FONDS: 'updateInteressementUserFonds',
   RESET_INTERESSEMENT_USER_FONDS: 'resetInteressementUserFonds',

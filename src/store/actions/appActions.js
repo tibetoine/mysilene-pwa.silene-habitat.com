@@ -771,6 +771,22 @@ export default {
       // commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
     }
   },
+  [On.LOAD_INTERESSEMENTS_ET_CONTACTS]: async function (
+    { commit, state },
+    year
+  ) {
+    try {
+      const response = await rest.loadInteressementsEtContacts(year)
+      const interessementsEtContacts = response.data
+
+      /* 2/ Enregistrement dans le store */
+      commit(Do.SET_INTERESSEMENT_ET_CONTACTS, interessementsEtContacts)
+    } catch (error) {
+      let errorMessage = `#ApiInteressement006 - Erreur lors de la récupéraration des intéressements et contacts dans l'API`
+      console.error(errorMessage, error)
+      commit(Do.SHOW_GLOBAL_ERROR, errorMessage)
+    }
+  },
   [On.SAVE_INTERESSEMENT_USER]: async function ({ commit, state }, data) {
     console.log('SAVE_INTERESSEMENT_USER ', data)
     /* 1/ Appel REST à l'API  */

@@ -7,6 +7,9 @@ export default {
   [Do.SET_INTERESSEMENT_USER]: (state, interessementUser) => {
     state.interessement.interessementUser = interessementUser
   },
+  [Do.SET_INTERESSEMENT_ET_CONTACTS]: (state, interessementsEtContacts) => {
+    state.interessement.interessementsEtContacts = interessementsEtContacts
+  },
   [Do.SET_INTERESSEMENT_ETAPE]: (state, etapeNumber) => {
     state.interessement.etape = etapeNumber
   },

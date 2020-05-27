@@ -2,7 +2,8 @@ export default {
   interessement: {
     configInteressement: null,
     interessementUser: null,
-    etape: 1
+    etape: 1,
+    interessementsEtContacts: null
   },
   access: {
     permissionsList: [],
