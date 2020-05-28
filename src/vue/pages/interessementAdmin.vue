@@ -1,5 +1,6 @@
 <template>
   <v-container style="margin-top: 50px;">
+    <confirm ref="confirm"></confirm>
     <v-layout>
       <v-flex v-if="configInteressement" xs12 offset-lg3 offset-xl2
         ><v-card>
@@ -13,22 +14,37 @@
           <v-container grid-list-xl>
             <v-layout column>
               <v-flex>
-                <v-text-field
-                  label="Fichier à uploader"
-                  @click="pickFile"
-                  v-model="fileName"
-                  prepend-icon="attach_file"
-                ></v-text-field>
-                <input
-                  type="file"
-                  style="display: none;"
-                  ref="file"
-                  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                  @change="onFilePicked"
-                />
-                <v-btn color="success" @click.stop="localUploadFile()"
-                  >Charger</v-btn
-                >
+                <v-alert :value="true" outline type="error">
+                  <h2>Attention ! Warning !</h2>
+                  <p>
+                    Attention, en chargeant le fichier excel d'import, vous
+                    écraserez les données d'intéressement des collaborateurs
+                    pour l'année en cours.. (En d'autres termes, si les
+                    collaborateurs ont déjà fait des choix, ils devront
+                    recommencer)
+                  </p>
+                  <v-btn color="error" @click="displayImport = true"
+                    >Oui oui j'ai compris les risques</v-btn
+                  >
+                </v-alert>
+                <div v-if="displayImport">
+                  <v-text-field
+                    label="Fichier à uploader (Cliquez-ici)"
+                    @click="pickFile"
+                    v-model="fileName"
+                    prepend-icon="attach_file"
+                  ></v-text-field>
+                  <input
+                    type="file"
+                    style="display: none;"
+                    ref="file"
+                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                    @change="onFilePicked"
+                  />
+                  <v-btn color="success" @click.stop="localUploadFile()"
+                    >Charger</v-btn
+                  >
+                </div>
                 <v-dialog v-model="dialog" max-width="290">
                   <v-card>
                     <v-card-title class="headline">Import Excel</v-card-title>
@@ -91,9 +107,10 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import On from '../../const/on'
+import Confirm from '../components/Confirm'
 export default {
   name: 'interessementAdmin',
-  components: {},
+  components: { Confirm },
   methods: {
     ...mapActions({
       uploadFile: On.UPLOAD_FILE,
@@ -127,7 +144,17 @@ export default {
       }
     },
     localUploadFile() {
-      this.uploadFile(this.file)
+      this.$refs.confirm
+        .open(
+          `Charger les données d'intéressement des collaborateurs`,
+          'Attention ceci écrasera les informations déjà renseignées pour les collaborateurs pour cette année.?',
+          { color: 'red' }
+        )
+        .then((confirm) => {
+          if (confirm) {
+            this.uploadFile(this.file)
+          }
+        })
     }
   },
   computed: {
@@ -155,6 +182,7 @@ export default {
     return {
       formData: new FormData(),
       title: 'Import fichier Excel',
+      displayImport: false,
       dialog: false,
       fileName: '',
       fileUrl: '',
