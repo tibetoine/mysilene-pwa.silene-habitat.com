@@ -140,10 +140,15 @@ export default {
         let quotePartNet = state.interessement.interessementUser.quote_part_net
         let repartitionTotalePEE =
           100 - state.interessement.interessementUser.choix.bulletin_de_salaire
+
         let tauxAbondement = state.interessement.configInteressement.abondement
-        let tauxCsgCrds = parseFloat(
+
+        let tauxCsgCrdsString =
           state.interessement.configInteressement.taux_csg_crds
-        )
+
+        tauxCsgCrdsString = tauxCsgCrdsString.replace(',', '.')
+        let tauxCsgCrds = Number(tauxCsgCrdsString)
+
         let montantAbondementAvantCsg =
           (((quotePartNet * repartitionTotalePEE) / 100) * tauxAbondement) / 100
         let montantAbondementApresCsg =

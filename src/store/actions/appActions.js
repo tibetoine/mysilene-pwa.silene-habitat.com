@@ -421,7 +421,7 @@ export default {
       dispatch(On.LOAD_GROUPS)
       /* Récupère l'année courante */
       dispatch(On.LOAD_INTERESSEMENT_CONFIG).then((res) => {
-        console.log(res)
+        // console.log(res)
         /* Current Year */
         let year = new Date().getFullYear()
         dispatch(On.LOAD_INTERESSEMENT_USER, { userId: userId, year: year })
@@ -450,7 +450,7 @@ export default {
     dispatch(On.LOAD_GROUPS)
     const userId = user._id.trim().toLowerCase()
     dispatch(On.LOAD_INTERESSEMENT_CONFIG).then((res) => {
-      console.log(res)
+      // console.log(res)
       /* Current Year */
       let year = new Date().getFullYear()
       dispatch(On.LOAD_INTERESSEMENT_USER, { userId: userId, year: year })
@@ -718,7 +718,7 @@ export default {
     try {
       const response = await rest.loadInteressementConfig(year)
 
-      console.log(response.data)
+      // console.log(response.data)
       const interessementConfig = response.data
       /* 2/ Enregistrement dans le store */
       commit(Do.SET_INTERESSEMENT_CONFIG, interessementConfig)
@@ -794,19 +794,15 @@ export default {
     }
   },
   [On.SAVE_INTERESSEMENT_USER]: async function ({ commit, state }, data) {
-    console.log('SAVE_INTERESSEMENT_USER ', data)
+    // console.log('SAVE_INTERESSEMENT_USER ', data)
     /* 1/ Appel REST à l'API  */
     let userId = data.userId
     let year = data.year
     let interessementUser = state.interessement.interessementUser
     try {
-      const response = await rest.saveInteressementUser(
-        userId,
-        year,
-        interessementUser
-      )
+      await rest.saveInteressementUser(userId, year, interessementUser)
 
-      console.log(response)
+      // console.log(response)
       commit(Do.SHOW_GLOBAL_SUCCESS, 'Votre choix a été enregistré.')
     } catch (error) {
       let errorMessage =
@@ -820,17 +816,17 @@ export default {
     }
   },
   [On.CLOSE_INTERESSEMENTS]: async function ({ commit, state }, data) {
-    console.log('CLOSE_INTERESSEMENTS ')
+    // console.log('CLOSE_INTERESSEMENTS ')
     /* 1/ Appel REST à l'API  */
     let year = data.year
     let closed = data.closed
 
-    console.log('closed:', closed)
-    console.log('year:', year)
+    // console.log('closed:', closed)
+    // console.log('year:', year)
     try {
-      const response = await rest.closeInteressement(closed, year)
+      await rest.closeInteressement(closed, year)
 
-      console.log(response)
+      // console.log(response)
       let successMessage
       if (closed) {
         successMessage = "Le module d'intéressement à été fermé"
@@ -846,11 +842,11 @@ export default {
     }
   },
   [On.EXPORT_INTERESSEMENTS]: async function ({ commit }, year) {
-    console.log('year', year)
+    // console.log('year', year)
     try {
       const response = await rest.exportInteressements(year)
 
-      console.log(response)
+      // console.log(response)
       // commit(Do.SHOW_GLOBAL_SUCCESS, 'Votre choix a été enregistré.')
       return response
     } catch (error) {
